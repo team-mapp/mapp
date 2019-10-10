@@ -25,8 +25,8 @@ android {
 
 dependencies {
     def lifecycle_version = "2.1.0"
-    
-    implementation"org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 
     // AndroidX libraries
     implementation "androidx.appcompat:appcompat:1.1.0"
@@ -48,7 +48,6 @@ dependencies {
     implementation "com.google.firebase:firebase-core:17.2.0"
     implementation "com.google.firebase:firebase-firestore:21.1.1"
     implementation "com.google.firebase:firebase-auth:19.1.0"
-    implementation "com.crashlytics.sdk.android:crashlytics:2.10.1"
     implementation "com.firebaseui:firebase-ui-auth:4.3.1"
 
     // Google Services
@@ -63,3 +62,5 @@ dependencies {
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
 }
+
+apply plugin: 'com.google.gms.google-services'
