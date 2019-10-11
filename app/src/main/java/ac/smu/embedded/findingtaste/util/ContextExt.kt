@@ -1,6 +1,5 @@
 package ac.smu.embedded.findingtaste.util
 
-import ac.smu.embedded.findingtaste.ViewModelFactory
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes

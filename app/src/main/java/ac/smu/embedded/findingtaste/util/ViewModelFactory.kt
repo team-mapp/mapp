@@ -1,4 +1,4 @@
-package ac.smu.embedded.findingtaste
+package ac.smu.embedded.findingtaste.util
 
 import ac.smu.embedded.findingtaste.main.MainViewModel
 import androidx.lifecycle.ViewModel
