@@ -1,4 +1,4 @@
-package ac.smu.embedded.findingtaste.util
+package ac.smu.embedded.mapp.util
 
 import android.content.Context
 import android.widget.Toast

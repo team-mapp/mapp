@@ -1,6 +1,6 @@
-package ac.smu.embedded.findingtaste.util
+package ac.smu.embedded.mapp.util
 
-import ac.smu.embedded.findingtaste.main.MainViewModel
+import ac.smu.embedded.mapp.main.MainViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 

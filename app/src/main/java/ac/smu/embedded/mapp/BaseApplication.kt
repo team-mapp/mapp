@@ -1,4 +1,4 @@
-package ac.smu.embedded.findingtaste
+package ac.smu.embedded.mapp
 
 import android.app.Application
 

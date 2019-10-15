@@ -1,4 +1,4 @@
-package ac.smu.embedded.findingtaste.main
+package ac.smu.embedded.mapp.main
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData

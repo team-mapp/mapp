@@ -1,10 +1,10 @@
-package ac.smu.embedded.findingtaste.main
+package ac.smu.embedded.mapp.main
 
-import ac.smu.embedded.findingtaste.R
-import ac.smu.embedded.findingtaste.util.TypedItem
-import ac.smu.embedded.findingtaste.util.getViewModelFactory
-import ac.smu.embedded.findingtaste.util.recyclerAdapter
-import ac.smu.embedded.findingtaste.util.showToast
+import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.util.TypedItem
+import ac.smu.embedded.mapp.util.getViewModelFactory
+import ac.smu.embedded.mapp.util.recyclerAdapter
+import ac.smu.embedded.mapp.util.showToast
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.viewModels

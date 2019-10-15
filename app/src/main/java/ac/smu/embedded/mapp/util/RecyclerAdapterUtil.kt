@@ -1,4 +1,4 @@
-package ac.smu.embedded.findingtaste.util
+package ac.smu.embedded.mapp.util
 
 import android.view.LayoutInflater
 import android.view.View
@@ -25,7 +25,7 @@ class BaseRecyclerAdapter<T>(
     private val items: MutableList<T>,
     private val initializer: (View, T) -> Unit
 ) : RecyclerView.Adapter<BaseRecyclerAdapter.BaseViewHolder>() {
-    
+
     constructor(
         viewHolderLayout: Int,
         items: MutableList<T>,
