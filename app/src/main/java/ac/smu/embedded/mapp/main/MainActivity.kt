@@ -1,11 +1,13 @@
 package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.model.Status
 import ac.smu.embedded.mapp.util.TypedItem
 import ac.smu.embedded.mapp.util.getViewModelFactory
 import ac.smu.embedded.mapp.util.recyclerAdapter
 import ac.smu.embedded.mapp.util.showToast
 import android.os.Bundle
+import android.util.Log
 import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -46,6 +48,38 @@ class MainActivity : AppCompatActivity() {
         btn_toast.setOnClickListener {
             viewModel.showToast("Toast button clicked")
             adapter.addItem(TypedItem(TYPE_ITEM, "Hello"))
+        }
+
+        viewModel.getTestLiveData().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (document in it.data?.documents!!) {
+                        Log.d("MainActivity", "(LiveData) ${document.data.toString()}")
+                    }
+                }
+                Status.ERROR -> {
+                    Log.e("MainActivity", "(LiveData) Error occurred (${it.error})")
+                }
+                Status.LOADING -> {
+                    Log.d("MainActivity", "(LiveData) Loading test data...")
+                }
+            }
+        })
+
+        val disposable = viewModel.getTestFlowable().subscribe {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (document in it.data?.documents!!) {
+                        Log.d("MainActivity", "(Flowable) ${document.data.toString()}")
+                    }
+                }
+                Status.ERROR -> {
+                    Log.e("MainActivity", "(Flowable) Error occurred (${it.error})")
+                }
+                Status.LOADING -> {
+                    Log.d("MainActivity", "(Flowable) Loading test data...")
+                }
+            }
         }
     }
 
