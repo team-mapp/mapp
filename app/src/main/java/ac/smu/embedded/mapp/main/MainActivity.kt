@@ -54,30 +54,56 @@ class MainActivity : AppCompatActivity() {
             when (it.status) {
                 Status.SUCCESS -> {
                     for (document in it.data?.documents!!) {
-                        Log.d("MainActivity", "(LiveData) ${document.data.toString()}")
+                        Log.d(TAG, "(LiveData:Task) ${document.data.toString()}")
                     }
                 }
                 Status.ERROR -> {
-                    Log.e("MainActivity", "(LiveData) Error occurred (${it.error})")
+                    Log.e(TAG, "(LiveData:Task) Error occurred (${it.error})")
                 }
                 Status.LOADING -> {
-                    Log.d("MainActivity", "(LiveData) Loading test data...")
+                    Log.d(TAG, "(LiveData:Task) Loading test data...")
                 }
             }
         })
 
-        val disposable = viewModel.getTestFlowable().subscribe {
+        var disposable = viewModel.getTestSingle().subscribe { snapshot, exception ->
+            if (exception == null) {
+                for (document in snapshot?.documents!!) {
+                    Log.d(TAG, "(Single:Task) ${document.data.toString()}")
+                }
+            } else {
+                Log.d(TAG, "(Single:Task) Error occurred ($exception)")
+            }
+        }
+
+        viewModel.getTestSnapshotLiveData().observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
                     for (document in it.data?.documents!!) {
-                        Log.d("MainActivity", "(Flowable) ${document.data.toString()}")
+                        Log.d(TAG, "(LiveData:Snapshot) ${document.data.toString()}")
                     }
                 }
                 Status.ERROR -> {
-                    Log.e("MainActivity", "(Flowable) Error occurred (${it.error})")
+                    Log.e(TAG, "(LiveData:Snapshot) Error occurred (${it.error})")
                 }
                 Status.LOADING -> {
-                    Log.d("MainActivity", "(Flowable) Loading test data...")
+                    Log.d(TAG, "(LiveData:Snapshot) Loading test data...")
+                }
+            }
+        })
+
+        disposable = viewModel.getTestSnapshotFlowable().subscribe {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (document in it.data?.documents!!) {
+                        Log.d(TAG, "(Flowable:Snapshot) ${document.data.toString()}")
+                    }
+                }
+                Status.ERROR -> {
+                    Log.e(TAG, "(Flowable:Snapshot) Error occurred (${it.error})")
+                }
+                Status.LOADING -> {
+                    Log.d(TAG, "(Flowable:Snapshot) Loading test data...")
                 }
             }
         }
@@ -92,5 +118,6 @@ class MainActivity : AppCompatActivity() {
     companion object {
         const val TYPE_HEADER = 100
         const val TYPE_ITEM = 101
+        const val TAG = "MainActivity"
     }
 }

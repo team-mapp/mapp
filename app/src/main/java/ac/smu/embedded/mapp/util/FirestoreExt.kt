@@ -10,8 +10,9 @@ import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
 import io.reactivex.BackpressureStrategy
 import io.reactivex.Flowable
+import io.reactivex.Single
 import io.reactivex.subjects.BehaviorSubject
-import io.reactivex.subjects.PublishSubject
+import io.reactivex.subjects.SingleSubject
 
 /**
  * Firestore를 이용할때 [Task] 결과에 대한 콜백을 [LiveData]로 Wrapping 해주는 Extension 함수
@@ -41,8 +42,8 @@ fun <TResult> Task<TResult>.asLiveData(): LiveData<Resource<TResult?>> {
 }
 
 /**
- * Firestore를 이용할때 [Task] 결과에 대한 콜백을 [Flowable]로 Wrapping 해주는 Extension 함수
- * [Task]가 Failure, Canceled 될 경우 [Flowable.doOnError]로 핸들링할 수 있습니다.
+ * Firestore를 이용할때 [Task] 결과에 대한 콜백을 [Single]로 Wrapping 해주는 Extension 함수
+ * [Task]가 Failure, Canceled 될 경우 에러가 전달됩니다.
  *
  * - 예제
  * ```kotlin
@@ -50,12 +51,12 @@ fun <TResult> Task<TResult>.asLiveData(): LiveData<Resource<TResult?>> {
  * db.collection("test").get().asFlowable()
  * ```
  *
- * @return Task 콜백에 대해 Wrapping 된 [Flowable]
+ * @return Task 콜백에 대해 Wrapping 된 [Single]
  */
-fun <TResult> Task<TResult>.asFlowable(): Flowable<TResult?> {
-    val subject = PublishSubject.create<TResult?>()
+fun <TResult> Task<TResult>.asSingle(): Single<TResult?> {
+    val subject = SingleSubject.create<TResult?>()
     addOnSuccessListener {
-        subject.onNext(it)
+        subject.onSuccess(it)
     }
     addOnFailureListener {
         subject.onError(it)
@@ -63,9 +64,8 @@ fun <TResult> Task<TResult>.asFlowable(): Flowable<TResult?> {
     addOnCanceledListener {
         subject.onError(Error("Task canceled"))
     }
-    return subject.toFlowable(BackpressureStrategy.LATEST)
+    return subject
 }
-
 
 /**
  * Firestore에서 주어지는 [DocumentReference] 결과에 대한 SnapshotListener를 [LiveData]로 Wrapping 해주는 Extension 함수
