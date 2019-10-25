@@ -18,7 +18,7 @@ class RestaurantRepository(private val db: FirebaseFirestore) {
         return db.collection(COLLECTION_PATH).asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
-                    Restaurant.fromMap(it.data!!)
+                    Restaurant.fromMap(it.id, it.data!!)
                 }
             }
         }
@@ -28,7 +28,7 @@ class RestaurantRepository(private val db: FirebaseFirestore) {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
-                    Restaurant.fromMap(it.data!!)
+                    Restaurant.fromMap(it.id, it.data!!)
                 }
             }
         }
@@ -42,7 +42,7 @@ class RestaurantRepository(private val db: FirebaseFirestore) {
             resource.transform { snapshot ->
                 val document = snapshot?.firstOrNull()
                 if (document != null) {
-                    Restaurant.fromMap(document.data)
+                    Restaurant.fromMap(document.id, document.data)
                 } else {
                     null
                 }

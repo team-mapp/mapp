@@ -18,7 +18,7 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         return db.collection(COLLECTION_PATH).asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
-                    Program.fromMap(it.data!!)
+                    Program.fromMap(it.id, it.data!!)
                 }
             }
         }
@@ -28,7 +28,7 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
-                    Program.fromMap(it.data!!)
+                    Program.fromMap(it.id, it.data!!)
                 }
             }
         }
@@ -43,7 +43,7 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
                 resource.transform { snapshot ->
                     val document = snapshot?.firstOrNull()
                     if (document != null) {
-                        Program.fromMap(document.data)
+                        Program.fromMap(document.id, document.data)
                     } else {
                         null
                     }
