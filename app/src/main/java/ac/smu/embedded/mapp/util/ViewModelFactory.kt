@@ -3,7 +3,7 @@ package ac.smu.embedded.mapp.util
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.repository.CelebsRepository
 import ac.smu.embedded.mapp.repository.ProgramsRepository
-import ac.smu.embedded.mapp.repository.RestaurantRepository
+import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 
@@ -11,7 +11,7 @@ import androidx.lifecycle.ViewModelProvider
 class ViewModelFactory(
     private val celebsRepository: CelebsRepository,
     private val programsRepository: ProgramsRepository,
-    private val restaurantRepository: RestaurantRepository
+    private val restaurantsRepository: RestaurantsRepository
 ) :
     ViewModelProvider.NewInstanceFactory() {
 
@@ -20,7 +20,7 @@ class ViewModelFactory(
             isAssignableFrom(MainViewModel::class.java) -> MainViewModel(
                 celebsRepository,
                 programsRepository,
-                restaurantRepository
+                restaurantsRepository
             )
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

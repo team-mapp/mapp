@@ -8,7 +8,7 @@ import ac.smu.embedded.mapp.util.map
 import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 
-class RestaurantRepository(private val db: FirebaseFirestore) {
+class RestaurantsRepository(private val db: FirebaseFirestore) {
 
     companion object {
         private const val COLLECTION_PATH = "restaurants"

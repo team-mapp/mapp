@@ -16,6 +16,6 @@ fun Context.getViewModelFactory(): ViewModelFactory {
     val application = applicationContext as BaseApplication
     val celebsRepository = application.celebsRepository
     val programsRepository = application.programsRepository
-    val restaurantRepository = application.restaurantRepository
+    val restaurantRepository = application.restaurantsRepository
     return ViewModelFactory(celebsRepository, programsRepository, restaurantRepository)
 }

@@ -98,16 +98,16 @@ class MainActivity : AppCompatActivity() {
         viewModel.loadCeleb("김준현").observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    viewModel.printLog("CelebsRepository:loadCelebsSync", it.data.toString())
+                    viewModel.printLog("CelebsRepository:loadCeleb", it.data.toString())
                 }
                 Status.ERROR -> {
                     viewModel.printLog(
-                        "CelebsRepository:loadCelebsSync",
+                        "CelebsRepository:loadCeleb",
                         "Error occurred (${it.error})"
                     )
                 }
                 Status.LOADING -> {
-                    viewModel.printLog("CelebsRepository:loadCelebsSync", "Loading test data...")
+                    viewModel.printLog("CelebsRepository:loadCeleb", "Loading test data...")
                 }
             }
         })
@@ -174,18 +174,21 @@ class MainActivity : AppCompatActivity() {
             when (it.status) {
                 Status.SUCCESS -> {
                     for (celeb in it.data!!) {
-                        viewModel.printLog("RestaurantRepository:loadRestaurants", celeb.toString())
+                        viewModel.printLog(
+                            "RestaurantsRepository:loadRestaurants",
+                            celeb.toString()
+                        )
                     }
                 }
                 Status.ERROR -> {
                     viewModel.printLog(
-                        "RestaurantRepository:loadRestaurants",
+                        "RestaurantsRepository:loadRestaurants",
                         "Error occurred (${it.error})"
                     )
                 }
                 Status.LOADING -> {
                     viewModel.printLog(
-                        "RestaurantRepository:loadRestaurants",
+                        "RestaurantsRepository:loadRestaurants",
                         "Loading test data..."
                     )
                 }
@@ -197,20 +200,20 @@ class MainActivity : AppCompatActivity() {
                 Status.SUCCESS -> {
                     for (celeb in it.data!!) {
                         viewModel.printLog(
-                            "RestaurantRepository:loadRestaurantsSync",
+                            "RestaurantsRepository:loadRestaurantsSync",
                             celeb.toString()
                         )
                     }
                 }
                 Status.ERROR -> {
                     viewModel.printLog(
-                        "RestaurantRepository:loadRestaurantsSync",
+                        "RestaurantsRepository:loadRestaurantsSync",
                         "Error occurred (${it.error})"
                     )
                 }
                 Status.LOADING -> {
                     viewModel.printLog(
-                        "RestaurantRepository:loadRestaurantsSync",
+                        "RestaurantsRepository:loadRestaurantsSync",
                         "Loading test data..."
                     )
                 }
@@ -220,17 +223,17 @@ class MainActivity : AppCompatActivity() {
         viewModel.loadRestaurant("밥한끼").observe(this, Observer {
             when (it.status) {
                 Status.SUCCESS -> {
-                    viewModel.printLog("RestaurantRepository:loadRestaurant", it.data.toString())
+                    viewModel.printLog("RestaurantsRepository:loadRestaurant", it.data.toString())
                 }
                 Status.ERROR -> {
                     viewModel.printLog(
-                        "RestaurantRepository:loadRestaurant",
+                        "RestaurantsRepository:loadRestaurant",
                         "Error occurred (${it.error})"
                     )
                 }
                 Status.LOADING -> {
                     viewModel.printLog(
-                        "RestaurantRepository:loadRestaurant",
+                        "RestaurantsRepository:loadRestaurant",
                         "Loading test data..."
                     )
                 }

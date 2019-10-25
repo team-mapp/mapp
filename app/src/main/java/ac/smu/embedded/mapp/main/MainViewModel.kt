@@ -6,7 +6,7 @@ import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.repository.CelebsRepository
 import ac.smu.embedded.mapp.repository.ProgramsRepository
-import ac.smu.embedded.mapp.repository.RestaurantRepository
+import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,7 +14,7 @@ import androidx.lifecycle.ViewModel
 class MainViewModel(
     private val celebsRepository: CelebsRepository,
     private val programsRepository: ProgramsRepository,
-    private val restaurantRepository: RestaurantRepository
+    private val restaurantsRepository: RestaurantsRepository
 ) : ViewModel() {
     private val _printLogData = MutableLiveData<String>()
     val printLogData: LiveData<String> = _printLogData
@@ -38,11 +38,11 @@ class MainViewModel(
         programsRepository.loadProgram(name)
 
     fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>> =
-        restaurantRepository.loadRestaurants()
+        restaurantsRepository.loadRestaurants()
 
     fun loadRestaurantsSync(): LiveData<Resource<List<Restaurant>?>> =
-        restaurantRepository.loadRestaurantsSync()
+        restaurantsRepository.loadRestaurantsSync()
 
     fun loadRestaurant(name: String): LiveData<Resource<Restaurant?>> =
-        restaurantRepository.loadRestaurant(name)
+        restaurantsRepository.loadRestaurant(name)
 }
