@@ -239,6 +239,52 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewModel.loadCelebRelations("rnDrhqPhwwmetV32b6Sm").observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.printLog(
+                        "CelebRelationsRepository:loadCelebRelations",
+                        it.data.toString()
+                    )
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "CelebRelationsRepository:loadCelebRelations",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        "CelebRelationsRepository:loadCelebRelations",
+                        "Loading test data..."
+                    )
+                }
+            }
+        })
+
+        viewModel.loadProgramRelations("PrkVtuklSufTq34KiJAP").observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.printLog(
+                        "ProgramRelationsRepository:loadProgramRelations",
+                        it.data.toString()
+                    )
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "ProgramRelationsRepository:loadProgramRelations",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        "ProgramRelationsRepository:loadProgramRelations",
+                        "Loading test data..."
+                    )
+                }
+            }
+        })
     }
 
     companion object {

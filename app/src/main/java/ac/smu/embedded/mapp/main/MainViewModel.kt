@@ -1,12 +1,8 @@
 package ac.smu.embedded.mapp.main
 
-import ac.smu.embedded.mapp.model.Celeb
-import ac.smu.embedded.mapp.model.Program
-import ac.smu.embedded.mapp.model.Resource
-import ac.smu.embedded.mapp.model.Restaurant
-import ac.smu.embedded.mapp.repository.CelebsRepository
-import ac.smu.embedded.mapp.repository.ProgramsRepository
-import ac.smu.embedded.mapp.repository.RestaurantsRepository
+import ac.smu.embedded.mapp.model.*
+import ac.smu.embedded.mapp.repository.*
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -14,12 +10,15 @@ import androidx.lifecycle.ViewModel
 class MainViewModel(
     private val celebsRepository: CelebsRepository,
     private val programsRepository: ProgramsRepository,
-    private val restaurantsRepository: RestaurantsRepository
+    private val restaurantsRepository: RestaurantsRepository,
+    private val celebRelationsRepository: CelebRelationsRepository,
+    private val programRelationsRepository: ProgramRelationsRepository
 ) : ViewModel() {
     private val _printLogData = MutableLiveData<String>()
     val printLogData: LiveData<String> = _printLogData
 
     fun printLog(tag: String, message: String) {
+        Log.d("MainViewModel", "($tag) $message")
         _printLogData.value = "($tag) $message"
     }
 
@@ -45,4 +44,10 @@ class MainViewModel(
 
     fun loadRestaurant(name: String): LiveData<Resource<Restaurant?>> =
         restaurantsRepository.loadRestaurant(name)
+
+    fun loadCelebRelations(celebDocumentId: String): LiveData<Resource<CelebRelation?>> =
+        celebRelationsRepository.loadCelebRelation(celebDocumentId)
+
+    fun loadProgramRelations(programDocumentId: String): LiveData<Resource<ProgramRelation?>> =
+        programRelationsRepository.loadProgramRelation(programDocumentId)
 }
