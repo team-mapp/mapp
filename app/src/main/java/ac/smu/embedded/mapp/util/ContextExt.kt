@@ -12,19 +12,6 @@ fun Context.showToast(toastText: String, timeLength: Int) {
     Toast.makeText(this, toastText, timeLength).show()
 }
 
-fun Context.getViewModelFactory(): ViewModelFactory {
-    val application = applicationContext as BaseApplication
-    val celebsRepository = application.celebsRepository
-    val programsRepository = application.programsRepository
-    val restaurantRepository = application.restaurantsRepository
-    val celebRelationsRepository = application.celebRelationsRepository
-    val programRelationsRepository = application.programRelationsRepository
-
-    return ViewModelFactory(
-        celebsRepository,
-        programsRepository,
-        restaurantRepository,
-        celebRelationsRepository,
-        programRelationsRepository
-    )
-}
+fun Context.getViewModelFactory(): ViewModelFactory = ViewModelFactory(
+    applicationContext as BaseApplication
+)
