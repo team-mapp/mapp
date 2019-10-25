@@ -285,6 +285,33 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         })
+
+        viewModel.loadCelebRelationsByName("이영자")?.observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.printLog(
+                        ":loadCelebRelationsByName",
+                        it.data.toString()
+                    )
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        ":loadCelebRelationsByName",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        ":loadCelebRelationsByName",
+                        "Loading test data..."
+                    )
+                }
+            }
+        })
+
+        viewModel.loadCelebWithRelations("이영자")?.observe(this, Observer {
+            viewModel.printLog(":loadCelebWithRelations", it.toString())
+        })
     }
 
     companion object {

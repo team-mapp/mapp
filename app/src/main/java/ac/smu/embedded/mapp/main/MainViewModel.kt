@@ -2,6 +2,9 @@ package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.model.*
 import ac.smu.embedded.mapp.repository.*
+import ac.smu.embedded.mapp.util.combineLatest
+import ac.smu.embedded.mapp.util.map
+import ac.smu.embedded.mapp.util.switchMap
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -50,4 +53,30 @@ class MainViewModel(
 
     fun loadProgramRelations(programDocumentId: String): LiveData<Resource<ProgramRelation?>> =
         programRelationsRepository.loadProgramRelation(programDocumentId)
+
+    fun loadCelebRelationsByName(name: String): LiveData<Resource<CelebRelation?>>? {
+        return celebsRepository.loadCeleb(name).switchMap {
+            if (it.status == Status.SUCCESS) {
+                celebRelationsRepository.loadCelebRelation(it.data?.documentId!!)
+            } else {
+                null
+            }
+        }
+    }
+
+    fun loadCelebWithRelations(name: String): LiveData<Pair<Resource<Celeb?>, Resource<CelebRelation?>>?>? {
+        return celebsRepository.loadCeleb(name).combineLatest {
+            if (it?.status == Status.SUCCESS) {
+                celebRelationsRepository.loadCelebRelation(it.data?.documentId!!)
+            } else {
+                null
+            }
+        }?.map {
+            if (it.first.status == Status.SUCCESS && it.second.status == Status.SUCCESS) {
+                it
+            } else {
+                null
+            }
+        }
+    }
 }
