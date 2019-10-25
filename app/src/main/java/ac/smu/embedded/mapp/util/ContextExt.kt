@@ -1,5 +1,6 @@
 package ac.smu.embedded.mapp.util
 
+import ac.smu.embedded.mapp.BaseApplication
 import android.content.Context
 import android.widget.Toast
 import androidx.annotation.StringRes
@@ -12,5 +13,9 @@ fun Context.showToast(toastText: String, timeLength: Int) {
 }
 
 fun Context.getViewModelFactory(): ViewModelFactory {
-    return ViewModelFactory()
+    val application = applicationContext as BaseApplication
+    val celebsRepository = application.celebsRepository
+    val programsRepository = application.programsRepository
+    val restaurantRepository = application.restaurantRepository
+    return ViewModelFactory(celebsRepository, programsRepository, restaurantRepository)
 }

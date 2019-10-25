@@ -1,40 +1,48 @@
 package ac.smu.embedded.mapp.main
 
+import ac.smu.embedded.mapp.model.Celeb
+import ac.smu.embedded.mapp.model.Program
 import ac.smu.embedded.mapp.model.Resource
-import ac.smu.embedded.mapp.util.asFlowable
-import ac.smu.embedded.mapp.util.asLiveData
-import ac.smu.embedded.mapp.util.asSingle
+import ac.smu.embedded.mapp.model.Restaurant
+import ac.smu.embedded.mapp.repository.CelebsRepository
+import ac.smu.embedded.mapp.repository.ProgramsRepository
+import ac.smu.embedded.mapp.repository.RestaurantRepository
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
-import io.reactivex.Flowable
-import io.reactivex.Single
 
-class MainViewModel : ViewModel() {
-    private val _toastText = MutableLiveData<String>()
-    val toastText: LiveData<String> = _toastText
+class MainViewModel(
+    private val celebsRepository: CelebsRepository,
+    private val programsRepository: ProgramsRepository,
+    private val restaurantRepository: RestaurantRepository
+) : ViewModel() {
+    private val _printLogData = MutableLiveData<String>()
+    val printLogData: LiveData<String> = _printLogData
 
-    private val db = FirebaseFirestore.getInstance()
-
-    fun showToast(text: String) {
-        _toastText.value = text
+    fun printLog(tag: String, message: String) {
+        _printLogData.value = "($tag) $message"
     }
 
-    fun getTestLiveData(): LiveData<Resource<QuerySnapshot?>> {
-        return db.collection("test").get().asLiveData()
-    }
+    fun loadCelebs(): LiveData<Resource<List<Celeb>?>> = celebsRepository.loadCelebs()
 
-    fun getTestSingle(): Single<QuerySnapshot?> {
-        return db.collection("test").get().asSingle()
-    }
+    fun loadCelebsSync(): LiveData<Resource<List<Celeb>?>> = celebsRepository.loadCelebsSync()
 
-    fun getTestSnapshotLiveData(): LiveData<Resource<QuerySnapshot?>> {
-        return db.collection("test").asLiveData()
-    }
+    fun loadCeleb(name: String): LiveData<Resource<Celeb?>> = celebsRepository.loadCeleb(name)
 
-    fun getTestSnapshotFlowable(): Flowable<Resource<QuerySnapshot?>> {
-        return db.collection("test").asFlowable()
-    }
+    fun loadPrograms(): LiveData<Resource<List<Program>?>> = programsRepository.loadPrograms()
+
+    fun loadProgramsSync(): LiveData<Resource<List<Program>?>> =
+        programsRepository.loadProgramsSync()
+
+    fun loadProgram(name: String): LiveData<Resource<Program?>> =
+        programsRepository.loadProgram(name)
+
+    fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>> =
+        restaurantRepository.loadRestaurants()
+
+    fun loadRestaurantsSync(): LiveData<Resource<List<Restaurant>?>> =
+        restaurantRepository.loadRestaurantsSync()
+
+    fun loadRestaurant(name: String): LiveData<Resource<Restaurant?>> =
+        restaurantRepository.loadRestaurant(name)
 }

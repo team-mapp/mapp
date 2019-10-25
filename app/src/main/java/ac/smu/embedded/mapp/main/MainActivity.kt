@@ -2,13 +2,11 @@ package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.model.Status
+import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.TypedItem
 import ac.smu.embedded.mapp.util.getViewModelFactory
 import ac.smu.embedded.mapp.util.recyclerAdapter
-import ac.smu.embedded.mapp.util.showToast
 import android.os.Bundle
-import android.util.Log
-import android.widget.Toast
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
@@ -21,12 +19,18 @@ class MainActivity : AppCompatActivity() {
 
     private val viewModel by viewModels<MainViewModel> { getViewModelFactory() }
 
+    private lateinit var adapter: BaseRecyclerAdapter<TypedItem<String>>
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setupToast()
+        initView()
+        setupPrintLog()
+        setupRepositoryTest()
+    }
 
-        val adapter =
+    private fun initView() {
+        adapter =
             recyclerAdapter(
                 mapOf(
                     TYPE_HEADER to R.layout.item_header,
@@ -44,74 +48,193 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
-
-        btn_toast.setOnClickListener {
-            viewModel.showToast("Toast button clicked")
-            adapter.addItem(TypedItem(TYPE_ITEM, "Hello"))
-        }
-
-        viewModel.getTestLiveData().observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    for (document in it.data?.documents!!) {
-                        Log.d(TAG, "(LiveData:Task) ${document.data.toString()}")
-                    }
-                }
-                Status.ERROR -> {
-                    Log.e(TAG, "(LiveData:Task) Error occurred (${it.error})")
-                }
-                Status.LOADING -> {
-                    Log.d(TAG, "(LiveData:Task) Loading test data...")
-                }
-            }
-        })
-
-        var disposable = viewModel.getTestSingle().subscribe { snapshot, exception ->
-            if (exception == null) {
-                for (document in snapshot?.documents!!) {
-                    Log.d(TAG, "(Single:Task) ${document.data.toString()}")
-                }
-            } else {
-                Log.d(TAG, "(Single:Task) Error occurred ($exception)")
-            }
-        }
-
-        viewModel.getTestSnapshotLiveData().observe(this, Observer {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    for (document in it.data?.documents!!) {
-                        Log.d(TAG, "(LiveData:Snapshot) ${document.data.toString()}")
-                    }
-                }
-                Status.ERROR -> {
-                    Log.e(TAG, "(LiveData:Snapshot) Error occurred (${it.error})")
-                }
-                Status.LOADING -> {
-                    Log.d(TAG, "(LiveData:Snapshot) Loading test data...")
-                }
-            }
-        })
-
-        disposable = viewModel.getTestSnapshotFlowable().subscribe {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    for (document in it.data?.documents!!) {
-                        Log.d(TAG, "(Flowable:Snapshot) ${document.data.toString()}")
-                    }
-                }
-                Status.ERROR -> {
-                    Log.e(TAG, "(Flowable:Snapshot) Error occurred (${it.error})")
-                }
-                Status.LOADING -> {
-                    Log.d(TAG, "(Flowable:Snapshot) Loading test data...")
-                }
-            }
-        }
     }
 
-    private fun setupToast() {
-        viewModel.toastText.observe(this, Observer {
-            showToast(it, Toast.LENGTH_SHORT)
+    private fun setupPrintLog() {
+        viewModel.printLogData.observe(this, Observer {
+            adapter.addItem(TypedItem(TYPE_ITEM, it))
+        })
+    }
+
+    private fun setupRepositoryTest() {
+        viewModel.loadCelebs().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (celeb in it.data!!) {
+                        viewModel.printLog("CelebsRepository:loadCelebs", celeb.toString())
+                    }
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "CelebsRepository:loadCelebs",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog("CelebsRepository:loadCelebs", "Loading test data...")
+                }
+            }
+        })
+
+        viewModel.loadCelebsSync().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (celeb in it.data!!) {
+                        viewModel.printLog("CelebsRepository:loadCelebsSync", celeb.toString())
+                    }
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "CelebsRepository:loadCelebsSync",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog("CelebsRepository:loadCelebsSync", "Loading test data...")
+                }
+            }
+        })
+
+        viewModel.loadCeleb("김준현").observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.printLog("CelebsRepository:loadCelebsSync", it.data.toString())
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "CelebsRepository:loadCelebsSync",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog("CelebsRepository:loadCelebsSync", "Loading test data...")
+                }
+            }
+        })
+
+        viewModel.loadPrograms().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (celeb in it.data!!) {
+                        viewModel.printLog("ProgramsRepository:loadPrograms", celeb.toString())
+                    }
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "ProgramsRepository:loadPrograms",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog("ProgramsRepository:loadPrograms", "Loading test data...")
+                }
+            }
+        })
+
+        viewModel.loadProgramsSync().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (celeb in it.data!!) {
+                        viewModel.printLog("ProgramsRepository:loadProgramsSync", celeb.toString())
+                    }
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "ProgramsRepository:loadProgramsSync",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        "ProgramsRepository:loadProgramsSync",
+                        "Loading test data..."
+                    )
+                }
+            }
+        })
+
+        viewModel.loadProgram("맛있는녀석들").observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.printLog("ProgramsRepository:loadProgram", it.data.toString())
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "ProgramsRepository:loadProgram",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog("ProgramsRepository:loadProgram", "Loading test data...")
+                }
+            }
+        })
+
+        viewModel.loadRestaurants().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (celeb in it.data!!) {
+                        viewModel.printLog("RestaurantRepository:loadRestaurants", celeb.toString())
+                    }
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "RestaurantRepository:loadRestaurants",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        "RestaurantRepository:loadRestaurants",
+                        "Loading test data..."
+                    )
+                }
+            }
+        })
+
+        viewModel.loadRestaurantsSync().observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    for (celeb in it.data!!) {
+                        viewModel.printLog(
+                            "RestaurantRepository:loadRestaurantsSync",
+                            celeb.toString()
+                        )
+                    }
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "RestaurantRepository:loadRestaurantsSync",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        "RestaurantRepository:loadRestaurantsSync",
+                        "Loading test data..."
+                    )
+                }
+            }
+        })
+
+        viewModel.loadRestaurant("밥한끼").observe(this, Observer {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    viewModel.printLog("RestaurantRepository:loadRestaurant", it.data.toString())
+                }
+                Status.ERROR -> {
+                    viewModel.printLog(
+                        "RestaurantRepository:loadRestaurant",
+                        "Error occurred (${it.error})"
+                    )
+                }
+                Status.LOADING -> {
+                    viewModel.printLog(
+                        "RestaurantRepository:loadRestaurant",
+                        "Loading test data..."
+                    )
+                }
+            }
         })
     }
 

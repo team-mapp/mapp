@@ -10,12 +10,20 @@ data class Resource<out T>(
             return Resource(Status.SUCCESS, data, null)
         }
 
-        fun <T> error(exception: Throwable, data: T?): Resource<T> {
-            return Resource(Status.ERROR, data, exception)
+        fun <T> error(error: Throwable, data: T?): Resource<T> {
+            return Resource(Status.ERROR, data, error)
         }
 
         fun <T> loading(data: T?): Resource<T> {
             return Resource(Status.LOADING, data, null)
         }
+    }
+}
+
+fun <I, O> Resource<I>.transform(transform: (I?) -> O): Resource<O> {
+    return when (status) {
+        Status.LOADING -> Resource.loading(transform(data))
+        Status.SUCCESS -> Resource.success(transform(data))
+        Status.ERROR -> Resource.error(error!!, null)
     }
 }
