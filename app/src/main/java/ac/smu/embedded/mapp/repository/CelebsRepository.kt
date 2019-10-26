@@ -2,7 +2,6 @@ package ac.smu.embedded.mapp.repository
 
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Resource
-import ac.smu.embedded.mapp.model.transform
 import ac.smu.embedded.mapp.util.asLiveData
 import ac.smu.embedded.mapp.util.map
 import androidx.lifecycle.LiveData
