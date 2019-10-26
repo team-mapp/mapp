@@ -2,10 +2,7 @@ package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.model.Status
-import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
-import ac.smu.embedded.mapp.util.TypedItem
-import ac.smu.embedded.mapp.util.getViewModelFactory
-import ac.smu.embedded.mapp.util.recyclerAdapter
+import ac.smu.embedded.mapp.util.*
 import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -48,6 +45,8 @@ class MainActivity : AppCompatActivity() {
 
         recycler_view.layoutManager = LinearLayoutManager(this)
         recycler_view.adapter = adapter
+
+        iv_test.load(this, "celebs/1_김준현.jpg")
     }
 
     private fun setupPrintLog() {
