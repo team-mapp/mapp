@@ -23,7 +23,7 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadProgramsSync(): LiveData<Resource<List<Program>?>> {
+    fun loadProgramsOnce(): LiveData<Resource<List<Program>?>> {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -33,11 +33,24 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadProgram(name: String): LiveData<Resource<Program?>> {
+    fun loadProgram(documentId: String): LiveData<Resource<Program?>> {
+        return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    if (it != null) {
+                        Program.fromMap(it.id, it.data!!)
+                    } else {
+                        null
+                    }
+                }
+            }
+    }
+
+    fun loadProgramByName(name: String): LiveData<Resource<Program?>> {
         return db.collection(COLLECTION_PATH).whereEqualTo(
             Program.FIELD_NAME,
             name
-        ).asLiveData()
+        ).get().asLiveData()
             .map { resource ->
                 resource.transform { snapshot ->
                     val document = snapshot?.firstOrNull()

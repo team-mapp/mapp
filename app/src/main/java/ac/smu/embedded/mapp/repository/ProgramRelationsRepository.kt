@@ -13,7 +13,7 @@ class ProgramRelationsRepository(private val db: FirebaseFirestore) {
     }
 
     fun loadProgramRelation(celebDocumentId: String): LiveData<Resource<ProgramRelation?>> {
-        return db.collection(COLLECTION_PATH).document(celebDocumentId).asLiveData()
+        return db.collection(COLLECTION_PATH).document(celebDocumentId).get().asLiveData()
             .map { resource ->
                 resource.transform {
                     if (it != null) {

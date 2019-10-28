@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.loadCelebsSync().observe(this, Observer { resource ->
+        viewModel.loadCelebsOnce().observe(this, Observer { resource ->
             resource.onSuccess {
                 for (celeb in it!!) {
                     viewModel.printLog("CelebsRepository:loadCelebsSync", celeb.toString())
@@ -111,7 +111,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.loadProgramsSync().observe(this, Observer { resource ->
+        viewModel.loadProgramsOnce().observe(this, Observer { resource ->
             resource.onSuccess {
                 for (celeb in it!!) {
                     viewModel.printLog("ProgramsRepository:loadProgramsSync", celeb.toString())
@@ -155,7 +155,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.loadRestaurantsSync().observe(this, Observer { resource ->
+        viewModel.loadRestaurantsOnce().observe(this, Observer { resource ->
             resource.onSuccess {
                 for (celeb in it!!) {
                     viewModel.printLog(
@@ -248,8 +248,14 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        viewModel.loadCelebWithRelations("이영자")?.observe(this, Observer {
+        viewModel.loadCelebWithRelations("이영자").observe(this, Observer {
             viewModel.printLog(":loadCelebWithRelations", it.toString())
+        })
+
+        viewModel.loadRestaurantsFromCelebName("이영자").observe(this, Observer {
+            for (restaurant in it.data!!) {
+                viewModel.printLog(":loadRestaurantsFromCelebName", restaurant.toString())
+            }
         })
     }
 

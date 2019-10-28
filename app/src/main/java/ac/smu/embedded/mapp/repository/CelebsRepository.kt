@@ -23,7 +23,7 @@ class CelebsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadCelebsSync(): LiveData<Resource<List<Celeb>?>> {
+    fun loadCelebsOnce(): LiveData<Resource<List<Celeb>?>> {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -33,11 +33,24 @@ class CelebsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadCeleb(name: String): LiveData<Resource<Celeb?>> {
+    fun loadCeleb(documentId: String): LiveData<Resource<Celeb?>> {
+        return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    if (it != null) {
+                        Celeb.fromMap(it.id, it.data!!)
+                    } else {
+                        null
+                    }
+                }
+            }
+    }
+
+    fun loadCelebByName(name: String): LiveData<Resource<Celeb?>> {
         return db.collection(COLLECTION_PATH).whereEqualTo(
             Celeb.FIELD_NAME,
             name
-        ).asLiveData().map { resource ->
+        ).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 val document = snapshot?.firstOrNull()
                 if (document != null) {

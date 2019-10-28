@@ -23,7 +23,7 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadRestaurantsSync(): LiveData<Resource<List<Restaurant>?>> {
+    fun loadRestaurantsOnce(): LiveData<Resource<List<Restaurant>?>> {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -33,11 +33,24 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadRestaurant(name: String): LiveData<Resource<Restaurant?>> {
+    fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>> {
+        return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    if (it != null) {
+                        Restaurant.fromMap(it.id, it.data!!)
+                    } else {
+                        null
+                    }
+                }
+            }
+    }
+
+    fun loadRestaurantByName(name: String): LiveData<Resource<Restaurant?>> {
         return db.collection(COLLECTION_PATH).whereEqualTo(
             Restaurant.FIELD_NAME,
             name
-        ).asLiveData().map { resource ->
+        ).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 val document = snapshot?.firstOrNull()
                 if (document != null) {

@@ -14,7 +14,7 @@ class CelebRelationsRepository(private val db: FirebaseFirestore) {
     }
 
     fun loadCelebRelation(celebDocumentId: String): LiveData<Resource<CelebRelation?>> {
-        return db.collection(COLLECTION_PATH).document(celebDocumentId).asLiveData()
+        return db.collection(COLLECTION_PATH).document(celebDocumentId).get().asLiveData()
             .map { resource ->
                 resource.transform {
                     if (it != null) {
