@@ -81,6 +81,7 @@ object LiveDataUtil {
                     }
                     if (dataList.size == liveDataList.size) {
                         value = dataList
+                        dataList.clear()
                     }
                 }
             }
