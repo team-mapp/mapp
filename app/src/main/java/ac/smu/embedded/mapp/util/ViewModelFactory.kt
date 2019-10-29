@@ -14,10 +14,7 @@ class ViewModelFactory(
         when {
             isAssignableFrom(MainViewModel::class.java) -> MainViewModel(
                 application.celebsRepository,
-                application.programsRepository,
-                application.restaurantsRepository,
-                application.celebRelationsRepository,
-                application.programRelationsRepository
+                application.programsRepository
             )
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }
