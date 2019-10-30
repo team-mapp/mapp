@@ -33,16 +33,17 @@ class CelebsFragment : Fragment(R.layout.fragment_main_content) {
         })
     }
 
-    fun initView() {
+    private fun initView() {
         adapter =
             recyclerAdapter(R.layout.item_content_card, mutableListOf()) { view, value ->
                 view.iv_content.load(requireContext(), value.image)
                 view.tv_content.text = value.name
             }
 
-        content_view.layoutManager = LinearLayoutManager(requireContext())
-        content_view.addItemDecoration(MarginItemDecoration(resources.getDimension(R.dimen.keyline_small).toInt()))
-        content_view.adapter = adapter
+        val marginDimen = resources.getDimension(R.dimen.keyline_small).toInt()
 
+        content_view.layoutManager = LinearLayoutManager(requireContext())
+        content_view.addItemDecoration(MarginItemDecoration(marginBottom = marginDimen))
+        content_view.adapter = adapter
     }
 }
