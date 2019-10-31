@@ -12,7 +12,7 @@ import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_content.*
 
-abstract class BaseContentFragment<T> : Fragment(R.layout.fragment_main_content) {
+abstract class ContentFragment<T> : Fragment(R.layout.fragment_main_content) {
 
     protected val viewModel by activityViewModels<MainViewModel> { requireActivity().getViewModelFactory() }
     protected lateinit var adapter: BaseRecyclerAdapter<T>

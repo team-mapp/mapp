@@ -11,7 +11,7 @@ import androidx.lifecycle.Observer
 import kotlinx.android.synthetic.main.fragment_main_content.*
 import kotlinx.android.synthetic.main.item_content_card.view.*
 
-class CelebsFragment : BaseContentFragment<Celeb>() {
+class CelebsFragment : ContentFragment<Celeb>() {
     override fun initAdapter(): BaseRecyclerAdapter<Celeb> =
         recyclerAdapter(R.layout.item_content_card, mutableListOf()) { view, value ->
             view.iv_content.load(requireContext(), value.image)
