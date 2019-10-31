@@ -1,6 +1,7 @@
 package ac.smu.embedded.mapp.util
 
 import ac.smu.embedded.mapp.BaseApplication
+import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -15,6 +16,13 @@ class ViewModelFactory(
             isAssignableFrom(MainViewModel::class.java) -> MainViewModel(
                 application.celebsRepository,
                 application.programsRepository
+            )
+            isAssignableFrom(DetailViewModel::class.java) -> DetailViewModel(
+                application.celebsRepository,
+                application.celebRelationsRepository,
+                application.programsRepository,
+                application.programRelationsRepository,
+                application.restaurantsRepository
             )
             else -> throw IllegalArgumentException("Unknown ViewModel class: ${modelClass.name}")
         }

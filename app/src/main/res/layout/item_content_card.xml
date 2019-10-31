@@ -49,6 +49,20 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_content"
             app:layout_constraintVertical_chainStyle="packed" />
 
+        <ImageButton
+            android:id="@+id/btn_favorite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:padding="@dimen/keyline_small"
+            android:src="@drawable/ic_favorite"
+            android:tint="@android:color/white"
+            android:visibility="gone"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription"
+            tools:visibility="visible" />
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </com.google.android.material.card.MaterialCardView>
