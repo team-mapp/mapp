@@ -30,7 +30,7 @@
         android:id="@+id/tv_user_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/keyline_normal"
+        android:layout_marginTop="@dimen/keyline_mini"
         android:text="Name"
         android:textColor="@color/colorAccent"
         android:textSize="@dimen/main_profile_name_size"
