@@ -33,7 +33,7 @@
         android:layout_marginTop="@dimen/keyline_normal"
         android:text="Name"
         android:textColor="@color/colorAccent"
-        android:textSize="@dimen/profile_name_size"
+        android:textSize="@dimen/main_profile_name_size"
         app:layout_constraintBottom_toTopOf="@+id/tab_layout"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"

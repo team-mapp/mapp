@@ -13,19 +13,20 @@ import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private val mainViewModel by viewModels<MainViewModel> { getViewModelFactory() }
+    private val viewModel by viewModels<MainViewModel> { getViewModelFactory() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
         initView()
     }
 
     private fun initView() {
-        supportActionBar?.title = ""
-        supportActionBar?.elevation = 0.0f
+        supportActionBar?.apply {
+            elevation = 0.0f
+            setDisplayShowTitleEnabled(false)
+        }
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {

@@ -1,25 +1,27 @@
 package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.detail.DetailActivity
 import ac.smu.embedded.mapp.model.Program
-import ac.smu.embedded.mapp.util.*
+import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
+import ac.smu.embedded.mapp.util.load
+import ac.smu.embedded.mapp.util.recyclerAdapter
 import android.view.View
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_content.*
 import kotlinx.android.synthetic.main.item_content_card.view.*
 
-class ProgramsFragment : Fragment(R.layout.fragment_main_content) {
+class ProgramsFragment : BaseContentFragment<Program>() {
+    override fun initAdapter(): BaseRecyclerAdapter<Program> =
+        recyclerAdapter(R.layout.item_content_card, mutableListOf()) { view, value ->
+            view.iv_content.load(requireContext(), value.image)
+            view.tv_content.text = value.name
+            view.setOnClickListener {
+                navigateDetail(DetailActivity.TYPE_PROGRAM, value.documentId)
+            }
+        }
 
-    private val viewModel by activityViewModels<MainViewModel> { requireActivity().getViewModelFactory() }
-    private lateinit var adapter: BaseRecyclerAdapter<Program>
-
-    override fun onStart() {
-        super.onStart()
-        initView()
-
+    override fun loadContents() {
         viewModel.loadPrograms().observe(this, Observer { resource ->
             resource.onSuccess {
                 loading_progress.visibility = View.GONE
@@ -31,19 +33,5 @@ class ProgramsFragment : Fragment(R.layout.fragment_main_content) {
                 loading_progress.visibility = View.VISIBLE
             }
         })
-    }
-
-    private fun initView() {
-        adapter =
-            recyclerAdapter(R.layout.item_content_card, mutableListOf()) { view, value ->
-                view.iv_content.load(requireContext(), value.image)
-                view.tv_content.text = value.name
-            }
-
-        val marginDimen = resources.getDimension(R.dimen.keyline_small).toInt()
-
-        content_view.layoutManager = LinearLayoutManager(requireContext())
-        content_view.addItemDecoration(MarginItemDecoration(marginBottom = marginDimen))
-        content_view.adapter = adapter
     }
 }
