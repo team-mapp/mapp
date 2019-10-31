@@ -19,10 +19,13 @@
             android:value="559188p0np" />
 
         <activity android:name="ac.smu.embedded.mapp.main.MainActivity">
+        </activity>
+        <activity android:name=".restaurantDetail.RestaurantDetailActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 
