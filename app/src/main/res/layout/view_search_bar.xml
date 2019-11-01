@@ -10,20 +10,21 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:paddingLeft="@dimen/keyline_normal"
-        android:paddingRight="@dimen/keyline_normal">
+        android:paddingLeft="@dimen/keyline_normal">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/hint_search"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="?android:textColorHint"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <ImageButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/search_bar_height"
+            android:layout_height="@dimen/search_bar_height"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_search"
             app:layout_constraintBottom_toBottomOf="parent"

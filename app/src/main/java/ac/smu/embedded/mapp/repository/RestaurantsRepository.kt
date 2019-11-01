@@ -33,6 +33,21 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
         }
     }
 
+    fun loadRestaurantsByQuery(query: String): LiveData<Resource<List<Restaurant>?>> {
+        return db.collection(COLLECTION_PATH)
+            .whereArrayContains(
+                Restaurant.FIELD_INDICES,
+                query
+            ).get()
+            .asLiveData().map { resource ->
+                resource.transform { snapshot ->
+                    snapshot?.documents?.map {
+                        Restaurant.fromMap(it.id, it.data!!)
+                    }
+                }
+            }
+    }
+
     fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>> {
         return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
             .map { resource ->

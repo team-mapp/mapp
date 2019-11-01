@@ -3,8 +3,10 @@ package ac.smu.embedded.mapp.detail
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
+import ac.smu.embedded.mapp.search.SearchActivity
 import ac.smu.embedded.mapp.util.*
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
@@ -16,6 +18,7 @@ import android.view.MenuItem
 import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
 import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -71,6 +74,8 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
         related_content_view.layoutManager = LinearLayoutManager(this)
         related_content_view.addItemDecoration(MarginItemDecoration(marginBottom = marginDimen))
         related_content_view.adapter = adapter
+
+        search_bar_layout.setOnClickListener { navigateSearch() }
     }
 
 
@@ -157,6 +162,18 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
             view_profile_bg.setBackgroundColor(backgroundColor)
             tv_name.setTextColor(swatch.titleTextColor)
         }
+    }
+
+    private fun navigateSearch() {
+        val intent = Intent(this, SearchActivity::class.java)
+        startActivity(
+            intent,
+            ActivityOptionsCompat.makeSceneTransitionAnimation(
+                this,
+                search_bar_layout,
+                "search_bar"
+            ).toBundle()
+        )
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {

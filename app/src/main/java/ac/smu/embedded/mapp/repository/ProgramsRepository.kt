@@ -33,6 +33,21 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         }
     }
 
+    fun loadProgramsByQuery(query: String): LiveData<Resource<List<Program>?>> {
+        return db.collection(COLLECTION_PATH)
+            .whereArrayContains(
+                Program.FIELD_INDICES,
+                query
+            ).get()
+            .asLiveData().map { resource ->
+                resource.transform { snapshot ->
+                    snapshot?.documents?.map {
+                        Program.fromMap(it.id, it.data!!)
+                    }
+                }
+            }
+    }
+
     fun loadProgram(documentId: String): LiveData<Resource<Program?>> {
         return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
             .map { resource ->

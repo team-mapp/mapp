@@ -33,6 +33,21 @@ class CelebsRepository(private val db: FirebaseFirestore) {
         }
     }
 
+    fun loadCelebsByQuery(query: String): LiveData<Resource<List<Celeb>?>> {
+        return db.collection(COLLECTION_PATH)
+            .whereArrayContains(
+                Celeb.FIELD_INDICES,
+                query
+            ).get()
+            .asLiveData().map { resource ->
+                resource.transform { snapshot ->
+                    snapshot?.documents?.map {
+                        Celeb.fromMap(it.id, it.data!!)
+                    }
+                }
+            }
+    }
+
     fun loadCeleb(documentId: String): LiveData<Resource<Celeb?>> {
         return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
             .map { resource ->
