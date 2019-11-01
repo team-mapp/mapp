@@ -10,7 +10,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
-import android.widget.ArrayAdapter
 import android.widget.TextView
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
@@ -24,7 +23,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
 
     private val viewModel by viewModels<SearchViewModel> { getViewModelFactory() }
     private lateinit var adapter: BaseRecyclerAdapter<TypedItem<out Any>>
-    private lateinit var autocompleteAdapter: ArrayAdapter<String>
+    private lateinit var autocompleteAdapter: AutoCompleteAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -87,8 +86,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                     it.restaurantResult.forEach { restaurant -> autoCompleteItems.add(restaurant.name) }
                 }
                 if (autoCompleteItems.size > 0) {
-                    autocompleteAdapter.clear()
-                    autocompleteAdapter.addAll(autoCompleteItems)
+                    autocompleteAdapter.updateItems(autoCompleteItems)
                 }
             }
         })
@@ -139,7 +137,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
         search_content_view.addItemDecoration(MarginItemDecoration(marginBottom = marginDimen))
         search_content_view.adapter = adapter
 
-        autocompleteAdapter = ArrayAdapter(this, R.layout.item_simple_text)
+        autocompleteAdapter = AutoCompleteAdapter(this, R.layout.item_simple_text)
 
         edit_search.setAdapter(autocompleteAdapter)
         edit_search.addTextChangedListener {
@@ -151,6 +149,10 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 viewModel.search(v.text.toString().trim())
             }
             return@setOnEditorActionListener true
+        }
+
+        edit_search.setOnItemClickListener { _, _, _, _ ->
+            viewModel.search(edit_search.text.toString().trim())
         }
 
         btn_search.setOnClickListener { viewModel.search(edit_search.text.toString().trim()) }
