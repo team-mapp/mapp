@@ -16,7 +16,6 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
@@ -29,10 +28,11 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.activity_detail.*
 import kotlinx.android.synthetic.main.item_content_card.view.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
 
-    private val viewModel by viewModels<DetailViewModel> { getViewModelFactory() }
+    private val detailViewModel: DetailViewModel by viewModel()
 
     private lateinit var adapter: BaseRecyclerAdapter<Restaurant>
 
@@ -65,7 +65,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 mutableListOf()
             ) { view, value ->
                 view.btn_favorite.visibility = View.VISIBLE
-                view.iv_content.load(this, value.image)
+                view.iv_content.load(value.image)
                 view.tv_content.text = value.name
             }
 
@@ -82,15 +82,15 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     private fun loadContents(dataType: Int, documentId: String) {
         val restaurantObserver = createRestaurantObserver()
         if (dataType == TYPE_CELEB) {
-            viewModel.loadCeleb(documentId).observe(this, Observer { resource ->
+            detailViewModel.loadCeleb(documentId).observe(this, Observer { resource ->
                 resource.onSuccess { updateProfile(it?.name!!, it.image) }
             })
-            viewModel.loadCelebRestaurants(documentId).observe(this, restaurantObserver)
+            detailViewModel.loadCelebRestaurants(documentId).observe(this, restaurantObserver)
         } else if (dataType == TYPE_PROGRAM) {
-            viewModel.loadProgram(documentId).observe(this, Observer { resource ->
+            detailViewModel.loadProgram(documentId).observe(this, Observer { resource ->
                 resource.onSuccess { updateProfile(it?.name!!, it.image) }
             })
-            viewModel.loadProgramRestaurants(documentId).observe(this, restaurantObserver)
+            detailViewModel.loadProgramRestaurants(documentId).observe(this, restaurantObserver)
         }
     }
 
@@ -98,7 +98,6 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     private fun updateProfile(name: String, image: String) {
         val requestListener = createRequestListener()
         iv_profile.loadBitmap(
-            this,
             image,
             RequestOptions.circleCropTransform(),
             requestListener

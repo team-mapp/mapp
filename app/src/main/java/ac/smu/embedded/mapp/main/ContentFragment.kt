@@ -4,17 +4,16 @@ import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.detail.DetailActivity
 import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.MarginItemDecoration
-import ac.smu.embedded.mapp.util.getViewModelFactory
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.activityViewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_content.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class ContentFragment<T> : Fragment(R.layout.fragment_main_content) {
 
-    protected val viewModel by activityViewModels<MainViewModel> { requireActivity().getViewModelFactory() }
+    protected val mainViewModel: MainViewModel by viewModel()
     protected lateinit var adapter: BaseRecyclerAdapter<T>
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {

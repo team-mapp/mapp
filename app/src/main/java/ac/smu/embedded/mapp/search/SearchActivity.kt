@@ -11,17 +11,18 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_search.*
 import kotlinx.android.synthetic.main.item_content_card.view.*
+import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity(R.layout.activity_search) {
 
-    private val viewModel by viewModels<SearchViewModel> { getViewModelFactory() }
+    private val searchViewModel: SearchViewModel by viewModel()
+
     private lateinit var adapter: BaseRecyclerAdapter<TypedItem<out Any>>
     private lateinit var autocompleteAdapter: AutoCompleteAdapter
 
@@ -29,7 +30,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
         super.onCreate(savedInstanceState)
         initView()
 
-        viewModel.searchResults.observe(this, Observer {
+        searchViewModel.searchResults.observe(this, Observer {
             if (it != null) {
                 loading_progress.visibility = View.GONE
 
@@ -73,7 +74,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
             }
         })
 
-        viewModel.searchAutoComplete.observe(this, Observer {
+        searchViewModel.searchAutoComplete.observe(this, Observer {
             if (it != null) {
                 val autoCompleteItems = mutableListOf<String>()
                 if (it.celebsResult != null) {
@@ -110,7 +111,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 }
                 typeCeleb -> {
                     val celeb = value.item as Celeb
-                    view.iv_content.load(this, celeb.image)
+                    view.iv_content.load(celeb.image)
                     view.tv_content.text = celeb.name
                     view.setOnClickListener {
                         navigateDetail(DetailActivity.TYPE_CELEB, celeb.documentId)
@@ -118,7 +119,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 }
                 typeProgram -> {
                     val program = value.item as Program
-                    view.iv_content.load(this, program.image)
+                    view.iv_content.load(program.image)
                     view.tv_content.text = program.name
                     view.setOnClickListener {
                         navigateDetail(DetailActivity.TYPE_PROGRAM, program.documentId)
@@ -126,7 +127,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 }
                 typeRestaurant -> {
                     val restaurant = value.item as Restaurant
-                    view.iv_content.load(this, restaurant.image)
+                    view.iv_content.load(restaurant.image)
                     view.tv_content.text = restaurant.name
                 }
             }
@@ -141,21 +142,21 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
 
         edit_search.setAdapter(autocompleteAdapter)
         edit_search.addTextChangedListener {
-            viewModel.search(edit_search.text.toString().trim(), true)
+            searchViewModel.search(edit_search.text.toString().trim(), true)
         }
 
         edit_search.setOnEditorActionListener { v, actionId, event ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
-                viewModel.search(v.text.toString().trim())
+                searchViewModel.search(v.text.toString().trim())
             }
             return@setOnEditorActionListener true
         }
 
         edit_search.setOnItemClickListener { _, _, _, _ ->
-            viewModel.search(edit_search.text.toString().trim())
+            searchViewModel.search(edit_search.text.toString().trim())
         }
 
-        btn_search.setOnClickListener { viewModel.search(edit_search.text.toString().trim()) }
+        btn_search.setOnClickListener { searchViewModel.search(edit_search.text.toString().trim()) }
 
         edit_search.requestFocusFromTouch()
     }

@@ -7,13 +7,19 @@ import ac.smu.embedded.mapp.util.map
 import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 
-class CelebRelationsRepository(private val db: FirebaseFirestore) {
+interface CelebRelationsRepository {
+
+    fun loadCelebRelation(celebDocumentId: String): LiveData<Resource<CelebRelation?>>
+
+}
+
+class CelebRelationsRepositoryImpl(private val db: FirebaseFirestore) : CelebRelationsRepository {
 
     companion object {
         private const val COLLECTION_PATH = "celebs_relations"
     }
 
-    fun loadCelebRelation(celebDocumentId: String): LiveData<Resource<CelebRelation?>> {
+    override fun loadCelebRelation(celebDocumentId: String): LiveData<Resource<CelebRelation?>> {
         return db.collection(COLLECTION_PATH).document(celebDocumentId).get().asLiveData()
             .map { resource ->
                 resource.transform {

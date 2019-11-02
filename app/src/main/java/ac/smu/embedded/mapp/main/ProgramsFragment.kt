@@ -14,7 +14,7 @@ import kotlinx.android.synthetic.main.item_content_card.view.*
 class ProgramsFragment : ContentFragment<Program>() {
     override fun initAdapter(): BaseRecyclerAdapter<Program> =
         recyclerAdapter(R.layout.item_content_card, mutableListOf()) { view, value ->
-            view.iv_content.load(requireContext(), value.image)
+            view.iv_content.load(value.image)
             view.tv_content.text = value.name
             view.setOnClickListener {
                 navigateDetail(DetailActivity.TYPE_PROGRAM, value.documentId)
@@ -22,7 +22,7 @@ class ProgramsFragment : ContentFragment<Program>() {
         }
 
     override fun loadContents() {
-        viewModel.loadPrograms().observe(this, Observer { resource ->
+        mainViewModel.loadPrograms().observe(this, Observer { resource ->
             resource.onSuccess {
                 loading_progress.visibility = View.GONE
                 adapter.replaceItems(it!!)

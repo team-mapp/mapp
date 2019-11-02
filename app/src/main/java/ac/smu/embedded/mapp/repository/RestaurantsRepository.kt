@@ -7,13 +7,27 @@ import ac.smu.embedded.mapp.util.map
 import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 
-class RestaurantsRepository(private val db: FirebaseFirestore) {
+interface RestaurantsRepository {
+
+    fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>>
+
+    fun loadRestaurantsOnce(): LiveData<Resource<List<Restaurant>?>>
+
+    fun loadRestaurantsByQuery(query: String): LiveData<Resource<List<Restaurant>?>>
+
+    fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>>
+
+    fun loadRestaurantByName(name: String): LiveData<Resource<Restaurant?>>
+
+}
+
+class RestaurantsRepositoryImpl(private val db: FirebaseFirestore) : RestaurantsRepository {
 
     companion object {
         private const val COLLECTION_PATH = "restaurants"
     }
 
-    fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>> {
+    override fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>> {
         return db.collection(COLLECTION_PATH).asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -23,7 +37,7 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadRestaurantsOnce(): LiveData<Resource<List<Restaurant>?>> {
+    override fun loadRestaurantsOnce(): LiveData<Resource<List<Restaurant>?>> {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -33,7 +47,7 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadRestaurantsByQuery(query: String): LiveData<Resource<List<Restaurant>?>> {
+    override fun loadRestaurantsByQuery(query: String): LiveData<Resource<List<Restaurant>?>> {
         return db.collection(COLLECTION_PATH)
             .whereArrayContains(
                 Restaurant.FIELD_INDICES,
@@ -48,7 +62,7 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
             }
     }
 
-    fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>> {
+    override fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>> {
         return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
             .map { resource ->
                 resource.transform {
@@ -61,7 +75,7 @@ class RestaurantsRepository(private val db: FirebaseFirestore) {
             }
     }
 
-    fun loadRestaurantByName(name: String): LiveData<Resource<Restaurant?>> {
+    override fun loadRestaurantByName(name: String): LiveData<Resource<Restaurant?>> {
         return db.collection(COLLECTION_PATH).whereEqualTo(
             Restaurant.FIELD_NAME,
             name

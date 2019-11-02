@@ -1,6 +1,5 @@
 package ac.smu.embedded.mapp.util
 
-import ac.smu.embedded.mapp.BaseApplication
 import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
@@ -9,7 +8,9 @@ import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.StorageReference
+import com.google.firebase.storage.ktx.storage
 
 /**
  * Firebase Cloud Storage 에서 이미지를 가져와 [ImageView]에 보여주는 확장 함수
@@ -26,13 +27,12 @@ import com.google.firebase.storage.StorageReference
  * @param requestListener 이미지 결과를 [Drawable] 객체로 받을 수 있는 리스너
  */
 fun ImageView.load(
-    context: Context,
     imageLocation: String,
     requestOptions: RequestOptions? = null,
     requestListener: RequestListener<Drawable>? = null
 ) {
     var builder = Glide.with(this)
-        .load(fetchImageReference(context, imageLocation))
+        .load(fetchImageReference(imageLocation))
         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
 
     if (requestOptions != null) {
@@ -59,14 +59,13 @@ fun ImageView.load(
  * @param requestListener 이미지 결과를 [Bitmap] 객체로 받을 수 있는 리스너
  */
 fun ImageView.loadBitmap(
-    context: Context,
     imageLocation: String,
     requestOptions: RequestOptions? = null,
     requestListener: RequestListener<Bitmap>? = null
 ) {
     var builder =
         Glide.with(this).asBitmap()
-            .load(fetchImageReference(context, imageLocation))
+            .load(fetchImageReference(imageLocation))
             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
 
     if (requestOptions != null) {
@@ -78,5 +77,5 @@ fun ImageView.loadBitmap(
     builder.into(this)
 }
 
-private fun fetchImageReference(context: Context, imageLocation: String): StorageReference =
-    (context.applicationContext as BaseApplication).storage.getReference(imageLocation)
+private fun fetchImageReference(imageLocation: String): StorageReference =
+    Firebase.storage.getReference(imageLocation)
