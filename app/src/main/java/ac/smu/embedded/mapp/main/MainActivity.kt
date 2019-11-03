@@ -2,14 +2,12 @@ package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.search.SearchActivity
-import ac.smu.embedded.mapp.util.getViewModelFactory
 import ac.smu.embedded.mapp.util.showToast
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager2.widget.ViewPager2
