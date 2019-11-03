@@ -110,7 +110,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 }
                 typeCeleb -> {
                     val celeb = value.item as Celeb
-                    view.iv_content.load(celeb.image)
+                    view.iv_content.loadStorage(celeb.image)
                     view.tv_content.text = celeb.name
                     view.setOnClickListener {
                         navigateDetail(DetailActivity.TYPE_CELEB, celeb.documentId)
@@ -118,7 +118,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 }
                 typeProgram -> {
                     val program = value.item as Program
-                    view.iv_content.load(program.image)
+                    view.iv_content.loadStorage(program.image)
                     view.tv_content.text = program.name
                     view.setOnClickListener {
                         navigateDetail(DetailActivity.TYPE_PROGRAM, program.documentId)
@@ -126,7 +126,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 }
                 typeRestaurant -> {
                     val restaurant = value.item as Restaurant
-                    view.iv_content.load(restaurant.image)
+                    view.iv_content.loadStorage(restaurant.image)
                     view.tv_content.text = restaurant.name
                 }
             }

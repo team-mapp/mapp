@@ -64,7 +64,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 R.layout.item_content_card
             ) { view, value ->
                 view.btn_favorite.visibility = View.VISIBLE
-                view.iv_content.load(value.image)
+                view.iv_content.loadStorage(value.image)
                 view.tv_content.text = value.name
             }
 
@@ -96,9 +96,9 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     @SuppressLint("SetTextI18n")
     private fun updateProfile(name: String, image: String) {
         val requestListener = createRequestListener()
-        iv_profile.loadBitmap(
+        iv_profile.loadStorageAsBitmap(
             image,
-            RequestOptions.circleCropTransform(),
+            listOf(RequestOptions.circleCropTransform()),
             requestListener
         )
         tv_name.text = "#$name"
