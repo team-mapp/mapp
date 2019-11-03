@@ -68,7 +68,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                         items.add(TypedItem(typeRestaurant, celeb))
                     }
                 }
-                adapter.replaceItems(items)
+                adapter.submitList(items as List<TypedItem<out Any>>?)
             } else {
                 loading_progress.visibility = View.VISIBLE
             }
@@ -102,8 +102,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 typeCeleb to R.layout.item_content_card,
                 typeProgram to R.layout.item_content_card,
                 typeRestaurant to R.layout.item_content_card
-            ),
-            mutableListOf()
+            )
         ) { view, value ->
             when (value.type) {
                 typeHeader -> {

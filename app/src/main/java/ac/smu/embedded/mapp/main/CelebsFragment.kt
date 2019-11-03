@@ -13,7 +13,7 @@ import kotlinx.android.synthetic.main.item_content_card.view.*
 
 class CelebsFragment : ContentFragment<Celeb>() {
     override fun initAdapter(): BaseRecyclerAdapter<Celeb> =
-        recyclerAdapter(R.layout.item_content_card, mutableListOf()) { view, value ->
+        recyclerAdapter(R.layout.item_content_card) { view, value ->
             view.iv_content.load(value.image)
             view.tv_content.text = value.name
             view.setOnClickListener {
@@ -25,7 +25,7 @@ class CelebsFragment : ContentFragment<Celeb>() {
         mainViewModel.loadCelebs().observe(this, Observer { resource ->
             resource.onSuccess {
                 loading_progress.visibility = View.GONE
-                adapter.replaceItems(it!!)
+                adapter.submitList(it!!)
             }.onError {
                 loading_progress.visibility = View.GONE
                 it.printStackTrace()

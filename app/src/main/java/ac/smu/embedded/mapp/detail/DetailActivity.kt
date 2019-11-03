@@ -61,8 +61,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
 
         adapter =
             recyclerAdapter(
-                R.layout.item_content_card,
-                mutableListOf()
+                R.layout.item_content_card
             ) { view, value ->
                 view.btn_favorite.visibility = View.VISIBLE
                 view.iv_content.load(value.image)
@@ -109,7 +108,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
         Observer { resource ->
             resource.onSuccess {
                 loading_progress.visibility = View.GONE
-                adapter.replaceItems(it!!)
+                adapter.submitList(it!!)
             }
         }
 
