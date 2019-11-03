@@ -1,11 +1,12 @@
 package ac.smu.embedded.mapp.search
 
-import ac.smu.embedded.mapp.model.Status
+import ac.smu.embedded.mapp.model.*
 import ac.smu.embedded.mapp.repository.CelebsRepository
 import ac.smu.embedded.mapp.repository.ProgramsRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.util.combineLatest
 import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
 
 class SearchViewModel(
@@ -19,12 +20,15 @@ class SearchViewModel(
     private val _searchAutoComplete = MutableLiveData<SearchResult?>()
     val searchAutoComplete = _searchAutoComplete
 
+    private lateinit var queryObserver: Observer<Pair<Pair<Resource<List<Celeb>?>, Resource<List<Program>?>>, Resource<List<Restaurant>?>>>
+
     fun search(query: String, autoComplete: Boolean = false) {
         val queryCelebs = celebsRepository.loadCelebsByQuery(query)
         val queryPrograms = programsRepository.loadProgramsByQuery(query)
         val queryRestaurants = restaurantsRepository.loadRestaurantsByQuery(query)
 
-        queryCelebs.combineLatest(queryPrograms).combineLatest(queryRestaurants).observeForever {
+        val queryData = queryCelebs.combineLatest(queryPrograms).combineLatest(queryRestaurants)
+        queryObserver = Observer {
             val celebsResult = it.first.first
             val programsResult = it.first.second
             val restaurantsResult = it.second
@@ -48,6 +52,7 @@ class SearchViewModel(
                             restaurantsResult.data
                         )
                 }
+                queryData.removeObserver(queryObserver)
             } else {
                 if (autoComplete) {
                     _searchAutoComplete.value = null
@@ -56,5 +61,6 @@ class SearchViewModel(
                 }
             }
         }
+        queryData.observeForever(queryObserver)
     }
 }
