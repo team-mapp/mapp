@@ -36,7 +36,7 @@ data class Resource<out T>(
      * @param callback
      * @return [Resource]
      */
-    fun onError(callback: (Throwable) -> Unit): Resource<*> {
+    fun onError(callback: (Throwable) -> Unit): Resource<T> {
         if (status == Status.ERROR) callback(error!!)
         return this
     }
@@ -54,7 +54,7 @@ data class Resource<out T>(
      * @param callback
      * @return [Resource]
      */
-    fun onLoading(callback: () -> Unit): Resource<*> {
+    fun onLoading(callback: () -> Unit): Resource<T> {
         if (status == Status.LOADING) callback()
         return this
     }
@@ -77,9 +77,9 @@ data class Resource<out T>(
      */
     fun <O> transform(transform: (T?) -> O): Resource<O> {
         return when (status) {
-            Status.LOADING -> loading(transform(data))
+            Status.LOADING -> loading()
             Status.SUCCESS -> success(transform(data))
-            Status.ERROR -> error(error!!, null)
+            Status.ERROR -> error(error!!)
         }
     }
 
@@ -88,12 +88,12 @@ data class Resource<out T>(
             return Resource(Status.SUCCESS, data, null)
         }
 
-        fun <T> error(error: Throwable, data: T?): Resource<T> {
-            return Resource(Status.ERROR, data, error)
+        fun <T> error(error: Throwable): Resource<T> {
+            return Resource(Status.ERROR, null, error)
         }
 
-        fun <T> loading(data: T?): Resource<T> {
-            return Resource(Status.LOADING, data, null)
+        fun <T> loading(): Resource<T> {
+            return Resource(Status.LOADING, null, null)
         }
     }
 }

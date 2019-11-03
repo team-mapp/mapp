@@ -23,15 +23,15 @@ import com.google.firebase.firestore.QuerySnapshot
  */
 fun <TResult> Task<TResult>.asLiveData(): LiveData<Resource<TResult?>> {
     val liveData = MutableLiveData<Resource<TResult?>>()
-    liveData.value = Resource.loading(null)
+    liveData.value = Resource.loading()
     addOnSuccessListener {
         liveData.value = Resource.success(it)
     }
     addOnFailureListener {
-        liveData.value = Resource.error(it, null)
+        liveData.value = Resource.error(it)
     }
     addOnCanceledListener {
-        liveData.value = Resource.error(Error("Task canceled"), null)
+        liveData.value = Resource.error(Error("Task canceled"))
     }
     return liveData
 }
@@ -50,12 +50,12 @@ fun <TResult> Task<TResult>.asLiveData(): LiveData<Resource<TResult?>> {
  */
 fun DocumentReference.asLiveData(): LiveData<Resource<DocumentSnapshot?>> {
     val liveData = MutableLiveData<Resource<DocumentSnapshot?>>()
-    liveData.value = Resource.loading(null)
+    liveData.value = Resource.loading()
     addSnapshotListener { snapshot, e ->
         if (e == null) {
             liveData.value = Resource.success(snapshot)
         } else {
-            liveData.value = Resource.error(e, null)
+            liveData.value = Resource.error(e)
         }
     }
     return liveData
@@ -76,12 +76,12 @@ fun DocumentReference.asLiveData(): LiveData<Resource<DocumentSnapshot?>> {
  */
 fun Query.asLiveData(): LiveData<Resource<QuerySnapshot?>> {
     val liveData = MutableLiveData<Resource<QuerySnapshot?>>()
-    liveData.value = Resource.loading(null)
+    liveData.value = Resource.loading()
     addSnapshotListener { snapshot, e ->
         if (e == null) {
             liveData.value = Resource.success(snapshot)
         } else {
-            liveData.value = Resource.error(e, null)
+            liveData.value = Resource.error(e)
         }
     }
     return liveData
