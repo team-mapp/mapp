@@ -1,10 +1,12 @@
 package ac.smu.embedded.mapp
 
+import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.search.SearchViewModel
 import android.app.Application
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -18,6 +20,9 @@ class BaseApplication : Application() {
     private val firestore: FirebaseFirestore
         get() = Firebase.firestore
 
+    private val firebaseAuth: FirebaseAuth
+        get() = FirebaseAuth.getInstance()
+
     private val repositoryModule = module {
 
         single<CelebsRepository> { CelebsRepositoryImpl(firestore) }
@@ -30,6 +35,8 @@ class BaseApplication : Application() {
 
         single<ProgramRelationsRepository> { ProgramRelationsRepositoryImpl(firestore) }
 
+        single<UserRepository> { UserRepositoryImpl(firebaseAuth) }
+
     }
 
     private val viewModelModule = module {
@@ -38,6 +45,8 @@ class BaseApplication : Application() {
         viewModel { DetailViewModel(get(), get(), get(), get(), get()) }
 
         viewModel { SearchViewModel(get(), get(), get()) }
+
+        viewModel { UserViewModel(get()) }
     }
 
     override fun onCreate() {
