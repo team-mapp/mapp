@@ -7,13 +7,27 @@ import ac.smu.embedded.mapp.util.map
 import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ProgramsRepository(private val db: FirebaseFirestore) {
+interface ProgramsRepository {
+
+    fun loadPrograms(): LiveData<Resource<List<Program>?>>
+
+    fun loadProgramsOnce(): LiveData<Resource<List<Program>?>>
+
+    fun loadProgramsByQuery(query: String): LiveData<Resource<List<Program>?>>
+
+    fun loadProgram(documentId: String): LiveData<Resource<Program?>>
+
+    fun loadProgramByName(name: String): LiveData<Resource<Program?>>
+
+}
+
+class ProgramsRepositoryImpl(private val db: FirebaseFirestore) : ProgramsRepository {
 
     companion object {
         private const val COLLECTION_PATH = "programs"
     }
 
-    fun loadPrograms(): LiveData<Resource<List<Program>?>> {
+    override fun loadPrograms(): LiveData<Resource<List<Program>?>> {
         return db.collection(COLLECTION_PATH).asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -23,7 +37,7 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadProgramsOnce(): LiveData<Resource<List<Program>?>> {
+    override fun loadProgramsOnce(): LiveData<Resource<List<Program>?>> {
         return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
@@ -33,7 +47,22 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
         }
     }
 
-    fun loadProgram(documentId: String): LiveData<Resource<Program?>> {
+    override fun loadProgramsByQuery(query: String): LiveData<Resource<List<Program>?>> {
+        return db.collection(COLLECTION_PATH)
+            .whereArrayContains(
+                Program.FIELD_INDICES,
+                query
+            ).get()
+            .asLiveData().map { resource ->
+                resource.transform { snapshot ->
+                    snapshot?.documents?.map {
+                        Program.fromMap(it.id, it.data!!)
+                    }
+                }
+            }
+    }
+
+    override fun loadProgram(documentId: String): LiveData<Resource<Program?>> {
         return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
             .map { resource ->
                 resource.transform {
@@ -46,7 +75,7 @@ class ProgramsRepository(private val db: FirebaseFirestore) {
             }
     }
 
-    fun loadProgramByName(name: String): LiveData<Resource<Program?>> {
+    override fun loadProgramByName(name: String): LiveData<Resource<Program?>> {
         return db.collection(COLLECTION_PATH).whereEqualTo(
             Program.FIELD_NAME,
             name
