@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Mapp</string>
+    <string name="tab_celeb_text">Celebs</string>
+    <string name="tab_program_text">TV Programs</string>
+    <string name="hint_search">Search</string>
+    <string name="menu_my_title" translatable="false">MY</string>
+
+    <string name="subtitle_celebs">Celebs</string>
+    <string name="subtitle_programs">Programs</string>
+    <string name="subtitle_restaurants">Restaurants</string>
 </resources>

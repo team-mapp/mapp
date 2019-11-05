@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">맙</string>
+    <string name="tab_celeb_text">셀럽맛집</string>
+    <string name="tab_program_text">TV 맛집</string>
+    <string name="hint_search">검색하세요</string>
+
+    <string name="subtitle_celebs">셀럽</string>
+    <string name="subtitle_programs">프로그램</string>
+    <string name="subtitle_restaurants">맛집</string>
 </resources>

@@ -4,6 +4,7 @@ data class Program(val documentId: String, val name: String, val image: String) 
     companion object {
         const val FIELD_NAME = "name"
         const val FIELD_IMAGE = "image"
+        const val FIELD_INDICES = "indices"
 
         fun fromMap(documentId: String, map: Map<String, Any>): Program {
             return Program(
