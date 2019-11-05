@@ -7,12 +7,20 @@ import ac.smu.embedded.mapp.util.map
 import androidx.lifecycle.LiveData
 import com.google.firebase.firestore.FirebaseFirestore
 
-class ProgramRelationsRepository(private val db: FirebaseFirestore) {
+interface ProgramRelationsRepository {
+
+    fun loadProgramRelation(celebDocumentId: String): LiveData<Resource<ProgramRelation?>>
+
+}
+
+class ProgramRelationsRepositoryImpl(private val db: FirebaseFirestore) :
+    ProgramRelationsRepository {
+
     companion object {
         private const val COLLECTION_PATH = "programs_relations"
     }
 
-    fun loadProgramRelation(celebDocumentId: String): LiveData<Resource<ProgramRelation?>> {
+    override fun loadProgramRelation(celebDocumentId: String): LiveData<Resource<ProgramRelation?>> {
         return db.collection(COLLECTION_PATH).document(celebDocumentId).get().asLiveData()
             .map { resource ->
                 resource.transform {

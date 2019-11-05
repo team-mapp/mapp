@@ -1,5 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="keyline_mini">4dp</dimen>
+    <dimen name="keyline_small">8dp</dimen>
+    <dimen name="keyline_normal">16dp</dimen>
+
+    <dimen name="card_height">120dp</dimen>
+    <dimen name="card_title_size">24sp</dimen>
+
+    <dimen name="search_bar_height">56dp</dimen>
+    <dimen name="search_bar_elevation">4dp</dimen>
+
+    <dimen name="profile_image_size">80dp</dimen>
+    <dimen name="main_profile_height">180dp</dimen>
+    <dimen name="main_profile_name_size">20sp</dimen>
+
+    <dimen name="detail_profile_height">120dp</dimen>
+    <dimen name="detail_profile_name_size">24sp</dimen>
+    <dimen name="detail_profile_img_margin">56dp</dimen>
+    <dimen name="detail_profile_name_margin">24dp</dimen>
+  
     <dimen name="activity_horizontal_margin">16dp</dimen>
     <dimen name="activity_vertical_margin">16dp</dimen>
 </resources>
