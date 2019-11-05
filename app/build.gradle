@@ -74,6 +74,9 @@ dependencies {
     testImplementation "androidx.arch.core:core-testing:$lifecycleVersion"
     androidTestImplementation "androidx.test.ext:junit:1.1.1"
     androidTestImplementation "androidx.test.espresso:espresso-core:3.2.0"
+
+    // circle
+    implementation 'de.hdodenhof:circleimageview:2.2.0'
 }
 
 apply plugin: "com.google.gms.google-services"

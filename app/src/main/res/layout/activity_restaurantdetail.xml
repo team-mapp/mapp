@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+<LinearLayout
+    android:id="@+id/linearLayout1"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <ImageView
+        android:id="@+id/ivRestaurantImage"
+        android:layout_width="match_parent"
+        android:layout_height="180dp" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <ImageView
+            android:id="@+id/ivIconMap"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/map"
+            android:layout_marginLeft="20dp"/>
+        <LinearLayout
+            android:id="@+id/linearLayoutAddress"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/tvAddress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="주소"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:textColor="@color/cardview_dark_background"/>
+            <TextView
+                android:id="@+id/tvAddressDetail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="서울 용산구 독서당로 65-3"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="10dp"
+        >
+
+        <ImageView
+            android:id="@+id/ivIconCallNumber"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/call"
+            android:layout_marginLeft="20dp"
+            />
+        <LinearLayout
+            android:id="@+id/linearLayoutCall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            >
+            <TextView
+                android:id="@+id/tvCall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="전화번호"
+                android:textSize="15sp"
+                android:textColor="@color/cardview_dark_background"
+                android:textStyle="bold"/>
+            <TextView
+                android:id="@+id/tvCallNumber"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="02-749-5999"
+                android:textColor="@color/colorAccent"/>
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/ivLocationMap"
+        android:layout_width="match_parent"
+        android:layout_height="180dp"/>
+
+    <View
+        android:id="@+id/Line1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="5dp"
+        />
+
+    <LinearLayout
+        android:id="@+id/linearLayoutReview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        >
+        <TextView
+            android:id="@+id/tvWriteReview"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="리뷰 작성"
+            android:textColor="@color/colorAccent"
+            android:textStyle="bold"
+            android:layout_marginLeft="20dp"
+            android:textSize="15sp"
+            android:layout_gravity="center_vertical"
+            />
+        <View
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:layout_weight="1" />
+        <ImageView
+            android:id="@+id/ivIconReView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@drawable/review"
+            android:gravity="right"
+            android:layout_marginRight="20dp"
+            />
+
+    </LinearLayout>
+    <View
+        android:id="@+id/line2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="5dp"
+        />
+
+    <view class="androidx.appcompat.app.AlertController$RecycleListView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+    </view>
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/rvReviewList"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="10dp"
+        android:layout_weight="2"
+        />
+</LinearLayout>
+</ScrollView>
