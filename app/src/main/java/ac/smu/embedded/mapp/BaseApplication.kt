@@ -10,6 +10,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -22,6 +24,9 @@ class BaseApplication : Application() {
 
     private val firebaseAuth: FirebaseAuth
         get() = FirebaseAuth.getInstance()
+
+    private val firebaseStorage: FirebaseStorage
+        get() = Firebase.storage
 
     private val repositoryModule = module {
 
@@ -36,6 +41,8 @@ class BaseApplication : Application() {
         single<ProgramRelationsRepository> { ProgramRelationsRepositoryImpl(firestore) }
 
         single<UserRepository> { UserRepositoryImpl(firebaseAuth) }
+
+        single<StorageRepository<*>> { StorageRepositoryImpl(firebaseStorage) }
 
     }
 
