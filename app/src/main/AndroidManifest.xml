@@ -18,7 +18,9 @@
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="559188p0np" />
 
-        <activity android:name=".main.MainActivity">
+        <activity
+            android:name=".main.MainActivity"
+            android:theme="@style/Theme.App.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

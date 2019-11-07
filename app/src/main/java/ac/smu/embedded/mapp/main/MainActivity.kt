@@ -25,10 +25,9 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     }
 
     private fun initView() {
-        supportActionBar?.apply {
-            elevation = 0.0f
-            setDisplayShowTitleEnabled(false)
-        }
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.setDisplayShowTitleEnabled(false)
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
