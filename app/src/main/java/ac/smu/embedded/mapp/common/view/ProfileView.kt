@@ -1,6 +1,7 @@
 package ac.smu.embedded.mapp.common.view
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.util.load
 import ac.smu.embedded.mapp.util.loadAsBitmap
 import ac.smu.embedded.mapp.util.loadStorageAsBitmap
 import android.content.Context
@@ -78,7 +79,7 @@ class ProfileView @JvmOverloads constructor(
     }
 
     fun setImage(drawable: Drawable) {
-        iv_content.setImageDrawable(drawable)
+        iv_content.load(drawable, imageRequestOptions)
     }
 
     fun setImage(
