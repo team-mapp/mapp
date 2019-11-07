@@ -5,4 +5,5 @@
     <color name="colorAccent">#606F82</color>
     <color name="backgroundColor">#F5F5F5</color>
     <color name="card_filter_color">#36000000</color>
+    <color name="content_favorite_color">#D50000</color>
 </resources>

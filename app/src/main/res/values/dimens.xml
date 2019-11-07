@@ -4,13 +4,14 @@
     <dimen name="keyline_small">8dp</dimen>
     <dimen name="keyline_normal">16dp</dimen>
 
-    <dimen name="card_height">120dp</dimen>
-    <dimen name="card_title_size">24sp</dimen>
+    <dimen name="card_title_size">18sp</dimen>
+    <dimen name="card_content_height">80dp</dimen>
+    <dimen name="card_content_radius">4dp</dimen>
 
     <dimen name="search_bar_height">56dp</dimen>
     <dimen name="search_bar_elevation">4dp</dimen>
 
-    <dimen name="profile_image_size">80dp</dimen>
+    <dimen name="profile_image_size">48dp</dimen>
     <dimen name="main_profile_height">180dp</dimen>
     <dimen name="main_profile_name_size">20sp</dimen>
 
