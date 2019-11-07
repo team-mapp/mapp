@@ -27,7 +27,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".restaurantDetail.RestaurantDetailActivity" />
-        <activity android:name=".detail.DetailActivity" />
+        <activity
+            android:name=".detail.DetailActivity"
+            android:theme="@style/Theme.App.NoActionBar" />
         <activity
             android:name=".search.SearchActivity"
             android:theme="@style/Theme.App.NoActionBar" />

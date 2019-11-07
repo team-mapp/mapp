@@ -1,17 +1,15 @@
 package ac.smu.embedded.mapp.detail
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.common.view.ContentView
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.search.SearchActivity
-import ac.smu.embedded.mapp.util.*
+import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
+import ac.smu.embedded.mapp.util.MarginItemDecoration
+import ac.smu.embedded.mapp.util.recyclerAdapter
 import android.annotation.SuppressLint
 import android.content.Intent
-import android.graphics.Bitmap
-import android.graphics.PorterDuff
-import android.graphics.PorterDuffColorFilter
-import android.graphics.drawable.ColorDrawable
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -19,15 +17,8 @@ import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.lifecycle.Observer
-import androidx.palette.graphics.Palette
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.load.DataSource
-import com.bumptech.glide.load.engine.GlideException
-import com.bumptech.glide.request.RequestListener
-import com.bumptech.glide.request.RequestOptions
-import com.bumptech.glide.request.target.Target
 import kotlinx.android.synthetic.main.activity_detail.*
-import kotlinx.android.synthetic.main.item_content_card.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
@@ -52,20 +43,24 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     }
 
     private fun initView() {
+        setSupportActionBar(toolbar)
+
         supportActionBar?.apply {
-            elevation = 0.0f
             setDisplayHomeAsUpEnabled(true)
             setDisplayShowTitleEnabled(false)
-            setHomeAsUpIndicator(createHomeAsUpIndicator())
         }
 
         adapter =
             recyclerAdapter(
-                R.layout.item_content_card
+                R.layout.item_content
             ) { view, value ->
-                view.btn_favorite.visibility = View.VISIBLE
-                view.iv_content.loadStorage(value.image)
-                view.tv_content.text = value.name
+                val contentView = view as ContentView
+                contentView.setContent(
+                    value.image, value.name,
+                    isFavorite = false,
+                    visibleFavorite = true
+                )
+                contentView.setOnClickListener {}
             }
 
         val marginDimen = resources.getDimension(R.dimen.keyline_small).toInt()
@@ -95,13 +90,8 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
 
     @SuppressLint("SetTextI18n")
     private fun updateProfile(name: String, image: String) {
-        val requestListener = createRequestListener()
-        iv_profile.loadStorageAsBitmap(
-            image,
-            listOf(RequestOptions.circleCropTransform()),
-            requestListener
-        )
-        tv_name.text = "#$name"
+        view_profile.setName(name)
+        view_profile.setImage(image, true)
     }
 
     private fun createRestaurantObserver(): Observer<Resource<List<Restaurant>>> =
@@ -111,56 +101,6 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 adapter.submitList(it!!)
             }
         }
-
-    @SuppressLint("PrivateResource")
-    private fun createHomeAsUpIndicator(): Drawable =
-        getDrawable(R.drawable.abc_ic_ab_back_material)?.apply {
-            colorFilter =
-                PorterDuffColorFilter(
-                    getColor(R.color.colorAccent),
-                    PorterDuff.Mode.SRC_ATOP
-                )
-        }!!
-
-    private fun createRequestListener(): RequestListener<Bitmap> {
-        return object : RequestListener<Bitmap> {
-            override fun onResourceReady(
-                resource: Bitmap?,
-                model: Any?,
-                target: Target<Bitmap>?,
-                dataSource: DataSource?,
-                isFirstResource: Boolean
-            ): Boolean {
-                startPostponedEnterTransition()
-                if (resource != null) {
-                    val palette = Palette.from(resource).generate()
-                    // updatePaletteColor(palette)
-                }
-                return false
-            }
-
-            override fun onLoadFailed(
-                e: GlideException?,
-                model: Any?,
-                target: Target<Bitmap>?,
-                isFirstResource: Boolean
-            ): Boolean {
-                supportStartPostponedEnterTransition()
-                return false
-            }
-        }
-    }
-
-    private fun updatePaletteColor(palette: Palette) {
-        val swatch = palette.mutedSwatch
-        val backgroundColor = palette.getMutedColor(getColor(R.color.colorPrimary))
-        if (swatch != null) {
-            window.statusBarColor = ColorUtils.manipulateColor(backgroundColor, 0.32f)
-            supportActionBar?.setBackgroundDrawable(ColorDrawable(backgroundColor))
-            view_profile_bg.setBackgroundColor(backgroundColor)
-            tv_name.setTextColor(swatch.titleTextColor)
-        }
-    }
 
     private fun navigateSearch() {
         val intent = Intent(this, SearchActivity::class.java)
@@ -175,7 +115,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.menu_main, menu)
+        menuInflater.inflate(R.menu.menu_detail, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
