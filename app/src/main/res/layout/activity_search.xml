@@ -5,44 +5,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/search_bar_layout"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/search_bar_height"
-        android:background="@android:color/white"
-        android:elevation="@dimen/search_bar_elevation"
-        android:paddingLeft="@dimen/keyline_normal"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.textview.MaterialAutoCompleteTextView
-            android:id="@+id/edit_search"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginEnd="@dimen/keyline_small"
-            android:background="@null"
-            android:completionThreshold="1"
-            android:hint="@string/hint_search"
-            android:imeOptions="actionSearch"
-            android:inputType="text"
-            android:maxLines="1"
-            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toLeftOf="@+id/btn_search"
-            app:layout_constraintTop_toTopOf="parent" />
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height"
+            android:minHeight="@dimen/toolbar_height"
+            android:paddingStart="@dimen/keyline_small"
+            android:paddingEnd="@dimen/keyline_small"
+            app:layout_scrollFlags="scroll">
 
-        <ImageButton
-            android:id="@+id/btn_search"
-            android:layout_width="@dimen/search_bar_height"
-            android:layout_height="@dimen/search_bar_height"
-            android:background="?attr/selectableItemBackground"
-            android:src="@drawable/ic_search"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription" />
+            <com.google.android.material.card.MaterialCardView
+                style="@style/Widget.MaterialComponents.CardView"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/search_bar_height"
+                app:cardBackgroundColor="@color/search_bar_background"
+                app:cardCornerRadius="@dimen/search_bar_radius"
+                app:cardElevation="@dimen/search_bar_elevation">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+                <androidx.constraintlayout.widget.ConstraintLayout
+                    android:id="@+id/search_bar_layout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/search_bar_background"
+                    android:elevation="@dimen/search_bar_elevation"
+                    android:paddingStart="@dimen/keyline_normal"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.textview.MaterialAutoCompleteTextView
+                        android:id="@+id/edit_search"
+                        android:layout_width="0dp"
+                        android:layout_height="match_parent"
+                        android:layout_gravity="center_horizontal"
+                        android:layout_marginEnd="@dimen/keyline_small"
+                        android:background="@null"
+                        android:completionThreshold="1"
+                        android:hint="@string/hint_search"
+                        android:imeOptions="actionSearch"
+                        android:inputType="text"
+                        android:maxLines="1"
+                        android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+                        app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@+id/btn_search"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <ImageButton
+                        android:id="@+id/btn_search"
+                        android:layout_width="@dimen/search_bar_height"
+                        android:layout_height="@dimen/search_bar_height"
+                        android:alpha="0.54"
+                        android:background="?attr/actionBarItemBackground"
+                        android:src="@drawable/ic_search"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintRight_toRightOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        tools:ignore="ContentDescription" />
+
+                </androidx.constraintlayout.widget.ConstraintLayout>
+
+            </com.google.android.material.card.MaterialCardView>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/search_content_view"
@@ -52,7 +84,7 @@
         android:layout_marginTop="@dimen/keyline_small"
         android:layout_marginRight="@dimen/keyline_small"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/search_bar_layout" />
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
 
     <ProgressBar
         android:id="@+id/loading_progress"

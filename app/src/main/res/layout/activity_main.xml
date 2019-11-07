@@ -16,16 +16,17 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:minHeight="80dp"
-            android:paddingLeft="@dimen/keyline_normal"
-            android:paddingRight="@dimen/keyline_normal"
+            android:layout_height="@dimen/toolbar_height"
+            android:minHeight="@dimen/toolbar_height"
+            android:paddingStart="@dimen/keyline_normal"
+            android:paddingEnd="@dimen/keyline_small"
             app:layout_scrollFlags="scroll">
 
             <ac.smu.embedded.mapp.common.view.ProfileView
                 android:id="@+id/view_profile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:image="@drawable/ic_account_circle"
                 app:imageTint="@color/profile_color"
                 app:name="Username"
                 app:textColor="@android:color/black" />

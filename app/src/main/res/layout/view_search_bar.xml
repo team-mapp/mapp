@@ -27,6 +27,7 @@
         <ImageButton
             android:layout_width="@dimen/search_bar_height"
             android:layout_height="@dimen/search_bar_height"
+            android:alpha="0.54"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_search"
             app:layout_constraintBottom_toBottomOf="parent"
