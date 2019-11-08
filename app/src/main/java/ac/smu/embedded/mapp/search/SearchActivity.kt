@@ -6,6 +6,7 @@ import ac.smu.embedded.mapp.detail.DetailActivity
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Program
 import ac.smu.embedded.mapp.model.Restaurant
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.MarginItemDecoration
 import ac.smu.embedded.mapp.util.TypedItem
@@ -141,6 +142,9 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                     contentView.setContent(
                         restaurant.image, restaurant.name
                     )
+                    contentView.setOnClickListener {
+                        navigateRestaurantDetail(restaurant.documentId)
+                    }
                 }
             }
         }
@@ -177,6 +181,12 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
         val intent = Intent(this, DetailActivity::class.java)
         intent.putExtra(DetailActivity.EXTRA_DATA_TYPE, type)
         intent.putExtra(DetailActivity.EXTRA_DOCUMENT_ID, documentId)
+        startActivity(intent)
+    }
+
+    private fun navigateRestaurantDetail(documentId: String) {
+        val intent = Intent(this, RestaurantDetailActivity::class.java)
+        intent.putExtra("document_id", documentId)
         startActivity(intent)
     }
 

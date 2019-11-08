@@ -4,6 +4,8 @@ import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.common.view.ContentView
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
+import ac.smu.embedded.mapp.profile.ProfileActivity
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import ac.smu.embedded.mapp.search.SearchActivity
 import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.MarginItemDecoration
@@ -60,7 +62,9 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                     isFavorite = false,
                     visibleFavorite = true
                 )
-                contentView.setOnClickListener {}
+                contentView.setOnClickListener {
+                    navigateRestaurantDetail(value.documentId)
+                }
             }
 
         val marginDimen = resources.getDimension(R.dimen.keyline_small).toInt()
@@ -114,6 +118,12 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
         )
     }
 
+    private fun navigateRestaurantDetail(documentId: String) {
+        val intent = Intent(this, RestaurantDetailActivity::class.java)
+        intent.putExtra("document_id", documentId)
+        startActivity(intent)
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_detail, menu)
         return super.onCreateOptionsMenu(menu)
@@ -122,6 +132,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             android.R.id.home -> finish()
+            R.id.action_my -> startActivity(Intent(this, ProfileActivity::class.java))
         }
         return super.onOptionsItemSelected(item)
     }

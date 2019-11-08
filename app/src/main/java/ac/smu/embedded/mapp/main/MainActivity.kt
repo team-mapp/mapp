@@ -1,13 +1,12 @@
 package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.profile.ProfileActivity
 import ac.smu.embedded.mapp.search.SearchActivity
-import ac.smu.embedded.mapp.util.showToast
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.viewpager2.widget.ViewPager2
@@ -75,7 +74,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_my -> {
-                showToast("Not implemented", Toast.LENGTH_SHORT)
+                startActivity(Intent(this, ProfileActivity::class.java))
             }
         }
         return true
