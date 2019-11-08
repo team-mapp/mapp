@@ -115,7 +115,7 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                 typeProgram to R.layout.item_content,
                 typeRestaurant to R.layout.item_content
             )
-        ) { view, value ->
+        ) { _, view, value ->
             when (value.type) {
                 typeHeader -> {
                     (view as TextView).text = value.item as String

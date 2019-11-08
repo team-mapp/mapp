@@ -12,7 +12,7 @@ import kotlinx.android.synthetic.main.fragment_main_content.*
 
 class ProgramsFragment : ContentFragment<Program>() {
     override fun initAdapter(): BaseRecyclerAdapter<Program> =
-        recyclerAdapter(R.layout.item_content) { view, value ->
+        recyclerAdapter(R.layout.item_content) { _, view, value ->
             val contentView = view as ContentView
             contentView.setContent(value.image, value.name)
             contentView.setOnClickListener {

@@ -55,7 +55,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
         adapter =
             recyclerAdapter(
                 R.layout.item_content
-            ) { view, value ->
+            ) { _, view, value ->
                 val contentView = view as ContentView
                 contentView.setContent(
                     value.image, value.name,
