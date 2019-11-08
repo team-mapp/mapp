@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item android:drawable="@color/colorPrimary"></item>//원하는 바탕색 추가
+
+    <item>
+        <bitmap android:src="@drawable/logo_splash"
+                android:gravity="center"/> // 원하는 로고와 위치 지정
+    </item>
+</layer-list>

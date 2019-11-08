@@ -17,7 +17,14 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="559188p0np" />
-
+        <!-- splash manifest변경 추가 -->
+        <activity android:name=".splash.Splash_MainActivity"
+                  android:theme="@style/SplashTheme"
+                  android:exported="true">
+        <!-- TODO: IntroActivity에서 MainActivity로 이동되는 Intent 추가하고 intent-filter 옮기기 -->
+        </activity>
+        <!-- intro activity 추가 -->
+        <activity android:name=".Intro.Intro_MainActivity"></activity>
         <activity
             android:name=".main.MainActivity"
             android:theme="@style/Theme.App.NoActionBar">
