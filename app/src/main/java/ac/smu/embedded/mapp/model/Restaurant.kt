@@ -1,5 +1,7 @@
 package ac.smu.embedded.mapp.model
 
+import com.google.firebase.firestore.GeoPoint
+
 data class Restaurant(
     val documentId: String,
     val name: String,
@@ -7,8 +9,7 @@ data class Restaurant(
     val additionalImage: List<String>?,
     val address: String,
     val phone: String,
-    val lat: Double,
-    val lon: Double
+    val location: GeoPoint
 ) {
     companion object {
         const val FIELD_NAME = "name"
@@ -17,8 +18,7 @@ data class Restaurant(
         const val FIELD_ADDITIONAL_IMAGE = "additionalImage"
         const val FIELD_ADDRESS = "address"
         const val FIELD_PHONE = "phone"
-        const val FIELD_LAT = "lat"
-        const val FIELD_LON = "lon"
+        const val FIELD_LOCATION = "location"
 
         @Suppress("UNCHECKED_CAST")
         fun fromMap(documentId: String, map: Map<String, Any>): Restaurant {
@@ -29,8 +29,7 @@ data class Restaurant(
                 additionalImage = map[FIELD_ADDITIONAL_IMAGE] as List<String>?,
                 address = map[FIELD_ADDRESS] as String? ?: error("Empty $FIELD_ADDRESS"),
                 phone = map[FIELD_PHONE] as String? ?: error("Empty $FIELD_PHONE"),
-                lat = map[FIELD_LAT] as Double? ?: error("Empty $FIELD_LAT"),
-                lon = map[FIELD_LON] as Double? ?: error("Empty $FIELD_LON")
+                location = map[FIELD_LOCATION] as GeoPoint? ?: error("Empty $FIELD_LOCATION")
             )
         }
     }
