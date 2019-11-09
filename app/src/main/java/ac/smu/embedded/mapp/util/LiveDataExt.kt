@@ -214,8 +214,8 @@ object LiveDataUtil {
         return MediatorLiveData<List<T>>().apply {
             val dataList = mutableListOf<T>()
 
-            liveDataList.forEach {
-                addSource(it) {
+            liveDataList.forEach { liveData ->
+                addSource(liveData) {
                     if (it != null) {
                         dataList.add(it)
                     }
