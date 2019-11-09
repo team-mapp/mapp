@@ -2,7 +2,6 @@ package ac.smu.embedded.mapp.detail
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.common.view.ContentView
-import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.profile.ProfileActivity
 import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
@@ -10,7 +9,6 @@ import ac.smu.embedded.mapp.search.SearchActivity
 import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.MarginItemDecoration
 import ac.smu.embedded.mapp.util.recyclerAdapter
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
@@ -78,33 +76,32 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
 
 
     private fun loadContents(dataType: Int, documentId: String) {
-        val restaurantObserver = createRestaurantObserver()
+        detailViewModel.restaurants.observe(this, Observer {
+            loading_progress.visibility = View.GONE
+            adapter.submitList(it!!)
+        })
+
         if (dataType == TYPE_CELEB) {
             detailViewModel.loadCeleb(documentId).observe(this, Observer { resource ->
-                resource.onSuccess { updateProfile(it?.name!!, it.image) }
+                resource.onSuccess {
+                    updateProfile(it?.name!!, it.image)
+                    detailViewModel.loadRestaurants(it.restaurants)
+                }
             })
-            detailViewModel.loadCelebRestaurants(documentId).observe(this, restaurantObserver)
         } else if (dataType == TYPE_PROGRAM) {
             detailViewModel.loadProgram(documentId).observe(this, Observer { resource ->
-                resource.onSuccess { updateProfile(it?.name!!, it.image) }
+                resource.onSuccess {
+                    updateProfile(it?.name!!, it.image)
+                    detailViewModel.loadRestaurants(it.restaurants)
+                }
             })
-            detailViewModel.loadProgramRestaurants(documentId).observe(this, restaurantObserver)
         }
     }
 
-    @SuppressLint("SetTextI18n")
     private fun updateProfile(name: String, image: String) {
         view_profile.setName(name)
         view_profile.setImage(image, true)
     }
-
-    private fun createRestaurantObserver(): Observer<Resource<List<Restaurant>>> =
-        Observer { resource ->
-            resource.onSuccess {
-                loading_progress.visibility = View.GONE
-                adapter.submitList(it!!)
-            }
-        }
 
     private fun navigateSearch() {
         val intent = Intent(this, SearchActivity::class.java)
