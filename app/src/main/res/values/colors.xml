@@ -8,4 +8,5 @@
     <color name="search_bar_background">#EEEEEE</color>
     <color name="profile_color">#C4C4C4</color>
     <color name="content_favorite_color">#D50000</color>
+    <color name="background_color_splash">#E0E0D8</color>
 </resources>
