@@ -5,6 +5,8 @@
     style="@style/Widget.MaterialComponents.CardView"
     android:layout_width="match_parent"
     android:layout_height="@dimen/search_bar_height"
+    app:cardBackgroundColor="@color/search_bar_background"
+    app:cardCornerRadius="@dimen/search_bar_radius"
     app:cardElevation="@dimen/search_bar_elevation">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -25,6 +27,7 @@
         <ImageButton
             android:layout_width="@dimen/search_bar_height"
             android:layout_height="@dimen/search_bar_height"
+            android:alpha="0.54"
             android:background="@android:color/transparent"
             android:src="@drawable/ic_search"
             app:layout_constraintBottom_toBottomOf="parent"

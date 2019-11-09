@@ -1,13 +1,19 @@
 package ac.smu.embedded.mapp.search
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.common.view.ContentView
 import ac.smu.embedded.mapp.detail.DetailActivity
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Program
 import ac.smu.embedded.mapp.model.Restaurant
-import ac.smu.embedded.mapp.util.*
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
+import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
+import ac.smu.embedded.mapp.util.MarginItemDecoration
+import ac.smu.embedded.mapp.util.TypedItem
+import ac.smu.embedded.mapp.util.recyclerAdapter
 import android.content.Intent
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
@@ -16,7 +22,6 @@ import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.activity_search.*
-import kotlinx.android.synthetic.main.item_content_card.view.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SearchActivity : AppCompatActivity(R.layout.activity_search) {
@@ -94,40 +99,52 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
     }
 
     private fun initView() {
+        setSupportActionBar(toolbar)
+
+        supportActionBar?.apply {
+            setDisplayShowTitleEnabled(false)
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         search_bar_layout.transitionName = "search_bar"
 
         adapter = recyclerAdapter(
             mapOf(
                 typeHeader to R.layout.item_header,
-                typeCeleb to R.layout.item_content_card,
-                typeProgram to R.layout.item_content_card,
-                typeRestaurant to R.layout.item_content_card
+                typeCeleb to R.layout.item_content,
+                typeProgram to R.layout.item_content,
+                typeRestaurant to R.layout.item_content
             )
-        ) { view, value ->
+        ) { _, view, value ->
             when (value.type) {
                 typeHeader -> {
                     (view as TextView).text = value.item as String
                 }
                 typeCeleb -> {
                     val celeb = value.item as Celeb
-                    view.iv_content.loadStorage(celeb.image)
-                    view.tv_content.text = celeb.name
-                    view.setOnClickListener {
+                    val contentView = view as ContentView
+                    contentView.setContent(celeb.image, celeb.name)
+                    contentView.setOnClickListener {
                         navigateDetail(DetailActivity.TYPE_CELEB, celeb.documentId)
                     }
                 }
                 typeProgram -> {
                     val program = value.item as Program
-                    view.iv_content.loadStorage(program.image)
-                    view.tv_content.text = program.name
-                    view.setOnClickListener {
+                    val contentView = view as ContentView
+                    contentView.setContent(program.image, program.name)
+                    contentView.setOnClickListener {
                         navigateDetail(DetailActivity.TYPE_PROGRAM, program.documentId)
                     }
                 }
                 typeRestaurant -> {
                     val restaurant = value.item as Restaurant
-                    view.iv_content.loadStorage(restaurant.image)
-                    view.tv_content.text = restaurant.name
+                    val contentView = view as ContentView
+                    contentView.setContent(
+                        restaurant.image, restaurant.name
+                    )
+                    contentView.setOnClickListener {
+                        navigateRestaurantDetail(restaurant.documentId)
+                    }
                 }
             }
         }
@@ -165,6 +182,19 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
         intent.putExtra(DetailActivity.EXTRA_DATA_TYPE, type)
         intent.putExtra(DetailActivity.EXTRA_DOCUMENT_ID, documentId)
         startActivity(intent)
+    }
+
+    private fun navigateRestaurantDetail(documentId: String) {
+        val intent = Intent(this, RestaurantDetailActivity::class.java)
+        intent.putExtra("document_id", documentId)
+        startActivity(intent)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when (item.itemId) {
+            android.R.id.home -> finishAfterTransition()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
     companion object {

@@ -8,4 +8,5 @@
     <string name="subtitle_celebs">셀럽</string>
     <string name="subtitle_programs">프로그램</string>
     <string name="subtitle_restaurants">맛집</string>
+    <string name="menu_notification">알림</string>
 </resources>

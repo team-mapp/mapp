@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ProfileView">
+        <attr name="name" format="reference|string" />
+        <attr name="image" format="reference" />
+        <attr name="imageTint" format="color" />
+        <attr name="textColor" format="color" />
+    </declare-styleable>
+</resources>
