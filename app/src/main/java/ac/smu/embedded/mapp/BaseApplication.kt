@@ -36,6 +36,8 @@ class BaseApplication : Application() {
 
         single<RestaurantsRepository> { RestaurantsRepositoryImpl(firestore) }
 
+        single<UserFavoriteRepository> { UserFavoriteRepositoryImpl(firestore) }
+
         single<UserRepository> { UserRepositoryImpl(firebaseAuth) }
 
         single<StorageRepository<*>> { StorageRepositoryImpl(firebaseStorage) }
