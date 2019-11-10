@@ -47,7 +47,7 @@ class BaseApplication : Application() {
     private val viewModelModule = module {
         viewModel { MainViewModel(get(), get()) }
 
-        viewModel { DetailViewModel(get(), get(), get()) }
+        viewModel { DetailViewModel(get(), get(), get(), get()) }
 
         viewModel { SearchViewModel(get(), get(), get()) }
 

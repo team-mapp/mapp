@@ -9,7 +9,8 @@ data class Restaurant(
     val additionalImage: List<String>?,
     val address: String,
     val phone: String,
-    val location: GeoPoint
+    val location: GeoPoint,
+    var isFavorite: Boolean = false
 ) {
     companion object {
         const val FIELD_NAME = "name"

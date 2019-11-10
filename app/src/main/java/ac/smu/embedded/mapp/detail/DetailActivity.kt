@@ -57,9 +57,17 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 val contentView = view as ContentView
                 contentView.setContent(
                     value.image, value.name,
-                    isFavorite = false,
+                    isFavorite = value.isFavorite,
                     visibleFavorite = true
                 )
+                contentView.setOnFavoriteClickListener { v, isFavorite ->
+                    if (isFavorite) {
+                        detailViewModel.removeFavorite("test", value.documentId)
+                    } else {
+                        detailViewModel.addFavorite("test", value.documentId)
+                    }
+                    contentView.isFavorite = !isFavorite
+                }
                 contentView.setOnClickListener {
                     navigateRestaurantDetail(value.documentId)
                 }
@@ -74,7 +82,6 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
         search_bar_layout.setOnClickListener { navigateSearch() }
     }
 
-
     private fun loadContents(dataType: Int, documentId: String) {
         detailViewModel.restaurants.observe(this, Observer {
             loading_progress.visibility = View.GONE
@@ -82,19 +89,21 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
         })
 
         if (dataType == TYPE_CELEB) {
-            detailViewModel.loadCeleb(documentId).observe(this, Observer { resource ->
-                resource.onSuccess {
-                    updateProfile(it?.name!!, it.image)
-                    detailViewModel.loadRestaurants(it.restaurants)
+            detailViewModel.celeb.observe(this, Observer {
+                if (it != null) {
+                    updateProfile(it.name, it.image)
+                    detailViewModel.loadRestaurants("test", it.restaurants)
                 }
             })
+            detailViewModel.loadCeleb(documentId)
         } else if (dataType == TYPE_PROGRAM) {
-            detailViewModel.loadProgram(documentId).observe(this, Observer { resource ->
-                resource.onSuccess {
-                    updateProfile(it?.name!!, it.image)
-                    detailViewModel.loadRestaurants(it.restaurants)
+            detailViewModel.program.observe(this, Observer {
+                if (it != null) {
+                    updateProfile(it.name, it.image)
+                    detailViewModel.loadRestaurants("test", it.restaurants)
                 }
             })
+            detailViewModel.loadProgram(documentId)
         }
     }
 
