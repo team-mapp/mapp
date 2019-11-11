@@ -1,5 +1,7 @@
 package ac.smu.embedded.mapp.model
 
+import ac.smu.embedded.mapp.util.emptyFieldError
+
 data class Celeb(
     val documentId: String,
     val name: String,
@@ -16,10 +18,12 @@ data class Celeb(
         fun fromMap(documentId: String, map: Map<String, Any>): Celeb {
             return Celeb(
                 documentId,
-                name = map[FIELD_NAME] as String? ?: error("Empty $FIELD_NAME"),
-                image = map[FIELD_IMAGE] as String? ?: error("Empty $FIELD_IMAGE"),
+                name = map[FIELD_NAME] as String?
+                    ?: emptyFieldError("Celeb", documentId, FIELD_NAME),
+                image = map[FIELD_IMAGE] as String?
+                    ?: emptyFieldError("Celeb", documentId, FIELD_IMAGE),
                 restaurants = map[FIELD_RESTAURANTS] as List<String>?
-                    ?: error("Empty $FIELD_RESTAURANTS")
+                    ?: emptyFieldError("Celeb", documentId, FIELD_RESTAURANTS)
             )
         }
     }

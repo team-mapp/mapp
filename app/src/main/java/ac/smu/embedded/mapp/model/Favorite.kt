@@ -1,5 +1,6 @@
 package ac.smu.embedded.mapp.model
 
+import ac.smu.embedded.mapp.util.emptyFieldError
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties
 
@@ -17,9 +18,10 @@ data class Favorite(
         fun fromMap(documentId: String, map: Map<String, Any>): Favorite {
             return Favorite(
                 documentId,
-                userId = map[FIELD_USER_ID] as String? ?: error("Empty $FIELD_USER_ID"),
+                userId = map[FIELD_USER_ID] as String?
+                    ?: emptyFieldError("Favorite", documentId, FIELD_USER_ID),
                 restaurantId = map[FIELD_RESTAURANT_ID] as String?
-                    ?: error("Empty $FIELD_RESTAURANT_ID")
+                    ?: emptyFieldError("Favorite", documentId, FIELD_RESTAURANT_ID)
             )
         }
     }
