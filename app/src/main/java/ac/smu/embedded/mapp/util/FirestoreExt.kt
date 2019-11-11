@@ -8,8 +8,8 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.suspendCancellableCoroutine
-import kotlin.coroutines.resume
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.channels.sendBlocking
 
 /**
  * Firestore를 이용할때 [Task] 결과에 대한 콜백을 [LiveData]로 Wrapping 해주는 Extension 함수
@@ -89,12 +89,18 @@ fun Query.asLiveData(): LiveData<Resource<QuerySnapshot?>> {
     return liveData
 }
 
-suspend fun Query.await() = suspendCancellableCoroutine<QuerySnapshot> {
+fun Query.observe(): Channel<QuerySnapshot> {
+    val channel = Channel<QuerySnapshot>()
     addSnapshotListener { snapshot, exception ->
-        if (exception == null) {
-            it.resume(snapshot!!)
-        } else {
-            it.cancel(exception)
+        if (exception != null) {
+            channel.close(exception)
+            return@addSnapshotListener
         }
+        if (snapshot == null) {
+            channel.close()
+            return@addSnapshotListener
+        }
+        channel.sendBlocking(snapshot)
     }
+    return channel
 }

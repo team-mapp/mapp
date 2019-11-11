@@ -4,8 +4,8 @@ import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.util.asLiveData
-import ac.smu.embedded.mapp.util.await
 import ac.smu.embedded.mapp.util.map
+import ac.smu.embedded.mapp.util.observe
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -54,13 +54,15 @@ class RestaurantsRepositoryImpl(private val db: FirebaseFirestore) : Restaurants
 
     override fun loadRestaurantsSync(scope: CoroutineScope): LiveData<List<Restaurant>?> {
         return liveData(scope.coroutineContext) {
-            val snapshot = db.collection(COLLECTION_PATH).await()
-            val list =
-                snapshot.documents
-                    .filter { it.data != null }
-                    .map { Restaurant.fromMap(it.id, it.data!!) }
-            if (list.isNotEmpty()) emit(list.toList())
-            else emit(null)
+            val channel = db.collection(COLLECTION_PATH).observe()
+            for (snapshot in channel) {
+                val list =
+                    snapshot.documents
+                        .filter { it.data != null }
+                        .map { Restaurant.fromMap(it.id, it.data!!) }
+                if (list.isNotEmpty()) emit(list.toList())
+                else emit(null)
+            }
         }
     }
 

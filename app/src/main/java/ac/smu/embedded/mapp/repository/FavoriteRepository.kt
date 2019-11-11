@@ -3,8 +3,8 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Favorite
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.util.asLiveData
-import ac.smu.embedded.mapp.util.await
 import ac.smu.embedded.mapp.util.map
+import ac.smu.embedded.mapp.util.observe
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -48,13 +48,15 @@ class FavoriteRepositoryImpl(private val db: FirebaseFirestore) : FavoriteReposi
         userId: String
     ): LiveData<List<Favorite>?> {
         return liveData(scope.coroutineContext) {
-            val snapshot = db.collection(COLLECTION_PATH).await()
-            val list =
-                snapshot.documents
-                    .filter { it.data != null }
-                    .map { Favorite.fromMap(it.id, it.data!!) }
-            if (list.isNotEmpty()) emit(list.toList())
-            else emit(null)
+            val channel = db.collection(COLLECTION_PATH).observe()
+            for (snapshot in channel) {
+                val list =
+                    snapshot.documents
+                        .filter { it.data != null }
+                        .map { Favorite.fromMap(it.id, it.data!!) }
+                if (list.isNotEmpty()) emit(list.toList())
+                else emit(null)
+            }
         }
     }
 
