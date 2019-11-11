@@ -1,7 +1,7 @@
 package ac.smu.embedded.mapp.repository
 
+import ac.smu.embedded.mapp.model.Favorite
 import ac.smu.embedded.mapp.model.Resource
-import ac.smu.embedded.mapp.model.UserFavorite
 import ac.smu.embedded.mapp.util.asLiveData
 import ac.smu.embedded.mapp.util.await
 import ac.smu.embedded.mapp.util.map
@@ -11,70 +11,70 @@ import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.tasks.await
 
-interface UserFavoriteRepository {
+interface FavoriteRepository {
 
-    fun loadUserFavorites(userId: String): LiveData<Resource<List<UserFavorite>?>>
+    fun loadFavorites(userId: String): LiveData<Resource<List<Favorite>?>>
 
-    fun loadUserFavoritesSync(scope: CoroutineScope, userId: String): LiveData<List<UserFavorite>?>
+    fun loadFavoritesSync(scope: CoroutineScope, userId: String): LiveData<List<Favorite>?>
 
-    suspend fun loadUserFavoritesAwait(userId: String): List<UserFavorite>?
+    suspend fun loadFavoritesAwait(userId: String): List<Favorite>?
 
-    fun addUserFavorite(userId: String, restaurantId: String)
+    fun addFavorite(userId: String, restaurantId: String)
 
-    fun removeUserFavorite(userId: String, restaurantId: String)
+    fun removeFavorite(userId: String, restaurantId: String)
 
 }
 
-class UserFavoriteRepositoryImpl(private val db: FirebaseFirestore) : UserFavoriteRepository {
+class FavoriteRepositoryImpl(private val db: FirebaseFirestore) : FavoriteRepository {
 
     companion object {
-        private const val COLLECTION_PATH = "user_favorites"
+        private const val COLLECTION_PATH = "favorites"
     }
 
-    override fun loadUserFavorites(userId: String): LiveData<Resource<List<UserFavorite>?>> =
+    override fun loadFavorites(userId: String): LiveData<Resource<List<Favorite>?>> =
         db.collection(COLLECTION_PATH).whereEqualTo(
-            UserFavorite.FIELD_USER_ID,
+            Favorite.FIELD_USER_ID,
             userId
         ).asLiveData().map { resource ->
             resource.transform { snapshot ->
                 snapshot?.documents?.map {
-                    UserFavorite.fromMap(it.id, it.data!!)
+                    Favorite.fromMap(it.id, it.data!!)
                 }
             }
         }
 
-    override fun loadUserFavoritesSync(
+    override fun loadFavoritesSync(
         scope: CoroutineScope,
         userId: String
-    ): LiveData<List<UserFavorite>?> {
+    ): LiveData<List<Favorite>?> {
         return liveData(scope.coroutineContext) {
             val snapshot = db.collection(COLLECTION_PATH).await()
             val list =
                 snapshot.documents
                     .filter { it.data != null }
-                    .map { UserFavorite.fromMap(it.id, it.data!!) }
+                    .map { Favorite.fromMap(it.id, it.data!!) }
             if (list.isNotEmpty()) emit(list.toList())
             else emit(null)
         }
     }
 
-    override suspend fun loadUserFavoritesAwait(userId: String): List<UserFavorite>? {
+    override suspend fun loadFavoritesAwait(userId: String): List<Favorite>? {
         val snapshot = db.collection(COLLECTION_PATH).get().await()
         val list =
             snapshot.documents
                 .filter { it.data != null }
-                .map { UserFavorite.fromMap(it.id, it.data!!) }
+                .map { Favorite.fromMap(it.id, it.data!!) }
         return if (list.isNotEmpty()) list else null
     }
 
-    override fun addUserFavorite(userId: String, restaurantId: String) {
-        db.collection(COLLECTION_PATH).add(UserFavorite("", userId, restaurantId))
+    override fun addFavorite(userId: String, restaurantId: String) {
+        db.collection(COLLECTION_PATH).add(Favorite("", userId, restaurantId))
     }
 
-    override fun removeUserFavorite(userId: String, restaurantId: String) {
+    override fun removeFavorite(userId: String, restaurantId: String) {
         db.collection(COLLECTION_PATH)
-            .whereEqualTo(UserFavorite.FIELD_USER_ID, userId)
-            .whereEqualTo(UserFavorite.FIELD_RESTAURANT_ID, restaurantId)
+            .whereEqualTo(Favorite.FIELD_USER_ID, userId)
+            .whereEqualTo(Favorite.FIELD_RESTAURANT_ID, restaurantId)
             .get()
             .addOnCompleteListener {
                 val document = it.result?.firstOrNull()
