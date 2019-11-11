@@ -40,6 +40,8 @@ class BaseApplication : Application() {
 
         single<FavoriteRepository> { FavoriteRepositoryImpl(firestore) }
 
+        single<ReviewRepository> { ReviewRepositoryImpl(firestore) }
+
         single<UserRepository> { UserRepositoryImpl(firebaseAuth) }
 
         single<StorageRepository<*>> { StorageRepositoryImpl(firebaseStorage) }
