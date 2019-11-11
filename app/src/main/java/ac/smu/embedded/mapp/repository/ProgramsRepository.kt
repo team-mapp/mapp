@@ -2,10 +2,12 @@ package ac.smu.embedded.mapp.repository
 
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Program
+import ac.smu.embedded.mapp.model.Program.Companion.fromMap
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.util.asLiveData
 import ac.smu.embedded.mapp.util.map
 import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,125 +44,83 @@ class ProgramsRepositoryImpl(private val db: FirebaseFirestore) : ProgramsReposi
         private const val COLLECTION_PATH = "programs"
     }
 
-    override fun loadPrograms(): LiveData<Resource<List<Program>?>> {
-        return db.collection(COLLECTION_PATH).asLiveData().map { resource ->
-            resource.transform { snapshot ->
-                snapshot?.documents?.map {
-                    Program.fromMap(it.id, it.data!!)
-                }
-            }
-        }
-    }
-
-    override fun loadProgramsSync(scope: CoroutineScope): LiveData<List<Program>?> {
-        return liveData(scope.coroutineContext) {
-            val channel = db.collection(COLLECTION_PATH).observe()
-            for (snapshot in channel) {
-                val list =
-                    snapshot.documents
-                        .filter { it.data != null }
-                        .map { Program.fromMap(it.id, it.data!!) }
-                if (list.isNotEmpty()) emit(list.toList())
-                else emit(null)
-            }
-        }
-    }
-
-    override fun loadProgramsOnce(): LiveData<Resource<List<Program>?>> {
-        return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
-            resource.transform { snapshot ->
-                snapshot?.documents?.map {
-                    Program.fromMap(it.id, it.data!!)
-                }
-            }
-        }
-    }
-
-    override suspend fun loadProgramsAwait(): List<Program>? {
-        val snapshot = db.collection(COLLECTION_PATH).get().await()
-        val list =
-            snapshot.documents
-                .filter { it.data != null }
-                .map { Program.fromMap(it.id, it.data!!) }
-        return if (list.isNotEmpty()) list else null
-    }
-
-    override fun loadProgramsByQuery(query: String): LiveData<Resource<List<Program>?>> {
-        return db.collection(COLLECTION_PATH)
-            .whereArrayContains(
-                Program.FIELD_INDICES,
-                query
-            ).get()
-            .asLiveData().map { resource ->
-                resource.transform { snapshot ->
-                    snapshot?.documents?.map {
-                        Program.fromMap(it.id, it.data!!)
-                    }
-                }
-            }
-    }
-
-    override suspend fun loadProgramsByQueryAwait(query: String): List<Program>? {
-        val snapshot = db.collection(COLLECTION_PATH)
-            .whereArrayContains(Celeb.FIELD_INDICES, query)
-            .get().await()
-        val list =
-            snapshot.documents
-                .filter { it.data != null }
-                .map { Program.fromMap(it.id, it.data!!) }
-        return if (list.isNotEmpty()) list else null
-    }
-
-    override fun loadProgram(documentId: String): LiveData<Resource<Program?>> {
-        return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
+    override fun loadPrograms(): LiveData<Resource<List<Program>?>> =
+        db.collection(COLLECTION_PATH)
+            .asLiveData()
             .map { resource ->
                 resource.transform {
-                    if (it != null) {
-                        Program.fromMap(it.id, it.data!!)
-                    } else {
-                        null
-                    }
+                    it?.toObject(::fromMap)
                 }
             }
-    }
 
-    override suspend fun loadProgramAwait(documentId: String): Program? {
-        val snapshot = db.collection(COLLECTION_PATH).document(documentId).get().await()
-        return if (snapshot.data != null) {
-            Program.fromMap(snapshot.id, snapshot.data!!)
-        } else {
-            null
+    override fun loadProgramsSync(scope: CoroutineScope): LiveData<List<Program>?> =
+        liveData(scope.coroutineContext) {
+            val channel = db.collection(COLLECTION_PATH).observe()
+            for (snapshot in channel) {
+                emit(snapshot.toObject(::fromMap))
+            }
         }
-    }
 
-    override fun loadProgramByName(name: String): LiveData<Resource<Program?>> {
-        return db.collection(COLLECTION_PATH).whereEqualTo(
-            Program.FIELD_NAME,
-            name
-        ).get().asLiveData()
+    override fun loadProgramsOnce(): LiveData<Resource<List<Program>?>> =
+        db.collection(COLLECTION_PATH)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
+                }
+            }
+
+    override suspend fun loadProgramsAwait(): List<Program>? =
+        db.collection(COLLECTION_PATH)
+            .get().await()
+            .toObject(::fromMap)
+
+    override fun loadProgramsByQuery(query: String): LiveData<Resource<List<Program>?>> =
+        db.collection(COLLECTION_PATH)
+            .whereArrayContains(Program.FIELD_INDICES, query)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
+                }
+            }
+
+    override suspend fun loadProgramsByQueryAwait(query: String): List<Program>? =
+        db.collection(COLLECTION_PATH)
+            .whereArrayContains(Celeb.FIELD_INDICES, query)
+            .get().await()
+            .toObject(::fromMap)
+
+    override fun loadProgram(documentId: String): LiveData<Resource<Program?>> =
+        db.collection(COLLECTION_PATH)
+            .document(documentId)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
+                }
+            }
+
+    override suspend fun loadProgramAwait(documentId: String): Program? =
+        db.collection(COLLECTION_PATH)
+            .document(documentId)
+            .get().await()
+            .toObject(::fromMap)
+
+    override fun loadProgramByName(name: String): LiveData<Resource<Program?>> =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Program.FIELD_NAME, name)
+            .get().asLiveData()
             .map { resource ->
                 resource.transform { snapshot ->
-                    val document = snapshot?.firstOrNull()
-                    if (document != null) {
-                        Program.fromMap(document.id, document.data)
-                    } else {
-                        null
-                    }
+                    snapshot?.firstOrNull()?.toObject(::fromMap)
                 }
             }
-    }
 
-    override suspend fun loadProgramByNameAwait(name: String): Program? {
-        val snapshot = db.collection(COLLECTION_PATH).whereEqualTo(
-            Celeb.FIELD_NAME,
-            name
-        ).get().await()
-
-        val document = snapshot.firstOrNull()
-        return if (document != null) {
-            Program.fromMap(document.id, document.data)
-        } else {
-            return null
-        }
-    }
+    override suspend fun loadProgramByNameAwait(name: String): Program? =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Celeb.FIELD_NAME, name)
+            .get().await()
+            .firstOrNull()
+            ?.toObject(::fromMap)
 }

@@ -104,3 +104,14 @@ fun Query.observe(): Channel<QuerySnapshot> {
     }
     return channel
 }
+
+fun <T> QuerySnapshot.toObject(transform: (String, Map<String, Any>) -> T): List<T>? {
+    val list = documents
+        .filter { it.data != null }
+        .map { transform(it.id, it.data!!) }
+    return if (list.isNotEmpty()) list else null
+}
+
+fun <T> DocumentSnapshot.toObject(transform: (String, Map<String, Any>) -> T): T? {
+    return if (data != null) transform(id, data!!) else null
+}

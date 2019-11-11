@@ -1,10 +1,12 @@
 package ac.smu.embedded.mapp.repository
 
 import ac.smu.embedded.mapp.model.Favorite
+import ac.smu.embedded.mapp.model.Favorite.Companion.fromMap
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.util.asLiveData
 import ac.smu.embedded.mapp.util.map
 import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -32,45 +34,34 @@ class FavoriteRepositoryImpl(private val db: FirebaseFirestore) : FavoriteReposi
     }
 
     override fun loadFavorites(userId: String): LiveData<Resource<List<Favorite>?>> =
-        db.collection(COLLECTION_PATH).whereEqualTo(
-            Favorite.FIELD_USER_ID,
-            userId
-        ).asLiveData().map { resource ->
-            resource.transform { snapshot ->
-                snapshot?.documents?.map {
-                    Favorite.fromMap(it.id, it.data!!)
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Favorite.FIELD_USER_ID, userId)
+            .asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
                 }
             }
-        }
 
     override fun loadFavoritesSync(
         scope: CoroutineScope,
         userId: String
-    ): LiveData<List<Favorite>?> {
-        return liveData(scope.coroutineContext) {
+    ): LiveData<List<Favorite>?> =
+        liveData(scope.coroutineContext) {
             val channel = db.collection(COLLECTION_PATH).observe()
             for (snapshot in channel) {
-                val list =
-                    snapshot.documents
-                        .filter { it.data != null }
-                        .map { Favorite.fromMap(it.id, it.data!!) }
-                if (list.isNotEmpty()) emit(list.toList())
-                else emit(null)
+                emit(snapshot.toObject(::fromMap))
             }
         }
-    }
 
-    override suspend fun loadFavoritesAwait(userId: String): List<Favorite>? {
-        val snapshot = db.collection(COLLECTION_PATH).get().await()
-        val list =
-            snapshot.documents
-                .filter { it.data != null }
-                .map { Favorite.fromMap(it.id, it.data!!) }
-        return if (list.isNotEmpty()) list else null
-    }
+    override suspend fun loadFavoritesAwait(userId: String): List<Favorite>? =
+        db.collection(COLLECTION_PATH)
+            .get().await()
+            .toObject(::fromMap)
 
     override fun addFavorite(userId: String, restaurantId: String) {
-        db.collection(COLLECTION_PATH).add(Favorite("", userId, restaurantId))
+        db.collection(COLLECTION_PATH)
+            .add(Favorite("", userId, restaurantId))
     }
 
     override fun removeFavorite(userId: String, restaurantId: String) {

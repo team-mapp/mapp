@@ -3,9 +3,11 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.Restaurant
+import ac.smu.embedded.mapp.model.Restaurant.Companion.fromMap
 import ac.smu.embedded.mapp.util.asLiveData
 import ac.smu.embedded.mapp.util.map
 import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
@@ -42,124 +44,83 @@ class RestaurantsRepositoryImpl(private val db: FirebaseFirestore) : Restaurants
         private const val COLLECTION_PATH = "restaurants"
     }
 
-    override fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>> {
-        return db.collection(COLLECTION_PATH).asLiveData().map { resource ->
-            resource.transform { snapshot ->
-                snapshot?.documents?.map {
-                    Restaurant.fromMap(it.id, it.data!!)
-                }
-            }
-        }
-    }
-
-    override fun loadRestaurantsSync(scope: CoroutineScope): LiveData<List<Restaurant>?> {
-        return liveData(scope.coroutineContext) {
-            val channel = db.collection(COLLECTION_PATH).observe()
-            for (snapshot in channel) {
-                val list =
-                    snapshot.documents
-                        .filter { it.data != null }
-                        .map { Restaurant.fromMap(it.id, it.data!!) }
-                if (list.isNotEmpty()) emit(list.toList())
-                else emit(null)
-            }
-        }
-    }
-
-    override fun loadRestaurantsOnce(): LiveData<Resource<List<Restaurant>?>> {
-        return db.collection(COLLECTION_PATH).get().asLiveData().map { resource ->
-            resource.transform { snapshot ->
-                snapshot?.documents?.map {
-                    Restaurant.fromMap(it.id, it.data!!)
-                }
-            }
-        }
-    }
-
-    override suspend fun loadRestaurantsOnceAwait(): List<Restaurant>? {
-        val snapshot = db.collection(COLLECTION_PATH).get().await()
-        val list =
-            snapshot.documents
-                .filter { it.data != null }
-                .map { Restaurant.fromMap(it.id, it.data!!) }
-        return if (list.isNotEmpty()) list else null
-    }
-
-    override fun loadRestaurantsByQuery(query: String): LiveData<Resource<List<Restaurant>?>> {
-        return db.collection(COLLECTION_PATH)
-            .whereArrayContains(
-                Restaurant.FIELD_INDICES,
-                query
-            ).get()
-            .asLiveData().map { resource ->
-                resource.transform { snapshot ->
-                    snapshot?.documents?.map {
-                        Restaurant.fromMap(it.id, it.data!!)
-                    }
-                }
-            }
-    }
-
-    override suspend fun loadRestaurantsByQueryAwait(query: String): List<Restaurant>? {
-        val snapshot = db.collection(COLLECTION_PATH)
-            .whereArrayContains(Celeb.FIELD_INDICES, query)
-            .get().await()
-        val list =
-            snapshot.documents
-                .filter { it.data != null }
-                .map { Restaurant.fromMap(it.id, it.data!!) }
-        return if (list.isNotEmpty()) list else null
-    }
-
-    override fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>> {
-        return db.collection(COLLECTION_PATH).document(documentId).get().asLiveData()
+    override fun loadRestaurants(): LiveData<Resource<List<Restaurant>?>> =
+        db.collection(COLLECTION_PATH)
+            .asLiveData()
             .map { resource ->
                 resource.transform {
-                    if (it != null) {
-                        Restaurant.fromMap(it.id, it.data!!)
-                    } else {
-                        null
-                    }
+                    it?.toObject(::fromMap)
                 }
             }
-    }
 
-    override suspend fun loadRestaurantAwait(documentId: String): Restaurant? {
-        val snapshot = db.collection(COLLECTION_PATH).document(documentId).get().await()
-        return if (snapshot.data != null) {
-            Restaurant.fromMap(snapshot.id, snapshot.data!!)
-        } else {
-            null
-        }
-    }
-
-    override fun loadRestaurantByName(name: String): LiveData<Resource<Restaurant?>> {
-        return db.collection(COLLECTION_PATH).whereEqualTo(
-            Restaurant.FIELD_NAME,
-            name
-        ).get().asLiveData().map { resource ->
-            resource.transform { snapshot ->
-                val document = snapshot?.firstOrNull()
-                if (document != null) {
-                    Restaurant.fromMap(document.id, document.data)
-                } else {
-                    null
-                }
+    override fun loadRestaurantsSync(scope: CoroutineScope): LiveData<List<Restaurant>?> =
+        liveData(scope.coroutineContext) {
+            val channel = db.collection(COLLECTION_PATH).observe()
+            for (snapshot in channel) {
+                emit(snapshot.toObject(::fromMap))
             }
         }
-    }
 
-    override suspend fun loadRestaurantByNameAwait(name: String): Restaurant? {
-        val snapshot = db.collection(COLLECTION_PATH).whereEqualTo(
-            Celeb.FIELD_NAME,
-            name
-        ).get().await()
+    override fun loadRestaurantsOnce(): LiveData<Resource<List<Restaurant>?>> =
+        db.collection(COLLECTION_PATH)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
+                }
+            }
 
-        val document = snapshot.firstOrNull()
-        return if (document != null) {
-            Restaurant.fromMap(document.id, document.data)
-        } else {
-            return null
-        }
-    }
+    override suspend fun loadRestaurantsOnceAwait(): List<Restaurant>? =
+        db.collection(COLLECTION_PATH)
+            .get().await()
+            .toObject(::fromMap)
+
+    override fun loadRestaurantsByQuery(query: String): LiveData<Resource<List<Restaurant>?>> =
+        db.collection(COLLECTION_PATH)
+            .whereArrayContains(Celeb.FIELD_INDICES, query)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
+                }
+            }
+
+    override suspend fun loadRestaurantsByQueryAwait(query: String): List<Restaurant>? =
+        db.collection(COLLECTION_PATH)
+            .whereArrayContains(Celeb.FIELD_INDICES, query)
+            .get().await()
+            .toObject(::fromMap)
+
+    override fun loadRestaurant(documentId: String): LiveData<Resource<Restaurant?>> =
+        db.collection(COLLECTION_PATH)
+            .document(documentId)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.toObject(::fromMap)
+                }
+            }
+
+    override suspend fun loadRestaurantAwait(documentId: String): Restaurant? =
+        db.collection(COLLECTION_PATH)
+            .document(documentId)
+            .get().await()
+            .toObject(::fromMap)
+
+    override fun loadRestaurantByName(name: String): LiveData<Resource<Restaurant?>> =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Celeb.FIELD_NAME, name)
+            .get().asLiveData()
+            .map { resource ->
+                resource.transform {
+                    it?.firstOrNull()?.toObject(::fromMap)
+                }
+            }
+
+    override suspend fun loadRestaurantByNameAwait(name: String): Restaurant? =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Celeb.FIELD_NAME, name)
+            .get().await()
+            .firstOrNull()
+            ?.toObject(::fromMap)
 }
