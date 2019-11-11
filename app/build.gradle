@@ -32,6 +32,8 @@ dependencies {
     def koinVersion = "2.0.1"
 
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlinVersion"
+
+    // Coroutines
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.0"
     implementation "org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1"
 
@@ -76,6 +78,9 @@ dependencies {
 
     // Naver Map SDK
     implementation "com.naver.maps:map-sdk:3.6.1"
+
+    // Logger
+    implementation "com.orhanobut:logger:2.2.0"
 
     // Testing libraries
     testImplementation "junit:junit:4.12"

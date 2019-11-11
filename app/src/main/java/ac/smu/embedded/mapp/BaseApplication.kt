@@ -12,6 +12,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -60,6 +62,10 @@ class BaseApplication : Application() {
             androidLogger()
             androidContext(this@BaseApplication)
             modules(listOf(repositoryModule, viewModelModule))
+        }
+
+        if (BuildConfig.DEBUG) {
+            Logger.addLogAdapter(AndroidLogAdapter())
         }
     }
 }
