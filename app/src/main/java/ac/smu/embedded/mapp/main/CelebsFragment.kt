@@ -8,7 +8,7 @@ import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.recyclerAdapter
 import android.view.View
 import androidx.lifecycle.Observer
-import kotlinx.android.synthetic.main.fragment_main_content.*
+import kotlinx.android.synthetic.main.activity_detail.*
 
 class CelebsFragment : ContentFragment<Celeb>() {
     override fun initAdapter(): BaseRecyclerAdapter<Celeb> =
@@ -24,16 +24,9 @@ class CelebsFragment : ContentFragment<Celeb>() {
         }
 
     override fun loadContents() {
-        mainViewModel.loadCelebs().observe(this, Observer { resource ->
-            resource.onSuccess {
-                loading_progress.visibility = View.GONE
-                adapter.submitList(it!!)
-            }.onError {
-                loading_progress.visibility = View.GONE
-                it.printStackTrace()
-            }.onLoading {
-                loading_progress.visibility = View.VISIBLE
-            }
+        mainViewModel.loadCelebs().observe(this, Observer {
+            loading_progress.visibility = View.GONE
+            adapter.submitList(it)
         })
     }
 }
