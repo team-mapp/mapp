@@ -7,9 +7,10 @@ import androidx.annotation.IntRange
  *
  * @property eatenFood 먹은 음식명
  * @property aboutFood 먹은 음식에 대한 평가
+ * @property recommendPoint 추천 점수 (0 - 5)
  * @property costEffective 가성비 (0 - 5)
  * @property servicePoint 서비스 평가 (0 - 5)
- * @property waitingTime 대기 시간
+ * @property waitingTime 대기 시간 (분 단위로 작성)
  * @property bestPlace 명당 자리
  * @property aboutPlace 명당 자리에 대한 평가
  * @property detailQuestion 랜덤으로 제공되는 상세 질문
@@ -18,6 +19,7 @@ import androidx.annotation.IntRange
 data class ReviewContent(
     val eatenFood: String?,
     val aboutFood: String?,
+    val recommendPoint: Int?,
     @IntRange(from = 0, to = 5) val costEffective: Int?,
     @IntRange(from = 0, to = 5) val servicePoint: Int?,
     val waitingTime: Int?,
@@ -29,6 +31,7 @@ data class ReviewContent(
     companion object {
         const val FIELD_EATEN_FOOD = "eatenFood"
         const val FIELD_ABOUT_FOOD = "aboutFood"
+        const val FIELD_RECOMMEND_POINT = "recommendPoint"
         const val FIELD_COST_EFFECTIVE = "costEffective"
         const val FIELD_SERVICE_POINT = "servicePoint"
         const val FIELD_WAITING_TIME = "waitingTime"
@@ -41,6 +44,7 @@ data class ReviewContent(
             return reviewContent {
                 eatenFood { map[FIELD_EATEN_FOOD] as String? }
                 aboutFood { map[FIELD_ABOUT_FOOD] as String? }
+                recommendPoint { (map[FIELD_RECOMMEND_POINT] as Long?)?.toInt() }
                 costEffective { (map[FIELD_COST_EFFECTIVE] as Long?)?.toInt() }
                 servicePoint { (map[FIELD_SERVICE_POINT] as Long?)?.toInt() }
                 waitingTime { (map[FIELD_WAITING_TIME] as Long?)?.toInt() }
@@ -61,6 +65,7 @@ class ReviewContentBuilder() {
     constructor(content: ReviewContent) : this() {
         eatenFood = content.eatenFood
         aboutFood = content.aboutFood
+        recommendPoint = content.recommendPoint
         costEffective = content.costEffective
         servicePoint = content.servicePoint
         waitingTime = content.waitingTime
@@ -72,6 +77,7 @@ class ReviewContentBuilder() {
 
     private var eatenFood: String? = null
     private var aboutFood: String? = null
+    private var recommendPoint: Int? = null
     private var costEffective: Int? = null
     private var servicePoint: Int? = null
     private var waitingTime: Int? = null
@@ -86,6 +92,14 @@ class ReviewContentBuilder() {
 
     fun aboutFood(lambda: () -> String?) {
         this.aboutFood = lambda()
+    }
+
+    fun recommendPoint(@IntRange(from = 0, to = 5) value: Int) {
+        this.recommendPoint = value
+    }
+
+    fun recommendPoint(lambda: () -> Int?) {
+        this.recommendPoint = lambda()
     }
 
     fun costEffective(@IntRange(from = 0, to = 5) value: Int) {
@@ -131,6 +145,7 @@ class ReviewContentBuilder() {
     fun build() = ReviewContent(
         eatenFood,
         aboutFood,
+        recommendPoint,
         costEffective,
         servicePoint,
         waitingTime,
