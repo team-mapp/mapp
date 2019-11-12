@@ -1,57 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
-
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 <LinearLayout
+
     android:id="@+id/linearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
     >
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/abLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolBar"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/toolbar_height">
+            <ac.smu.embedded.mapp.common.view.ProfileView
+                android:id="@+id/viewProfile"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:textColor="@android:color/black"/>
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
     <ImageView
         android:id="@+id/ivRestaurantImage"
         android:layout_width="match_parent"
-        android:layout_height="180dp" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <ImageView
-            android:id="@+id/ivIconMap"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/map"
-            android:layout_marginLeft="20dp"/>
-        <LinearLayout
-            android:id="@+id/linearLayoutAddress"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
-            >
-            <TextView
-                android:id="@+id/tvAddress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="주소"
-                android:textSize="15sp"
-                android:textStyle="bold"
-                android:textColor="@color/cardview_dark_background"/>
-            <TextView
-                android:id="@+id/tvAddressDetail"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="서울 용산구 독서당로 65-3"
-                android:textColor="@color/colorAccent"/>
-        </LinearLayout>
-    </LinearLayout>
+        android:layout_height="180dp"
+        />
 
     <LinearLayout
         android:id="@+id/linearLayout3"
@@ -59,6 +41,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginTop="10dp"
+        android:layout_marginBottom="10dp"
         >
 
         <ImageView
@@ -88,80 +71,121 @@
                 android:id="@+id/tvCallNumber"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="02-749-5999"
+                android:text="전화번호"
                 android:textColor="@color/colorAccent"/>
         </LinearLayout>
-
     </LinearLayout>
 
-    <ImageView
-        android:id="@+id/ivLocationMap"
-        android:layout_width="match_parent"
-        android:layout_height="180dp"/>
+        <LinearLayout
+            android:id="@+id/linearLayout2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
 
-    <View
-        android:id="@+id/Line1"
+            <ImageView
+                android:id="@+id/ivIconMap"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:layout_marginLeft="20dp"
+                android:src="@drawable/map" />
+
+            <LinearLayout
+                android:id="@+id/linearLayoutAddress"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/tvAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="주소"
+                    android:textColor="@color/cardview_dark_background"
+                    android:textSize="15sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvAddressDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="주소"
+                    android:textColor="@color/colorAccent" />
+            </LinearLayout>
+        </LinearLayout>
+
+    <com.naver.maps.map.MapView
+        android:id="@+id/MapView"
         android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorAccent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_height="180dp"
+        android:name="com.naver.maps.map.MapFragment"
+        android:layout_margin="10dp"
         />
 
-    <LinearLayout
-        android:id="@+id/linearLayoutReview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <TextView
-            android:id="@+id/tvWriteReview"
+        <LinearLayout
+            android:id="@+id/linearLayoutReview"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="리뷰 작성"
-            android:textColor="@color/colorAccent"
-            android:textStyle="bold"
-            android:layout_marginLeft="20dp"
-            android:textSize="15sp"
-            android:layout_gravity="center_vertical"
-            />
-        <View
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_weight="1" />
-        <ImageView
-            android:id="@+id/ivIconReView"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:src="@drawable/review"
-            android:gravity="right"
-            android:layout_marginRight="20dp"
-            />
+            android:orientation="horizontal">
 
-    </LinearLayout>
-    <View
-        android:id="@+id/line2"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:background="@color/colorAccent"
-        android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="5dp"
-        />
+            <TextView
+                android:id="@+id/tvReview"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="20dp"
+                android:text="리뷰"
+                android:textColor="@color/colorAccent"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                />
+
+            <View
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_weight="1" />
+
+
+        </LinearLayout>
 
     <view class="androidx.appcompat.app.AlertController$RecycleListView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
-
     </view>
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvReviewList"
+
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
-        android:layout_weight="2"
-        />
+        android:layout_height="wrap_content"
+        >
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/rvReviewList"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            >
+        </androidx.recyclerview.widget.RecyclerView>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/floatingButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="10dp"
+            android:src="@drawable/write"
+            android:tint="@color/backgroundColor"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+
+        </com.google.android.material.floatingactionbutton.FloatingActionButton>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
 </LinearLayout>
 </ScrollView>

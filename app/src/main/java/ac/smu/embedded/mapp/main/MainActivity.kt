@@ -26,12 +26,15 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun initView() {
         setSupportActionBar(toolbar)
 
-        supportActionBar?.setDisplayShowTitleEnabled(false)
+        supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setDisplayShowTitleEnabled(false)
+        }
 
         tab_layout.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener {
             override fun onTabSelected(tab: TabLayout.Tab?) {
                 view_pager.setCurrentItem(tab?.position!!, true)
-            }
+            } 
 
             override fun onTabReselected(tab: TabLayout.Tab?) {
                 // No-op

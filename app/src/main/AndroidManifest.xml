@@ -33,7 +33,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".restaurantDetail.RestaurantDetailActivity" />
+        <activity
+            android:name=".restaurantDetail.RestaurantDetailActivity"
+            android:theme="@style/Theme.App.NoActionBar"
+            ></activity>
         <activity
             android:name=".detail.DetailActivity"
             android:theme="@style/Theme.App.NoActionBar" />

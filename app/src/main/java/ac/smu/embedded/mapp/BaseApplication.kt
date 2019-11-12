@@ -4,6 +4,7 @@ import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.repository.*
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailViewModel
 import ac.smu.embedded.mapp.search.SearchViewModel
 import android.app.Application
 import com.google.firebase.auth.FirebaseAuth
@@ -54,6 +55,8 @@ class BaseApplication : Application() {
         viewModel { SearchViewModel(get(), get(), get()) }
 
         viewModel { UserViewModel(get()) }
+
+        viewModel { RestaurantDetailViewModel(get()) }
     }
 
     override fun onCreate() {
