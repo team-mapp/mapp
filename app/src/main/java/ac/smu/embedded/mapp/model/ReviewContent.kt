@@ -9,7 +9,7 @@ import androidx.annotation.IntRange
  * @property aboutFood 먹은 음식에 대한 평가
  * @property costEffective 가성비 (0 - 5)
  * @property servicePoint 서비스 평가 (0 - 5)
- * @property waitingTime 대기 시간 (TODO: 정확한 시간이 필요한 건지 확인)
+ * @property waitingTime 대기 시간
  * @property bestPlace 명당 자리
  * @property aboutPlace 명당 자리에 대한 평가
  * @property detailQuestion 랜덤으로 제공되는 상세 질문
@@ -20,7 +20,7 @@ data class ReviewContent(
     val aboutFood: String?,
     @IntRange(from = 0, to = 5) val costEffective: Int?,
     @IntRange(from = 0, to = 5) val servicePoint: Int?,
-    @IntRange(from = 0, to = 5) val waitingTime: Int?,
+    val waitingTime: Int?,
     val bestPlace: String?,
     val aboutPlace: String?,
     val detailQuestion: String?,
@@ -104,7 +104,7 @@ class ReviewContentBuilder() {
         this.servicePoint = lambda()
     }
 
-    fun waitingTime(@IntRange(from = 0, to = 5) value: Int) {
+    fun waitingTime(value: Int) {
         this.waitingTime = value
     }
 
