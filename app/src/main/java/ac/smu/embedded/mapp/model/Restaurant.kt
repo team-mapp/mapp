@@ -1,5 +1,6 @@
 package ac.smu.embedded.mapp.model
 
+import ac.smu.embedded.mapp.util.emptyFieldError
 import com.google.firebase.firestore.GeoPoint
 
 data class Restaurant(
@@ -9,7 +10,8 @@ data class Restaurant(
     val additionalImage: List<String>?,
     val address: String,
     val phone: String,
-    val location: GeoPoint
+    val location: GeoPoint,
+    var isFavorite: Boolean = false
 ) {
     companion object {
         const val FIELD_NAME = "name"
@@ -24,12 +26,17 @@ data class Restaurant(
         fun fromMap(documentId: String, map: Map<String, Any>): Restaurant {
             return Restaurant(
                 documentId,
-                name = map[FIELD_NAME] as String? ?: error("Empty $FIELD_NAME"),
-                image = map[FIELD_IMAGE] as String? ?: error("Empty $FIELD_IMAGE"),
+                name = map[FIELD_NAME] as String?
+                    ?: emptyFieldError("Restaurant", documentId, FIELD_NAME),
+                image = map[FIELD_IMAGE] as String?
+                    ?: emptyFieldError("Restaurant", documentId, FIELD_IMAGE),
                 additionalImage = map[FIELD_ADDITIONAL_IMAGE] as List<String>?,
-                address = map[FIELD_ADDRESS] as String? ?: error("Empty $FIELD_ADDRESS"),
-                phone = map[FIELD_PHONE] as String? ?: error("Empty $FIELD_PHONE"),
-                location = map[FIELD_LOCATION] as GeoPoint? ?: error("Empty $FIELD_LOCATION")
+                address = map[FIELD_ADDRESS] as String?
+                    ?: emptyFieldError("Restaurant", documentId, FIELD_ADDRESS),
+                phone = map[FIELD_PHONE] as String?
+                    ?: emptyFieldError("Restaurant", documentId, FIELD_PHONE),
+                location = map[FIELD_LOCATION] as GeoPoint?
+                    ?: emptyFieldError("Restaurant", documentId, FIELD_LOCATION)
             )
         }
     }

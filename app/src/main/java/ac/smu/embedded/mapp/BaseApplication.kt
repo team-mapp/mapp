@@ -13,6 +13,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
+import com.orhanobut.logger.AndroidLogAdapter
+import com.orhanobut.logger.Logger
 import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.android.viewmodel.dsl.viewModel
@@ -37,9 +39,9 @@ class BaseApplication : Application() {
 
         single<RestaurantsRepository> { RestaurantsRepositoryImpl(firestore) }
 
-        single<CelebRelationsRepository> { CelebRelationsRepositoryImpl(firestore) }
+        single<FavoriteRepository> { FavoriteRepositoryImpl(firestore) }
 
-        single<ProgramRelationsRepository> { ProgramRelationsRepositoryImpl(firestore) }
+        single<ReviewRepository> { ReviewRepositoryImpl(firestore) }
 
         single<UserRepository> { UserRepositoryImpl(firebaseAuth) }
 
@@ -50,7 +52,7 @@ class BaseApplication : Application() {
     private val viewModelModule = module {
         viewModel { MainViewModel(get(), get()) }
 
-        viewModel { DetailViewModel(get(), get(), get()) }
+        viewModel { DetailViewModel(get(), get(), get(), get()) }
 
         viewModel { SearchViewModel(get(), get(), get()) }
 
@@ -65,6 +67,10 @@ class BaseApplication : Application() {
             androidLogger()
             androidContext(this@BaseApplication)
             modules(listOf(repositoryModule, viewModelModule))
+        }
+
+        if (BuildConfig.DEBUG) {
+            Logger.addLogAdapter(AndroidLogAdapter())
         }
     }
 }

@@ -1,46 +1,57 @@
 package ac.smu.embedded.mapp.detail
 
-import ac.smu.embedded.mapp.model.Resource
+import ac.smu.embedded.mapp.model.Celeb
+import ac.smu.embedded.mapp.model.Program
 import ac.smu.embedded.mapp.model.Restaurant
-import ac.smu.embedded.mapp.model.Status
 import ac.smu.embedded.mapp.repository.CelebsRepository
+import ac.smu.embedded.mapp.repository.FavoriteRepository
 import ac.smu.embedded.mapp.repository.ProgramsRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
-import ac.smu.embedded.mapp.util.LiveDataUtil
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.launch
 
 class DetailViewModel(
     private val celebsRepository: CelebsRepository,
     private val programsRepository: ProgramsRepository,
-    private val restaurantsRepository: RestaurantsRepository
+    private val restaurantsRepository: RestaurantsRepository,
+    private val favoriteRepository: FavoriteRepository
 ) : ViewModel() {
+    private val _celeb = MutableLiveData<Celeb?>()
+    val celeb: LiveData<Celeb?> = _celeb
+
+    private val _program = MutableLiveData<Program?>()
+    val program: LiveData<Program?> = _program
+
     private val _restaurants = MutableLiveData<List<Restaurant>?>()
     val restaurants: LiveData<List<Restaurant>?> = _restaurants
 
-    private lateinit var restaurantsObserver: Observer<List<Resource<Restaurant?>>>
+    fun loadCeleb(documentId: String) = viewModelScope.launch {
+        _celeb.value = celebsRepository.loadCelebAwait(documentId)
+    }
 
-    fun loadCeleb(documentId: String) = celebsRepository.loadCeleb(documentId)
+    fun loadProgram(documentId: String) = viewModelScope.launch {
+        _program.value = programsRepository.loadProgramAwait(documentId)
+    }
 
-    fun loadProgram(documentId: String) = programsRepository.loadProgram(documentId)
-
-    fun loadRestaurants(documentIds: List<String>) {
-        val restaurantDataList = documentIds.map {
-            restaurantsRepository.loadRestaurant(it)
-        }
-        val zippedData = LiveDataUtil.zip(restaurantDataList)
-        restaurantsObserver = Observer { list ->
-            val restaurantList = list.filter {
-                it.status == Status.SUCCESS && it.data != null
-            }.map { it.data!! }
-
-            if (restaurantList.size == documentIds.size) {
-                _restaurants.value = restaurantList
-                zippedData.removeObserver(restaurantsObserver)
+    fun loadRestaurants(userId: String, documentIds: List<String>) =
+        viewModelScope.launch {
+            val userFavorites = favoriteRepository.loadFavoritesAwait(userId)
+            val restaurants = documentIds.map {
+                restaurantsRepository.loadRestaurantAwait(it)
+            }
+            val userFavoriteIds = userFavorites?.map { it.restaurantId }
+            _restaurants.value = restaurants.filterNotNull().map {
+                it.isFavorite = userFavoriteIds?.contains(it.documentId) ?: false
+                return@map it
             }
         }
-        zippedData.observeForever(restaurantsObserver)
-    }
+
+    fun addFavorite(userId: String, documentId: String) =
+        favoriteRepository.addFavorite(userId, documentId)
+
+    fun removeFavorite(userId: String, documentId: String) =
+        favoriteRepository.removeFavorite(userId, documentId)
 }

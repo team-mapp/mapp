@@ -10,10 +10,13 @@ import androidx.lifecycle.MutableLiveData
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import kotlinx.coroutines.tasks.await
 
 interface UserRepository {
 
     fun signIn(credential: AuthCredential): LiveData<Resource<User?>>
+
+    suspend fun signInAwait(credential: AuthCredential): User?
 
     fun signOut()
 
@@ -36,6 +39,17 @@ class UserRepositoryImpl(private val auth: FirebaseAuth) : UserRepository {
                 }
             }
         }
+
+    override suspend fun signInAwait(credential: AuthCredential): User? {
+        val result = auth.signInWithCredential(credential).await()
+        return if (result.user != null) {
+            with(result.user!!) {
+                User(uid, displayName, photoUrl.toString())
+            }
+        } else {
+            null
+        }
+    }
 
     override fun signOut() = auth.signOut()
 

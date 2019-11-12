@@ -24,16 +24,9 @@ class ProgramsFragment : ContentFragment<Program>() {
         }
 
     override fun loadContents() {
-        mainViewModel.loadPrograms().observe(this, Observer { resource ->
-            resource.onSuccess {
-                loading_progress.visibility = View.GONE
-                adapter.submitList(it!!)
-            }.onError {
-                loading_progress.visibility = View.GONE
-                it.printStackTrace()
-            }.onLoading {
-                loading_progress.visibility = View.VISIBLE
-            }
+        mainViewModel.loadPrograms().observe(this, Observer {
+            loading_progress.visibility = View.GONE
+            adapter.submitList(it)
         })
     }
 }
