@@ -1,5 +1,6 @@
 package ac.smu.embedded.mapp
 
+import ac.smu.embedded.mapp.Intro.IntroViewModel
 import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
@@ -56,6 +57,8 @@ class BaseApplication : Application() {
         viewModel { SearchViewModel(get(), get(), get()) }
 
         viewModel { UserViewModel(get()) }
+
+        viewModel {IntroViewModel(get() , get(), get(), get())}
     }
 
     override fun onCreate() {
