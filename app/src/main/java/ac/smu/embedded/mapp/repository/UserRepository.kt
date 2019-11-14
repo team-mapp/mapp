@@ -24,7 +24,11 @@ interface UserRepository {
 
     fun updateUserProfile(displayName: String?, profileImage: String?): LiveData<Resource<Void?>>
 
+    suspend fun updateUserProfileAwait(displayName: String?, profileImage: String?): Boolean
+
     fun deleteUser(): LiveData<Resource<Void?>>
+
+    suspend fun deleteUserAwait(): Boolean
 
 }
 
@@ -78,8 +82,28 @@ class UserRepositoryImpl(private val auth: FirebaseAuth) : UserRepository {
         return user?.updateProfile(builder.build())?.asLiveData() ?: createErrorData("Unknown user")
     }
 
+    override suspend fun updateUserProfileAwait(
+        displayName: String?,
+        profileImage: String?
+    ): Boolean {
+        val builder = UserProfileChangeRequest.Builder()
+        if (displayName != null) {
+            builder.setDisplayName(displayName)
+        }
+        if (profileImage != null) {
+            builder.setPhotoUri(Uri.parse(profileImage))
+        }
+
+        val user = auth.currentUser
+        return user?.updateProfile(builder.build())?.await() != null
+    }
+
     override fun deleteUser(): LiveData<Resource<Void?>> {
         return auth.currentUser?.delete()?.asLiveData() ?: createErrorData("Unknown user")
+    }
+
+    override suspend fun deleteUserAwait(): Boolean {
+        return auth.currentUser?.delete()?.await() != null
     }
 
     private fun createErrorData(message: String): LiveData<Resource<Void?>> {
