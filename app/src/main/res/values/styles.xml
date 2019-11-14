@@ -1,31 +1,46 @@
 <resources>
 
     <style name="Theme.App" parent="Theme.MaterialComponents.Light">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorSecondary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="background">@color/backgroundColor</item>
-        <item name="android:navigationBarColor">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:colorBackground">@color/backgroundColor</item>
+        <item name="android:navigationBarColor">@color/colorSecondary</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="appBarLayoutStyle">@style/AppBarLayout.Default</item>
+        <item name="toolbarStyle">@style/Toolbar.Default</item>
     </style>
 
     <style name="Theme.App.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimary">@color/colorSecondary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
-        <item name="background">@color/backgroundColor</item>
-        <item name="android:navigationBarColor">@color/colorAccent</item>
+        <item name="colorSecondary">@color/colorSecondary</item>
+        <item name="android:colorBackground">@color/backgroundColor</item>
+        <item name="android:navigationBarColor">@color/colorSecondary</item>
         <item name="android:windowActivityTransitions">true</item>
         <item name="android:windowLightStatusBar">true</item>
+        <item name="appBarLayoutStyle">@style/AppBarLayout.Default</item>
+        <item name="toolbarStyle">@style/Toolbar.Default</item>
     </style>
 
+    <style name="AppBarLayout.Default" parent="Widget.MaterialComponents.AppBarLayout.Primary">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
 
-    //for splash
-    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar">//위의 엑션바(툴바)삭
+    <style name="Toolbar.Default" parent="Widget.MaterialComponents.Toolbar">
+        <item name="android:background">@color/colorPrimary</item>
+    </style>
+
+    <style name="TextAppearance.Header" parent="@style/TextAppearance.MaterialComponents.Subtitle1">
+        <item name="android:textColor">@color/colorSecondary</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:padding">@dimen/keyline_small</item>
+    </style>
+
+    <!-- for splash -->
+    <style name="SplashTheme" parent="Theme.AppCompat.NoActionBar"> <!-- 위의 엑션바(툴바)삭 -->
         <item name="android:windowBackground">@drawable/splash</item>
     </style>
-
-
 
 </resources>

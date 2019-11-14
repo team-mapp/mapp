@@ -3,9 +3,11 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#606F82</color>
+    <color name="colorSecondary">#606F82</color>
     <color name="backgroundColor">#F5F5F5</color>
     <color name="card_filter_color">#36000000</color>
     <color name="search_bar_background">#EEEEEE</color>
     <color name="profile_color">#C4C4C4</color>
     <color name="content_favorite_color">#D50000</color>
+    <color name="review_content_background">#FFFFFF</color>
 </resources>
