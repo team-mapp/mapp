@@ -69,7 +69,7 @@ class BaseApplication : Application() {
 
         single<ReviewRepository> { ReviewRepositoryImpl(firestore) }
 
-        single<UserRepository> { UserRepositoryImpl(firebaseAuth) }
+        single<UserRepository> { UserRepositoryImpl(firebaseAuth, firestore) }
 
         single<StorageRepository<*>> { StorageRepositoryImpl(firebaseStorage) }
 
@@ -91,7 +91,7 @@ class BaseApplication : Application() {
     private val viewModelModule = module {
         viewModel { MainViewModel(get(), get()) }
 
-        viewModel { DetailViewModel(get(), get(), get(), get()) }
+        viewModel { DetailViewModel(get(), get(), get(), get(), get()) }
 
         viewModel { SearchViewModel(get(), get(), get()) }
 

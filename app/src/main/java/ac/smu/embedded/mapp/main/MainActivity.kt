@@ -1,14 +1,17 @@
 package ac.smu.embedded.mapp.main
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.profile.ProfileActivity
 import ac.smu.embedded.mapp.search.SearchActivity
+import ac.smu.embedded.mapp.settings.SettingsActivity
 import android.content.Intent
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
+import androidx.lifecycle.Observer
 import androidx.viewpager2.widget.ViewPager2
 import com.google.android.material.tabs.TabLayout
 import kotlinx.android.synthetic.main.activity_main.*
@@ -16,11 +19,12 @@ import org.koin.android.viewmodel.ext.android.viewModel
 
 class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
-    private val mainViewModel: MainViewModel by viewModel()
+    private val userViewModel: UserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
+        setupUserProfile()
     }
 
     private fun initView() {
@@ -52,6 +56,17 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         view_pager.adapter = MainPagerAdapter(this)
 
         search_bar_layout.setOnClickListener { navigateSearch() }
+    }
+
+    private fun setupUserProfile() {
+        userViewModel.userData.observe(this, Observer {
+            if (it != null) {
+                if (it.profileImage != null) {
+                    view_profile.setImage(it.profileImage, isStorage = false)
+                }
+                view_profile.setTitle(it.displayName!!)
+            }
+        })
     }
 
     private fun navigateSearch() {
