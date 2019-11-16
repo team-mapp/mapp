@@ -48,11 +48,11 @@ class ReviewViewModel(
         setState(review, reviewRepository.loadReviewAwait(documentId))
     }
 
-    fun saveReview(restaurantId: String, reviewContent: ReviewContent) {
+    fun saveReview(restaurantId: String, reviewContent: ReviewContent) = viewModelScope.launch {
         if (validReview(reviewContent)) {
             val user = userRepository.getUser()
-            if (user != null) {
-                reviewRepository.addReview(restaurantId, user.uid!!, reviewContent)
+            if (user != null && reviewRepository.hasReviewAwait(restaurantId, user.uid!!)) {
+                reviewRepository.addReview(restaurantId, user.uid, reviewContent)
             }
         }
     }
