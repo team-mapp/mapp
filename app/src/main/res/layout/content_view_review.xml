@@ -1,0 +1,245 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout_review"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_marginTop="@dimen/keyline_small"
+    android:background="@color/content_background"
+    android:padding="@dimen/keyline_normal">
+
+    <ac.smu.embedded.mapp.common.view.ProfileView
+        android:id="@+id/view_user_profile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:image="@drawable/ic_account_circle"
+        app:imageTint="@color/profile_color"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:title="Username" />
+
+    <View
+        android:id="@+id/view_rating"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_two_line_height"
+        android:layout_marginTop="@dimen/keyline_small"
+        app:layout_constraintTop_toBottomOf="@id/view_user_profile" />
+
+    <TextView
+        android:id="@+id/tv_cost_effective"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/question_cost_effective"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:layout_constraintBottom_toTopOf="@id/tv_service_point"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_rating"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <RatingBar
+        android:id="@+id/rating_cost_effective"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_content_margin"
+        app:layout_constraintBottom_toBottomOf="@id/tv_cost_effective"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_cost_effective"
+        tools:rating="3" />
+
+    <TextView
+        android:id="@+id/tv_service_point"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/keyline_small"
+        android:text="@string/question_service_point"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+        app:layout_constraintBottom_toBottomOf="@id/view_rating"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_cost_effective"
+        app:layout_constraintVertical_chainStyle="packed" />
+
+    <RatingBar
+        android:id="@+id/rating_service_point"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_content_margin"
+        app:layout_constraintBottom_toBottomOf="@id/tv_service_point"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/tv_service_point"
+        tools:rating="3" />
+
+    <View
+        android:id="@+id/view_recommend"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_two_line_height"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/view_rating" />
+
+    <ImageView
+        android:id="@+id/iv_recommend"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/view_recommend"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_recommend"
+        tools:src="@drawable/ic_dissatisfied" />
+
+    <TextView
+        android:id="@+id/tv_hint_recommend"
+        style="@style/TextAppearance.Overline"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:text="@string/question_recommend"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_recommend" />
+
+    <TextView
+        android:id="@+id/tv_recommend"
+        style="@style/TextAppearance.OverlineTitle"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:text="@string/answer_so_so"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_hint_recommend" />
+
+    <View
+        android:id="@+id/view_waiting_time"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_two_line_height"
+        app:layout_constraintTop_toBottomOf="@id/view_recommend" />
+
+    <ImageView
+        android:id="@+id/iv_waiting_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_time"
+        app:layout_constraintBottom_toBottomOf="@id/view_waiting_time"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_waiting_time"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_hint_waiting_time"
+        style="@style/TextAppearance.Overline"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:text="@string/hint_waiting_time"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_waiting_time" />
+
+    <TextView
+        android:id="@+id/tv_waiting_time"
+        style="@style/TextAppearance.OverlineTitle"
+        android:layout_marginStart="@dimen/list_content_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_hint_waiting_time"
+        tools:text="10분 이내" />
+
+    <View
+        android:id="@+id/view_eaten_food"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_two_line_height"
+        app:layout_constraintTop_toBottomOf="@id/view_waiting_time" />
+
+    <ImageView
+        android:id="@+id/iv_eaten_food"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_restaurant_menu"
+        app:layout_constraintBottom_toBottomOf="@id/view_eaten_food"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_eaten_food"
+        tools:ignore="ContentDescription" />
+
+
+    <TextView
+        android:id="@+id/tv_hint_eaten_food"
+        style="@style/TextAppearance.Overline"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:text="@string/hint_eaten_food"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_eaten_food" />
+
+    <TextView
+        android:id="@+id/tv_eaten_food"
+        style="@style/TextAppearance.OverlineTitle"
+        android:layout_marginStart="@dimen/list_content_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_hint_eaten_food"
+        tools:text="(음식명)" />
+
+    <androidx.constraintlayout.widget.Group
+        android:id="@+id/group_best_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:constraint_referenced_ids="view_best_place,iv_best_place,tv_hint_best_place,tv_best_place" />
+
+    <View
+        android:id="@+id/view_best_place"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_two_line_height"
+        app:layout_constraintTop_toBottomOf="@id/view_eaten_food" />
+
+    <ImageView
+        android:id="@+id/iv_best_place"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_best_place"
+        app:layout_constraintBottom_toBottomOf="@id/view_best_place"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_best_place"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_hint_best_place"
+        style="@style/TextAppearance.Overline"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:text="@string/question_best_place"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_best_place" />
+
+    <TextView
+        android:id="@+id/tv_best_place"
+        style="@style/TextAppearance.OverlineTitle"
+        android:layout_marginStart="@dimen/list_content_margin"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_hint_best_place"
+        tools:text="없음" />
+
+    <View
+        android:id="@+id/view_review_content"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/list_two_line_height"
+        app:layout_constraintTop_toBottomOf="@id/view_best_place" />
+
+    <ImageView
+        android:id="@+id/iv_review_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_review"
+        app:layout_constraintBottom_toBottomOf="@id/view_review_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_review_content"
+        tools:ignore="ContentDescription" />
+
+    <TextView
+        android:id="@+id/tv_hint_review_content"
+        style="@style/TextAppearance.Overline"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:text="@string/hint_review"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="@id/view_review_content" />
+
+    <TextView
+        android:id="@+id/tv_review_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/list_content_margin"
+        android:gravity="bottom"
+        android:minHeight="20dp"
+        android:textAppearance="@style/TextAppearance.MaterialComponents.Body2"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/tv_hint_review_content"
+        tools:text="리뷰 내용" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

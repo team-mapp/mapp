@@ -18,10 +18,11 @@
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="559188p0np" />
         <!-- splash manifest변경 추가 -->
-        <activity android:name=".splash.Splash_MainActivity"
-                  android:theme="@style/SplashTheme"
-                  android:exported="true">
-        <!-- TODO: IntroActivity에서 MainActivity로 이동되는 Intent 추가하고 intent-filter 옮기기 -->
+        <activity
+            android:name=".splash.Splash_MainActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme">
+            <!-- TODO: IntroActivity에서 MainActivity로 이동되는 Intent 추가하고 intent-filter 옮기기 -->
         </activity>
         <!-- intro activity 추가 -->
         <activity android:name=".Intro.Intro_MainActivity"></activity>
@@ -42,6 +43,12 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.App.NoActionBar" />
         <activity android:name=".profile.ProfileActivity" />
+        <activity
+            android:name=".review.ReviewWriteActivity"
+            android:theme="@style/Theme.App.Review" />
+        <activity
+            android:name=".review.ReviewViewActivity"
+            android:theme="@style/Theme.App.Review" />
     </application>
 
 </manifest>

@@ -10,4 +10,7 @@
     <color name="profile_color">#C4C4C4</color>
     <color name="content_favorite_color">#D50000</color>
     <color name="review_content_background">#FFFFFF</color>
+    <color name="content_background">#FFFFFF</color>
+    <color name="error_color">#b00020</color>
+    <color name="star_color">#ffd600</color>
 </resources>

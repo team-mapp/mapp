@@ -4,6 +4,7 @@ import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.repository.*
+import ac.smu.embedded.mapp.review.ReviewViewModel
 import ac.smu.embedded.mapp.search.SearchViewModel
 import android.app.Application
 import android.content.SharedPreferences
@@ -95,6 +96,8 @@ class BaseApplication : Application() {
         viewModel { SearchViewModel(get(), get(), get()) }
 
         viewModel { UserViewModel(get()) }
+
+        viewModel { ReviewViewModel(get(), get(), get(), get(named(CONFIG_REMOTE))) }
     }
 
     override fun onCreate() {
