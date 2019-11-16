@@ -28,8 +28,7 @@
                 android:layout_height="wrap_content"
                 app:image="@drawable/ic_account_circle"
                 app:imageTint="@color/profile_color"
-                app:name="Username"
-                app:textColor="@android:color/black" />
+                app:title="Username" />
 
         </com.google.android.material.appbar.MaterialToolbar>
 

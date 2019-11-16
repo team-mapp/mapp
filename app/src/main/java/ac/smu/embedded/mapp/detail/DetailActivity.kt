@@ -108,7 +108,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     }
 
     private fun updateProfile(name: String, image: String) {
-        view_profile.setName(name)
+        view_profile.setTitle(name)
         view_profile.setImage(image, true)
     }
 
