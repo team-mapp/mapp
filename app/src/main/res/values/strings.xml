@@ -39,7 +39,6 @@
 
     <string name="msg_exit_review">Do you want to stop writing reviews?</string>
 
-    <string name="key_google_login" translatable="false">pref_google_login</string>
     <string name="msg_req_waiting_time">Required waiting time</string>
     <string name="msg_req_eaten_food">Required eaten food</string>
     <string name="msg_req_review_content">Required review content</string>
@@ -47,4 +46,14 @@
 
     <string name="created_date_format">Created %1$s</string>
     <string name="updated_date_format">Updated %1$s</string>
+
+    <string name="notification_channel_default_id" translatable="false">default</string>
+    <string name="notification_channel_default">Default notification</string>
+    <string name="notification_channel_review_created">New review to favorite restaurant notification</string>
+    <string name="notification_channel_review_created_desc">Notify me when someone writes a review in my favorite restaurant</string>
+
+    <string name="notification_review_created_title">New review added</string>
+    <string name="notification_review_created_content">Added new view to %1$s</string>
+
+    <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>

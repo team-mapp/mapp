@@ -45,4 +45,11 @@
 
     <string name="created_date_format">%1$s 생성됨</string>
     <string name="updated_date_format">%1$s 수정됨</string>
+
+    <string name="notification_channel_default">기본 서비스 알림</string>
+    <string name="notification_channel_review_created">즐겨찾기한 식당 새 리뷰 알림</string>
+    <string name="notification_channel_review_created_desc">즐겨찾기한 식당에 다른 사용자가 리뷰를 작성하면 알려줍니다</string>
+
+    <string name="notification_review_created_title">새 리뷰 등록됨</string>
+    <string name="notification_review_created_content">%1$s에 새로운 리뷰가 등록되었어요</string>
 </resources>

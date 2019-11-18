@@ -17,6 +17,15 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="559188p0np" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/notification_channel_default_id" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications" />
+
         <!-- splash manifest변경 추가 -->
         <activity
             android:name=".splash.Splash_MainActivity"
@@ -49,6 +58,14 @@
         <activity
             android:name=".review.ReviewViewActivity"
             android:theme="@style/Theme.App.Review" />
+
+        <service
+            android:name=".service.FirebaseNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

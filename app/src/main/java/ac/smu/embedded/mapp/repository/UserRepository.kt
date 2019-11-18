@@ -1,5 +1,6 @@
 package ac.smu.embedded.mapp.repository
 
+import ac.smu.embedded.mapp.model.NotificationToken
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.util.asLiveData
@@ -7,9 +8,13 @@ import ac.smu.embedded.mapp.util.map
 import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import kotlinx.coroutines.tasks.await
 
 interface UserRepository {
@@ -30,9 +35,23 @@ interface UserRepository {
 
     suspend fun deleteUserAwait(): Boolean
 
+    suspend fun getNotificationToken(): InstanceIdResult?
+
+    fun addNotificationToken(token: String)
+
 }
 
-class UserRepositoryImpl(private val auth: FirebaseAuth) : UserRepository {
+class UserRepositoryImpl(
+    private val auth: FirebaseAuth,
+    private val db: FirebaseFirestore
+) :
+    UserRepository {
+
+    companion object {
+        const val COLLECTION_USER_PATH = "users"
+        const val COLLECTION_TOKEN_PATH = "tokens"
+    }
+
     override fun signIn(credential: AuthCredential): LiveData<Resource<User?>> =
         auth.signInWithCredential(credential).asLiveData().map { resource ->
             resource.transform {
@@ -104,6 +123,15 @@ class UserRepositoryImpl(private val auth: FirebaseAuth) : UserRepository {
 
     override suspend fun deleteUserAwait(): Boolean {
         return auth.currentUser?.delete()?.await() != null
+    }
+
+    override suspend fun getNotificationToken(): InstanceIdResult? =
+        FirebaseInstanceId.getInstance().instanceId.await()
+
+    override fun addNotificationToken(token: String) {
+        db.collection(COLLECTION_TOKEN_PATH)
+            .document(token)
+            .set(NotificationToken(auth.uid, Timestamp.now()))
     }
 
     private fun createErrorData(message: String): LiveData<Resource<Void?>> {

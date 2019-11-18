@@ -29,6 +29,10 @@ class UserViewModel(
 
     fun signIn(credential: AuthCredential) = viewModelScope.launch {
         _userData.value = userRepository.signInAwait(credential)
+        val idResult = userRepository.getNotificationToken()
+        if (idResult != null) {
+            userRepository.addNotificationToken(idResult.token)
+        }
     }
 
     fun signInWithGoogle(activity: Activity, clientId: String) {
