@@ -6,14 +6,18 @@ import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.UserRepository
 import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import android.app.NotificationChannel
-import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Intent
+import android.graphics.Bitmap
 import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
+import com.google.firebase.storage.ktx.storage
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -34,31 +38,55 @@ class FirebaseNotificationService : FirebaseMessagingService() {
         super.onMessageReceived(message)
         Logger.d("Message received (data: ${message.data})")
         when (message.data[KEY_DATA_TYPE]) {
-            MESSAGE_TYPE_REVIEW_CREATED -> {
+            TYPE_REVIEW_CREATED -> {
                 val restaurantId = message.data[KEY_RESTAURANT_ID]
                 CoroutineScope(Dispatchers.Main).launch {
                     val restaurant =
                         restaurantsRepository.loadRestaurantAwait(restaurantId!!)
                     if (restaurant != null) {
-                        createReviewChannel()
-                        createReviewNotification(restaurant)
+                        createNotificationChannel(
+                            CHANNEL_ID_REVIEW_CREATED,
+                            getString(R.string.notification_channel_review_created),
+                            getString(R.string.notification_channel_review_created_desc),
+                            NotificationManagerCompat.IMPORTANCE_DEFAULT
+                        )
+                        CoroutineScope(Dispatchers.IO).launch {
+                            val largeIcon = getLargeIcon(restaurant.image)
+                            notifyReviewNotification(restaurant, largeIcon)
+                        }
                     }
                 }
             }
         }
     }
 
-    private fun createReviewNotification(restaurant: Restaurant) {
+    private fun createNotificationChannel(
+        id: String,
+        name: String,
+        desc: String? = null,
+        importance: Int
+    ) {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(id, name, importance).apply {
+                if (desc != null) {
+                    description = desc
+                }
+            }
+            NotificationManagerCompat.from(this).createNotificationChannel(channel)
+        }
+    }
+
+    private fun notifyReviewNotification(restaurant: Restaurant, largeIcon: Bitmap) {
         val restaurantIntent = Intent(this, RestaurantDetailActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+            putExtra("document_id", restaurant.documentId)
         }
-
-        restaurantIntent.putExtra("document_id", restaurant.documentId)
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, restaurantIntent, 0)
 
-        val builder = NotificationCompat.Builder(this, CHANNEL_REVIEW_CREATED_ID)
+        val builder = NotificationCompat.Builder(this, CHANNEL_ID_REVIEW_CREATED)
             .setSmallIcon(R.drawable.ic_review)
+            .setLargeIcon(largeIcon)
             .setContentTitle(getString(R.string.notification_review_created_title))
             .setContentText(
                 String.format(
@@ -71,31 +99,29 @@ class FirebaseNotificationService : FirebaseMessagingService() {
             .setAutoCancel(true)
 
         with(NotificationManagerCompat.from(this)) {
-            notify(NOTIFICATION_REVIEW_ID, builder.build())
+            notify(NOTIFICATION_ID_REVIEW_CREATED, builder.build())
         }
     }
 
-    private fun createReviewChannel() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = getString(R.string.notification_channel_review_created)
-            val descriptionText = getString(R.string.notification_channel_review_created_desc)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(CHANNEL_REVIEW_CREATED_ID, name, importance).apply {
-                description = descriptionText
-            }
-            NotificationManagerCompat.from(this).createNotificationChannel(channel)
-        }
+    private fun getLargeIcon(imageUrl: String): Bitmap {
+        val future = Glide.with(this)
+            .asBitmap()
+            .load(Firebase.storage.getReference(imageUrl))
+            .apply(RequestOptions.circleCropTransform())
+            .submit()
+        return future.get()
     }
-
 
     companion object {
-        private val NOTIFICATION_REVIEW_ID = 100
-
-        private val CHANNEL_REVIEW_CREATED_ID = "review_created"
-
         private val KEY_DATA_TYPE = "type"
         private val KEY_RESTAURANT_ID = "restaurantId"
 
-        private val MESSAGE_TYPE_REVIEW_CREATED = "review_created"
+        private val TYPE_REVIEW_CREATED = "review_created"
+
+        private val NOTIFICATION_ID_REVIEW_CREATED = 101
+
+        private val GROUP_KEY_REVIEW_CREATED = "ac.smu.embedded.mapp.REVIEW_CREATED"
+
+        private val CHANNEL_ID_REVIEW_CREATED = "review_created"
     }
 }
