@@ -1,10 +1,13 @@
 package ac.smu.embedded.mapp.service
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.model.Notification
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.UserRepository
+import ac.smu.embedded.mapp.repository.local.NotificationDao
 import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
+import ac.smu.embedded.mapp.util.NotificationConstants.TYPE_REVIEW_CREATED
 import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Intent
@@ -28,6 +31,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
     private val userRepository: UserRepository by inject()
     private val restaurantsRepository: RestaurantsRepository by inject()
+    private val notificationDao: NotificationDao by inject()
 
     override fun onNewToken(token: String) {
         Logger.d("Refreshed token: $token")
@@ -37,7 +41,8 @@ class FirebaseNotificationService : FirebaseMessagingService() {
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
         Logger.d("Message received (data: ${message.data})")
-        when (message.data[KEY_DATA_TYPE]) {
+        val type = message.data[KEY_TYPE]
+        when (type) {
             TYPE_REVIEW_CREATED -> {
                 val restaurantId = message.data[KEY_RESTAURANT_ID]
                 CoroutineScope(Dispatchers.Main).launch {
@@ -53,6 +58,13 @@ class FirebaseNotificationService : FirebaseMessagingService() {
                         CoroutineScope(Dispatchers.IO).launch {
                             val largeIcon = getLargeIcon(restaurant.image)
                             notifyReviewNotification(restaurant, largeIcon)
+                            notificationDao.insert(
+                                Notification(
+                                    type = type,
+                                    content = restaurantId,
+                                    notifyAt = System.currentTimeMillis()
+                                )
+                            )
                         }
                     }
                 }
@@ -113,15 +125,11 @@ class FirebaseNotificationService : FirebaseMessagingService() {
     }
 
     companion object {
-        private val KEY_DATA_TYPE = "type"
-        private val KEY_RESTAURANT_ID = "restaurantId"
+        private const val KEY_TYPE = "type"
+        private const val KEY_RESTAURANT_ID = "restaurantId"
 
-        private val TYPE_REVIEW_CREATED = "review_created"
+        private const val NOTIFICATION_ID_REVIEW_CREATED = 101
 
-        private val NOTIFICATION_ID_REVIEW_CREATED = 101
-
-        private val GROUP_KEY_REVIEW_CREATED = "ac.smu.embedded.mapp.REVIEW_CREATED"
-
-        private val CHANNEL_ID_REVIEW_CREATED = "review_created"
+        private const val CHANNEL_ID_REVIEW_CREATED = "review_created"
     }
 }

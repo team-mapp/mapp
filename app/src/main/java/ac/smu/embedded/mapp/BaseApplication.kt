@@ -4,11 +4,13 @@ import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.repository.*
+import ac.smu.embedded.mapp.repository.local.AppDatabase
 import ac.smu.embedded.mapp.review.ReviewViewModel
 import ac.smu.embedded.mapp.search.SearchViewModel
 import android.app.Application
 import android.content.SharedPreferences
 import androidx.preference.PreferenceManager
+import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.ktx.firestore
@@ -52,10 +54,24 @@ class BaseApplication : Application() {
             return remoteConfig
         }
 
+    private val db: AppDatabase
+        get() = Room.databaseBuilder(
+            applicationContext,
+            AppDatabase::class.java,
+            "mapp-db"
+        ).build()
+
+
     private val appPreference: SharedPreferences
         get() = PreferenceManager.getDefaultSharedPreferences(
             applicationContext
         )
+
+    private val daoModule = module {
+
+        single { db.notificationDao() }
+
+    }
 
     private val repositoryModule = module {
 
@@ -86,10 +102,11 @@ class BaseApplication : Application() {
         single<ConfigWriterRepository> {
             LocalConfigRepository(appPreference)
         }
+
     }
 
     private val viewModelModule = module {
-        viewModel { MainViewModel(get(), get()) }
+        viewModel { MainViewModel(get(), get(), get(), get()) }
 
         viewModel { DetailViewModel(get(), get(), get(), get(), get()) }
 
@@ -105,7 +122,7 @@ class BaseApplication : Application() {
         startKoin {
             androidLogger()
             androidContext(this@BaseApplication)
-            modules(listOf(repositoryModule, viewModelModule))
+            modules(listOf(repositoryModule, daoModule, viewModelModule))
         }
 
         if (BuildConfig.DEBUG) {

@@ -8,3 +8,9 @@ const val CONFIG_USE_BEST_PLACE = "use_best_place"
 val remoteConfigs = mapOf(
     CONFIG_USE_BEST_PLACE to true
 )
+
+object NotificationConstants {
+
+    const val TYPE_REVIEW_CREATED = "review_created"
+
+}
