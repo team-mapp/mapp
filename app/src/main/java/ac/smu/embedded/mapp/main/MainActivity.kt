@@ -104,7 +104,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         userViewModel.userData.observe(this, Observer {
             if (it != null) {
                 if (it.profileImage != null) {
-                    view_profile.setImage(it.profileImage, isStorage = false)
+                    view_profile.setImage(it.profileImage, isStorage = !it.isExternalProfile())
                 }
                 view_profile.setTitle(it.displayName!!)
             }

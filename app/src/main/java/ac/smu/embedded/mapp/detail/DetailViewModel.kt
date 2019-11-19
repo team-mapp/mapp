@@ -49,8 +49,13 @@ class DetailViewModel(
         }
 
     fun addFavorite(documentId: String) =
-        favoriteRepository.addFavorite(userRepository.getUser()?.uid!!, documentId)
+        viewModelScope.launch {
+            favoriteRepository.addFavorite(userRepository.getUser()?.uid!!, documentId)
+        }
 
     fun removeFavorite(documentId: String) =
-        favoriteRepository.removeFavorite(userRepository.getUser()?.uid!!, documentId)
+        viewModelScope.launch {
+            favoriteRepository.removeFavorite(userRepository.getUser()?.uid!!, documentId)
+        }
 }
+
