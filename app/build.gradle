@@ -90,6 +90,10 @@ dependencies {
 
     // circle
     implementation 'de.hdodenhof:circleimageview:2.2.0'
+
+    //ted permission
+    implementation "gun0912.ted:tedpermission:2.1.0"
+
 }
 
 apply plugin: "com.google.gms.google-services"

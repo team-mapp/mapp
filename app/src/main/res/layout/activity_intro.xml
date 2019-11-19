@@ -1,12 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E0E0D8"
     android:orientation="vertical">
-
 
     <TextView
         android:id="@+id/textView"
@@ -22,8 +19,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView"
-        android:layout_marginTop="-2dp"
         android:layout_centerInParent="true"
+        android:layout_marginTop="-2dp"
         android:text="사진을 선택하지 않으면 기본사진으로 대체됩니다."
         android:textColor="#606F82"
         android:textSize="10dp" />
@@ -54,13 +51,13 @@
 
     <ImageView
         android:id="@+id/imageView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
         android:layout_below="@+id/textView2"
         android:layout_centerInParent="true"
         android:layout_centerVertical="true"
         android:layout_marginTop="20dp"
-        tools:srcCompat="@tools:sample/avatars" />
+        android:src="@drawable/image_intro_profile" />
 
     <ImageView
         android:id="@+id/imageView2"
@@ -70,6 +67,4 @@
         android:layout_centerInParent="true"
         android:layout_marginBottom="133dp"
         android:src="@drawable/logo" />
-
-
 </RelativeLayout>
