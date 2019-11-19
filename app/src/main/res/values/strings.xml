@@ -19,7 +19,7 @@
     <string name="question_waiting_time">Waiting time *</string>
     <string name="question_eaten_food">Eaten food *</string>
     <string name="question_review">Review *</string>
-    <string name="question_best_place">Best place</string>
+    <string name="question_best_place">Seat</string>
     <string name="hint_waiting_time">Waiting time</string>
     <string name="hint_eaten_food">Eaten food</string>
     <string name="hint_review">Review</string>

@@ -60,13 +60,12 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
             when (checkedId) {
                 R.id.btn_answer_yes -> {
                     if (isChecked && useBestPlace) {
-                        layout_best_place.visibility = View.VISIBLE
+                        // No-op
                     }
                 }
                 else -> {
                     if (isChecked && useBestPlace) {
-                        layout_best_place.visibility = View.GONE
-                        edit_best_place.setText("")
+                        // No-op
                     }
                 }
             }
