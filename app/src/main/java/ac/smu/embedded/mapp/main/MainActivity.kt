@@ -7,7 +7,6 @@ import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.profile.ProfileActivity
 import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import ac.smu.embedded.mapp.search.SearchActivity
-import ac.smu.embedded.mapp.settings.SettingsActivity
 import ac.smu.embedded.mapp.util.*
 import android.content.Intent
 import android.os.Bundle
@@ -144,9 +143,6 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
             }
             R.id.action_notification -> {
                 drawer_layout.openDrawer(GravityCompat.END)
-            }
-            R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
             }
         }
         return true
