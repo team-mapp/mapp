@@ -1,10 +1,13 @@
 package ac.smu.embedded.mapp.profile
 
 import ac.smu.embedded.mapp.R
+import ac.smu.embedded.mapp.common.UserViewModel
+import ac.smu.embedded.mapp.common.view.ContentView
+import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.model.UploadTaskStatus
 import ac.smu.embedded.mapp.profile.FavoritesList
-import ac.smu.embedded.mapp.common.view.ProfileView
-import ac.smu.embedded.mapp.common.view.ContentView
+import ac.smu.embedded.mapp.repository.FavoriteRepository
+import ac.smu.embedded.mapp.repository.FavoriteRepositoryImpl
 import ac.smu.embedded.mapp.util.loadStorage
 import ac.smu.embedded.mapp.util.recyclerAdapter
 import android.Manifest
@@ -23,17 +26,19 @@ import kotlinx.android.synthetic.main.activity_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
 import android.os.PersistableBundle
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.orhanobut.logger.Logger
 import kotlinx.android.synthetic.main.item_favorites.view.*
 
 class ProfileActivity : AppCompatActivity(R.layout.activity_profile) {
 
     private val PERMISSION_CODE = 0;
     private val IMAGE_PICK_CODE = 1;
-    //private val IMAGE_CROP_CODE = 2;
 
     private val profileViewModel: ProfileViewModel by viewModel()
+    private val favoriteViewModel: FavoriteViewModel by viewModel()
+    private val userViewModel: UserViewModel by viewModel()
 
-    val favoritesList = arrayListOf(
+    var favoritesList = arrayListOf(
         FavoritesList("식당1"),
         FavoritesList("식당2"),
         FavoritesList("식당3"),
@@ -44,25 +49,52 @@ class ProfileActivity : AppCompatActivity(R.layout.activity_profile) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_profile)
 
-
-        val listAdapter = recyclerAdapter(R.layout.item_favorites, favoritesList) { view , value ->
-            view.userFavorites.text = "${value.restaurantName}"
+        val listAdapter = recyclerAdapter<Restaurant>(R.layout.item_content) { _, view, value ->
+            val contentView = view as ContentView
+            contentView.setContent(
+                value.image, value.name,
+                isFavorite = value.isFavorite,
+                visibleFavorite = true
+            )
+            contentView.setOnFavoriteClickListener { v, isFavorite ->
+                if (isFavorite) {
+                } else {
+                }
+                contentView.isFavorite = !isFavorite
+            }
+            contentView.setOnClickListener {
+            }
         }
         rvFavoritesList.adapter = listAdapter
         rvFavoritesList.layoutManager = LinearLayoutManager(this)
 
-        // 이전 액티비티에서 documentId가 존재하는 경우
-//        if (intent.hasExtra(DOCUMENT_ID)) {
-//            val documentId = intent.getStringExtra(DOCUMENT_ID)!!
-//            initView()
-//            //loadContents(documentId)
-//        } else {
-//            throw UnsupportedOperationException(
-//                "Not received intent data, required EXTRA_DATA_TYPE, EXTRA_DOCUMENT_ID"
-//            )
-//        }
+        //사용자 프로필 불러오기
+        userViewModel.userData.observe(this, Observer {
+//            if (it != null) {
+//                it.displayName
+//                it.profileImage
+//            }
+        })
 
-        //프로필 이미지뷰 클릭시
+        profileViewModel.restaurants.observe(this, Observer {
+            listAdapter.submitList(it)
+        })
+
+        //즐겨찾기 리스트 불러오기
+        favoriteViewModel.loadFavorites("test").observe(this, Observer { resource ->
+            resource.onSuccess {
+                val restaurntIds = it?.map {
+                    it.restaurantId
+                }
+                if (restaurntIds != null) {
+                    profileViewModel.loadRestaurants("test", restaurntIds)
+                }
+            }
+        })
+
+        //favoriteViewModel.loadFavorites("test")
+
+        //프로필이미지뷰 클릭시
         profileImgView.setOnClickListener {
             //permission 허가 여부 확인
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
@@ -81,7 +113,6 @@ class ProfileActivity : AppCompatActivity(R.layout.activity_profile) {
             }
         }
     }
-
     //handle requested permission result
     override fun onRequestPermissionsResult(
         requestCode: Int,
@@ -121,35 +152,23 @@ class ProfileActivity : AppCompatActivity(R.layout.activity_profile) {
     companion object{
         const val DOCUMENT_ID = "document_id"
     }
-
-    override fun onStart(){1
+    override fun onStart(){
         super.onStart()
     }
-
     override fun onPause() {
         super.onPause()
     }
-
     override fun onSaveInstanceState(outState: Bundle, outPersistentState: PersistableBundle) {
         super.onSaveInstanceState(outState, outPersistentState)
     }
-
     override fun onStop() {
         super.onStop()
     }
-
     override fun onDestroy() {
         super.onDestroy()
     }
-
     override fun onLowMemory() {
         super.onLowMemory()
     }
 
-    fun initView(){
-        supportActionBar?.apply {
-            setDisplayHomeAsUpEnabled(true)
-            setDisplayShowTitleEnabled(false)
-        }
-    }
 }

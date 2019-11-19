@@ -3,6 +3,7 @@ package ac.smu.embedded.mapp
 import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
+import ac.smu.embedded.mapp.profile.FavoriteViewModel
 import ac.smu.embedded.mapp.profile.ProfileViewModel
 import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.search.SearchViewModel
@@ -58,7 +59,9 @@ class BaseApplication : Application() {
 
         viewModel { UserViewModel(get()) }
 
-        viewModel {ProfileViewModel(get())}
+        viewModel { ProfileViewModel(get(), get(), get())}
+
+        viewModel { FavoriteViewModel(get()) }
 
     }
 
