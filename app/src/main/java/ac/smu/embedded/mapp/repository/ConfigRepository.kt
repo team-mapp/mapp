@@ -43,11 +43,11 @@ class FirebaseConfigRepository(
     init {
         Logger.d("FirebaseConfigRepository initialized")
         remoteConfig.setDefaultsAsync(remoteConfigs)
-            .addOnCompleteListener {
-                if (it.isSuccessful) {
-                    notifyDataSetUpdated()
-                }
+        remoteConfig.fetchAndActivate().addOnCompleteListener {
+            if (it.isSuccessful) {
+                notifyDataSetUpdated()
             }
+        }
     }
 
     override fun getDataUpdatedObserver(): LiveData<Long> = updatedObserver
