@@ -92,11 +92,10 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
 
         btn_write_review.setOnClickListener {
             if (review == null) {
-                reviewViewModel.saveReview(restaurantId, createReviewContent())
+                reviewViewModel.saveReview(restaurantId, null, createReviewContent())
             } else {
-                reviewViewModel.updateReview(review!!.documentId, createReviewContent())
+                reviewViewModel.saveReview(restaurantId, review!!.documentId, createReviewContent())
             }
-            super.onBackPressed()
         }
     }
 
@@ -158,6 +157,12 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
         reviewViewModel.validReviewContent.observe(this, Observer {
             layout_review_content.error =
                 if (!it) getString(R.string.msg_req_review_content) else null
+        })
+
+        reviewViewModel.contentSaved.observe(this, Observer {
+            if (it) {
+                super.onBackPressed()
+            }
         })
     }
 

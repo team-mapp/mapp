@@ -32,6 +32,8 @@ class ReviewViewModel(
 
     val validReviewContent: LiveData<Boolean> = useState(true)
 
+    val contentSaved: LiveData<Boolean> = useState(false)
+
     val configObserver = configLoaderRepository.getDataUpdatedObserver()
 
     fun fetchConfig(): Map<String, Any> {
@@ -48,17 +50,22 @@ class ReviewViewModel(
         setState(review, reviewRepository.loadReviewAwait(documentId))
     }
 
-    fun saveReview(restaurantId: String, reviewContent: ReviewContent) = viewModelScope.launch {
+    fun saveReview(
+        restaurantId: String,
+        documentId: String? = null,
+        reviewContent: ReviewContent
+    ) = viewModelScope.launch {
         if (validReview(reviewContent)) {
             val user = userRepository.getUser()
-            if (user != null && reviewRepository.hasReviewAwait(restaurantId, user.uid!!)) {
-                reviewRepository.addReview(restaurantId, user.uid, reviewContent)
+            if (user != null) {
+                if (documentId == null) {
+                    reviewRepository.addReview(restaurantId, user.uid!!, reviewContent)
+                } else {
+                    reviewRepository.updateReview(documentId, reviewContent)
+                }
+                setState(contentSaved, true)
             }
         }
-    }
-
-    fun updateReview(documentId: String, reviewContent: ReviewContent) {
-        reviewRepository.updateReview(documentId, reviewContent)
     }
 
     private fun validReview(reviewContent: ReviewContent): Boolean {
