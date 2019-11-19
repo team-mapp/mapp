@@ -58,7 +58,7 @@ class BaseApplication : Application() {
 
         viewModel { UserViewModel(get()) }
 
-        viewModel {IntroViewModel(get() , get(), get(), get())}
+        viewModel { IntroViewModel(get(), get()) }
     }
 
     override fun onCreate() {

@@ -24,6 +24,8 @@ class Intro_MainActivity : AppCompatActivity() {
 
     private val OPEN_GALLERY = 1
     private val userViewModel: UserViewModel by viewModel()
+    private val introViewModel: IntroViewModel by viewModel()
+    private
     var currentImageURL: Uri? =null
 
 
@@ -33,12 +35,19 @@ class Intro_MainActivity : AppCompatActivity() {
 
         userViewModel.userData.observe(this, Observer {
             Log.d("IntroActivity", it.toString())
+            if (it != null && currentImageURL != null) {
+                introViewModel.upladImage(currentImageURL!!)!!.observe(this, Observer {
+                    it.onComplete {
+                        var intent = Intent(this,MainActivity::class.java )
+                        startActivity(intent)
+                    }
+                })
+
+            }
         })
 
         textView4.setOnClickListener{
-//            var intent = Intent(this,MainActivity::class.java )
-//
-//            startActivity(intent)
+
             userViewModel.signInWithGoogle(this, getString(R.string.default_web_client_id))
 
 
@@ -69,6 +78,7 @@ class Intro_MainActivity : AppCompatActivity() {
             if (requestCode == OPEN_GALLERY){
 
                 currentImageURL =data?.data
+                introViewModel.upladImage(currentImageURL!!)//!!null채크안하고 무조건넣겠다.
 
                 try {
                     val bitmap = MediaStore.Images.Media.getBitmap(contentResolver,currentImageURL)
