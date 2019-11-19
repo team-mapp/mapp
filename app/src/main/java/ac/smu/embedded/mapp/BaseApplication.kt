@@ -2,6 +2,7 @@ package ac.smu.embedded.mapp
 
 import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
+import ac.smu.embedded.mapp.intro.IntroViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.repository.local.AppDatabase
@@ -106,6 +107,7 @@ class BaseApplication : Application() {
     }
 
     private val viewModelModule = module {
+
         viewModel { MainViewModel(get(), get(), get(), get()) }
 
         viewModel { DetailViewModel(get(), get(), get(), get(), get()) }
@@ -115,6 +117,9 @@ class BaseApplication : Application() {
         viewModel { UserViewModel(get()) }
 
         viewModel { ReviewViewModel(get(), get(), get(), get(named(CONFIG_REMOTE))) }
+
+        viewModel { IntroViewModel(get(), get()) }
+
     }
 
     override fun onCreate() {

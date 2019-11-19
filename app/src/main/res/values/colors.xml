@@ -13,4 +13,5 @@
     <color name="content_background">#FFFFFF</color>
     <color name="error_color">#b00020</color>
     <color name="star_color">#ffd600</color>
+    <color name="background_color_splash">#E0E0D8</color>
 </resources>
