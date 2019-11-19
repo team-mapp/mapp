@@ -34,5 +34,5 @@
     <dimen name="list_three_line_height">88dp</dimen>
 
     <dimen name="text_overline_height">24dp</dimen>
-    <dimen name="text_overline_title_height">20dp</dimen>
+    <dimen name="text_overline_content_height">20dp</dimen>
 </resources>

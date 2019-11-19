@@ -72,32 +72,50 @@ class ReviewViewActivity : AppCompatActivity(R.layout.activity_view_review) {
                 reviewViewModel.loadRestaurant(it.restaurantId)
                 view_user_profile.setSubtitle(getDate(it.createdAt, it.updatedAt))
 
-                val content = it.content
-                when (content.recommendPoint) {
-                    RECOMMEND_YES -> {
-                        iv_recommend.setImageDrawable(getDrawable(R.drawable.ic_very_satisfied))
-                        tv_recommend.text = getString(R.string.answer_yes)
+                with(it.content) {
+                    when (recommendPoint) {
+                        RECOMMEND_YES -> {
+                            iv_recommend.setImageDrawable(getDrawable(R.drawable.ic_very_satisfied))
+                            tv_recommend.text = getString(R.string.answer_yes)
+                        }
+                        RECOMMEND_SOSO -> {
+                            iv_recommend.setImageDrawable(getDrawable(R.drawable.ic_dissatisfied))
+                            tv_recommend.text = getString(R.string.answer_so_so)
+                        }
+                        RECOMMEND_NO -> {
+                            iv_recommend.setImageDrawable(getDrawable(R.drawable.ic_very_dissatisfied))
+                            tv_recommend.text = getString(R.string.answer_no)
+                        }
                     }
-                    RECOMMEND_SOSO -> {
-                        iv_recommend.setImageDrawable(getDrawable(R.drawable.ic_dissatisfied))
-                        tv_recommend.text = getString(R.string.answer_so_so)
+
+                    rating_cost_effective.rating = costEffective?.toFloat()!!
+                    rating_service_point.rating = servicePoint?.toFloat()!!
+                    tv_waiting_time.text = waitTimeFromInt(waitingTime!!)
+                    tv_eaten_food.text = eatenFood
+
+                    if (aboutFood != null) {
+                        group_about_food.visibility = View.VISIBLE
+                        tv_about_food.text = aboutFood
+                    } else {
+                        group_about_food.visibility = View.GONE
                     }
-                    RECOMMEND_NO -> {
-                        iv_recommend.setImageDrawable(getDrawable(R.drawable.ic_very_dissatisfied))
-                        tv_recommend.text = getString(R.string.answer_no)
+
+                    if (bestPlace != null) {
+                        group_best_place.visibility = View.VISIBLE
+                        tv_best_place.text = bestPlace
+                    } else {
+                        group_best_place.visibility = View.GONE
                     }
+
+                    if (aboutPlace != null) {
+                        group_about_place.visibility = View.VISIBLE
+                        tv_about_place.text = aboutPlace
+                    } else {
+                        group_about_place.visibility = View.GONE
+                    }
+
+                    tv_review_content.text = detailAnswer
                 }
-                rating_cost_effective.rating = content.costEffective?.toFloat()!!
-                rating_service_point.rating = content.servicePoint?.toFloat()!!
-                tv_waiting_time.text = waitTimeFromInt(content.waitingTime!!)
-                tv_eaten_food.text = content.eatenFood
-                if (content.bestPlace != null) {
-                    group_best_place.visibility = View.VISIBLE
-                    tv_best_place.text = content.bestPlace
-                } else {
-                    group_best_place.visibility = View.GONE
-                }
-                tv_review_content.text = content.detailAnswer
             }
             review = it
         })

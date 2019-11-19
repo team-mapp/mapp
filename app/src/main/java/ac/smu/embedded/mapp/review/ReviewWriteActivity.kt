@@ -5,12 +5,14 @@ import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.model.ReviewContent
 import ac.smu.embedded.mapp.model.reviewContent
 import ac.smu.embedded.mapp.util.CONFIG_USE_BEST_PLACE
+import ac.smu.embedded.mapp.util.toNullIfEmpty
 import android.content.DialogInterface
 import android.os.Bundle
 import android.view.MenuItem
 import android.view.View
 import android.widget.ArrayAdapter
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.widget.addTextChangedListener
 import androidx.lifecycle.Observer
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import com.orhanobut.logger.Logger
@@ -71,6 +73,22 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
             }
         }
 
+        edit_eaten_food.addTextChangedListener {
+            if (it != null && it.toString().isNotEmpty()) {
+                layout_about_food.visibility = View.VISIBLE
+            } else {
+                layout_about_food.visibility = View.GONE
+            }
+        }
+
+        edit_best_place.addTextChangedListener {
+            if (it != null && it.toString().isNotEmpty()) {
+                layout_about_place.visibility = View.VISIBLE
+            } else {
+                layout_about_place.visibility = View.GONE
+            }
+        }
+
         waitingTimeMap = mapOf(
             getString(R.string.waiting_time_none) to 0,
             getString(R.string.waiting_time_10) to 10,
@@ -122,20 +140,27 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
 
         reviewViewModel.review.observe(this, Observer {
             if (it != null) {
-                val content = it.content
-                when (content.recommendPoint) {
-                    RECOMMEND_YES -> btn_answer_yes.isChecked = true
-                    RECOMMEND_SOSO -> btn_answer_soso.isChecked = true
-                    RECOMMEND_NO -> btn_answer_no.isChecked = true
+                with(it.content) {
+                    when (recommendPoint) {
+                        RECOMMEND_YES -> btn_answer_yes.isChecked = true
+                        RECOMMEND_SOSO -> btn_answer_soso.isChecked = true
+                        RECOMMEND_NO -> btn_answer_no.isChecked = true
+                    }
+                    rating_cost_effective.rating = costEffective?.toFloat()!!
+                    rating_service_point.rating = servicePoint?.toFloat()!!
+                    waiting_time_dropdown.setText(waitTimeFromInt(waitingTime!!), false)
+                    edit_eaten_food.setText(eatenFood)
+                    if (aboutFood != null) {
+                        edit_about_food.setText(aboutFood)
+                    }
+                    if (bestPlace != null) {
+                        edit_best_place.setText(bestPlace)
+                    }
+                    if (aboutPlace != null) {
+                        edit_about_place.setText(aboutPlace)
+                    }
+                    edit_review.setText(detailAnswer)
                 }
-                rating_cost_effective.rating = content.costEffective?.toFloat()!!
-                rating_service_point.rating = content.servicePoint?.toFloat()!!
-                waiting_time_dropdown.setText(waitTimeFromInt(content.waitingTime!!), false)
-                edit_eaten_food.setText(content.eatenFood)
-                if (content.bestPlace != null) {
-                    edit_best_place.setText(content.bestPlace)
-                }
-                edit_review.setText(content.detailAnswer)
             }
             review = it
         })
@@ -186,14 +211,9 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
             servicePoint(rating_service_point.rating.toInt())
             waitingTime { waitTimeFromString(waiting_time_dropdown.text.toString()) }
             eatenFood { edit_eaten_food.text.toString() }
-            bestPlace {
-                val bestPlace = edit_best_place.text.toString()
-                if (bestPlace.isNotEmpty()) {
-                    bestPlace
-                } else {
-                    null
-                }
-            }
+            aboutFood { edit_about_food.text.toString().toNullIfEmpty() }
+            bestPlace { edit_best_place.text.toString().toNullIfEmpty() }
+            aboutPlace { edit_about_place.text.toString().toNullIfEmpty() }
             detailAnswer { edit_review.text.toString() }
         }
     }

@@ -149,6 +149,25 @@
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_about_food"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/keyline_small"
+        android:hint="@string/question_about_food"
+        android:visibility="gone"
+        app:errorEnabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/layout_eaten_food"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_about_food"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/layout_best_place"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
@@ -157,12 +176,31 @@
         android:hint="@string/question_best_place"
         app:endIconMode="clear_text"
         app:errorEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/layout_eaten_food"
+        app:layout_constraintTop_toBottomOf="@+id/layout_about_food"
         app:startIconDrawable="@drawable/ic_best_place"
         tools:visibility="visible">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_best_place"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/layout_about_place"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/keyline_small"
+        android:hint="@string/question_about_place"
+        android:visibility="gone"
+        app:errorEnabled="true"
+        app:layout_constraintTop_toBottomOf="@+id/layout_best_place"
+        tools:visibility="visible">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_about_place"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
@@ -177,7 +215,7 @@
         android:hint="@string/question_review"
         app:counterEnabled="true"
         app:errorEnabled="true"
-        app:layout_constraintTop_toBottomOf="@+id/layout_best_place">
+        app:layout_constraintTop_toBottomOf="@+id/layout_about_place">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/edit_review"

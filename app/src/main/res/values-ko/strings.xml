@@ -20,6 +20,8 @@
     <string name="question_eaten_food">먹은 음식 *</string>
     <string name="question_review">리뷰 *</string>
     <string name="question_best_place">앉은 자리</string>
+    <string name="question_about_place">앉은 자리는 어땠나요?</string>
+    <string name="question_about_food">먹은 음식은 어땠나요?</string>
     <string name="hint_waiting_time">대기 시간</string>
     <string name="hint_eaten_food">먹은 음식</string>
     <string name="hint_review">리뷰</string>

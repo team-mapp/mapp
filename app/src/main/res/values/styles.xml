@@ -43,15 +43,16 @@
     </style>
 
     <style name="TextAppearance.Overline" parent="@style/TextAppearance.MaterialComponents.Overline">
+        <item name="android:textSize">12sp</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">@dimen/text_overline_height</item>
         <item name="android:gravity">bottom</item>
         <item name="android:textColor">?android:textColorSecondary</item>
     </style>
 
-    <style name="TextAppearance.OverlineTitle" parent="@style/TextAppearance.MaterialComponents.Body2">
+    <style name="TextAppearance.OverlineContent" parent="@style/TextAppearance.MaterialComponents.Body2">
         <item name="android:layout_width">wrap_content</item>
-        <item name="android:layout_height">@dimen/text_overline_title_height</item>
+        <item name="android:layout_height">@dimen/text_overline_content_height</item>
         <item name="android:gravity">bottom</item>
     </style>
 
