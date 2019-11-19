@@ -43,6 +43,8 @@ interface ReviewRepository {
 
     fun removeReview(documentId: String)
 
+    suspend fun hasReviewAwait(restaurantId: String, userId: String): Boolean
+
 }
 
 class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository {
@@ -175,5 +177,13 @@ class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository
         db.collection(COLLECTION_PATH)
             .document(documentId)
             .delete()
+    }
+
+    override suspend fun hasReviewAwait(restaurantId: String, userId: String): Boolean {
+        val snapshot = db.collection(COLLECTION_PATH)
+            .whereEqualTo(Review.FIELD_RESTAURANT_ID, restaurantId)
+            .whereEqualTo(Review.FIELD_USER_ID, userId)
+            .get().await()
+        return snapshot.size() > 0
     }
 }

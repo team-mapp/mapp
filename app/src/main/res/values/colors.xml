@@ -3,10 +3,15 @@
     <color name="colorPrimary">#FFFFFF</color>
     <color name="colorPrimaryDark">#FFFFFF</color>
     <color name="colorAccent">#606F82</color>
+    <color name="colorSecondary">#606F82</color>
     <color name="backgroundColor">#F5F5F5</color>
     <color name="card_filter_color">#36000000</color>
     <color name="search_bar_background">#EEEEEE</color>
     <color name="profile_color">#C4C4C4</color>
     <color name="content_favorite_color">#D50000</color>
+    <color name="review_content_background">#FFFFFF</color>
+    <color name="content_background">#FFFFFF</color>
+    <color name="error_color">#b00020</color>
+    <color name="star_color">#ffd600</color>
     <color name="background_color_splash">#E0E0D8</color>
 </resources>

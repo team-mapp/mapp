@@ -72,7 +72,7 @@ class ContentView @JvmOverloads constructor(
                     palette.getDarkMutedColor(
                         ContextCompat.getColor(
                             context,
-                            R.color.colorAccent
+                            R.color.colorSecondary
                         )
                     )
                 setCardBackgroundColor(backgroundColor)
@@ -109,8 +109,8 @@ class ContentView @JvmOverloads constructor(
         view_profile.setImage(imageUrl, isStorage, imageRequestListener)
     }
 
-    fun setName(name: String) {
-        view_profile.setName(name)
+    fun setTitle(name: String) {
+        view_profile.setTitle(name)
     }
 
     fun setVisibleFavorite(isVisible: Boolean) {
@@ -137,7 +137,7 @@ class ContentView @JvmOverloads constructor(
         imageFromStorage: Boolean = true
     ) {
         setImage(imageUrl, imageFromStorage)
-        setName(name)
+        setTitle(name)
         setVisibleFavorite(isFavorite || visibleFavorite)
         this.isFavorite = isFavorite
         updateFavorite()

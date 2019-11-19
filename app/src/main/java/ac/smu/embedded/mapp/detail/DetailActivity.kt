@@ -62,9 +62,9 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 )
                 contentView.setOnFavoriteClickListener { v, isFavorite ->
                     if (isFavorite) {
-                        detailViewModel.removeFavorite("test", value.documentId)
+                        detailViewModel.removeFavorite(value.documentId)
                     } else {
-                        detailViewModel.addFavorite("test", value.documentId)
+                        detailViewModel.addFavorite(value.documentId)
                     }
                     contentView.isFavorite = !isFavorite
                 }
@@ -92,7 +92,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
             detailViewModel.celeb.observe(this, Observer {
                 if (it != null) {
                     updateProfile(it.name, it.image)
-                    detailViewModel.loadRestaurants("test", it.restaurants)
+                    detailViewModel.loadRestaurants(it.restaurants)
                 }
             })
             detailViewModel.loadCeleb(documentId)
@@ -100,7 +100,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
             detailViewModel.program.observe(this, Observer {
                 if (it != null) {
                     updateProfile(it.name, it.image)
-                    detailViewModel.loadRestaurants("test", it.restaurants)
+                    detailViewModel.loadRestaurants(it.restaurants)
                 }
             })
             detailViewModel.loadProgram(documentId)
@@ -108,7 +108,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
     }
 
     private fun updateProfile(name: String, image: String) {
-        view_profile.setName(name)
+        view_profile.setTitle(name)
         view_profile.setImage(image, true)
     }
 
