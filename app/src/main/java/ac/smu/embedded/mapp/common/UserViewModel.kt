@@ -52,7 +52,7 @@ class UserViewModel(
     }
 
     fun updateUserProfile(displayName: String?, profileImage: String?) = viewModelScope.launch {
-        userRepository.updateUserProfileAwait(displayName, profileImage)
+        userRepository.updateUserProfile(displayName, profileImage)
         updateUser()
     }
 
@@ -74,7 +74,7 @@ class UserViewModel(
         }
     }
 
-    private fun updateUser() {
+    private fun updateUser() = viewModelScope.launch {
         _userData.value = userRepository.getUser()
     }
 

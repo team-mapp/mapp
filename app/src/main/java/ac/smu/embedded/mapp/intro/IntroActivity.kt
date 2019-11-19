@@ -33,12 +33,14 @@ class IntroActivity : AppCompatActivity() {
         userViewModel.userData.observe(this, Observer {
             Log.d("IntroActivity", it.toString())
             if (it != null && currentImageURL != null) {
-                introViewModel.upladImage(currentImageURL!!)!!.observe(this, Observer {
-                    it.onComplete {
-                        val intent = Intent(this, MainActivity::class.java)
-                        startActivity(intent)
-                    }
-                })
+                introViewModel.upladImage(currentImageURL!!)
+            }
+        })
+
+        introViewModel.uploadCompleted.observe(this, Observer {
+            if (it) {
+                val intent = Intent(this, MainActivity::class.java)
+                startActivity(intent)
             }
         })
 
