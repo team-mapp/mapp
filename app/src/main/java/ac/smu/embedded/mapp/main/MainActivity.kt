@@ -5,13 +5,10 @@ import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.model.Notification
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.profile.ProfileActivity
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import ac.smu.embedded.mapp.search.SearchActivity
 import ac.smu.embedded.mapp.settings.SettingsActivity
-import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
-import ac.smu.embedded.mapp.util.NotificationConstants
-import ac.smu.embedded.mapp.util.loadStorage
-import ac.smu.embedded.mapp.util.recyclerAdapter
-import android.annotation.SuppressLint
+import ac.smu.embedded.mapp.util.*
 import android.content.Intent
 import android.os.Bundle
 import android.text.format.DateUtils
@@ -85,6 +82,11 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                         restaurant.name
                     )
                     viewHolder.tv_subtitle.text = DateUtils.getRelativeTimeSpanString(item.notifyAt)
+                    viewHolder.itemView.setOnClickListener {
+                        val intent = Intent(this, RestaurantDetailActivity::class.java)
+                        intent.putExtra(EXTRA_DOCUMENT_ID, item.content)
+                        startActivity(intent)
+                    }
                 }
             }
 
@@ -122,12 +124,19 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
         )
     }
 
+    override fun onBackPressed() {
+        if (drawer_layout.isDrawerOpen(GravityCompat.END)) {
+            drawer_layout.closeDrawer(GravityCompat.END)
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return super.onCreateOptionsMenu(menu)
     }
 
-    @SuppressLint("RtlHardcoded")
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_my -> {

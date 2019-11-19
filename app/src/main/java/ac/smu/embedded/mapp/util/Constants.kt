@@ -1,5 +1,7 @@
 package ac.smu.embedded.mapp.util
 
+const val EXTRA_DOCUMENT_ID = "document_id"
+
 const val CONFIG_USE_BEST_PLACE = "use_best_place"
 
 /**

@@ -7,6 +7,7 @@ import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.UserRepository
 import ac.smu.embedded.mapp.repository.local.NotificationDao
 import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
+import ac.smu.embedded.mapp.util.EXTRA_DOCUMENT_ID
 import ac.smu.embedded.mapp.util.NotificationConstants.TYPE_REVIEW_CREATED
 import android.app.NotificationChannel
 import android.app.PendingIntent
@@ -91,7 +92,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
     private fun notifyReviewNotification(restaurant: Restaurant, largeIcon: Bitmap) {
         val restaurantIntent = Intent(this, RestaurantDetailActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-            putExtra("document_id", restaurant.documentId)
+            putExtra(EXTRA_DOCUMENT_ID, restaurant.documentId)
         }
 
         val pendingIntent: PendingIntent = PendingIntent.getActivity(this, 0, restaurantIntent, 0)
