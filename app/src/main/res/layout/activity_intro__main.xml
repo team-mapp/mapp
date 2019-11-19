@@ -51,7 +51,7 @@
         android:textColor="#606F82"
         android:textSize="30dp"
         android:textStyle="bold"
-        android:onClick="onClick"/>
+        />
 
     <ImageView
         android:id="@+id/imageView"
