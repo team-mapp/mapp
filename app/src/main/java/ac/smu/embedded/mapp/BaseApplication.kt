@@ -14,6 +14,7 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -35,7 +36,11 @@ private const val CONFIG_LOCAL = "local"
 
 class BaseApplication : Application() {
     private val firestore: FirebaseFirestore
-        get() = Firebase.firestore
+        get() = Firebase.firestore.apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build()
+        }
 
     private val firebaseAuth: FirebaseAuth
         get() = FirebaseAuth.getInstance()
