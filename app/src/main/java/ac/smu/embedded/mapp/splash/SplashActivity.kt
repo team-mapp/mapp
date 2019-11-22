@@ -1,19 +1,28 @@
 package ac.smu.embedded.mapp.splash
 
+import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.intro.IntroActivity
+import ac.smu.embedded.mapp.main.MainActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
+import org.koin.android.viewmodel.ext.android.viewModel
 
-
-// TODO (1) 기기 내 설정 값을 통해 로그인이 된 경우 MainActivity로 이동하기
-// TODO (2) Splash, IntroActivity의 백그라운드 색상을 다른 화면과 맞추기 (로고 내 배경색 지워야함)
 class SplashActivity : AppCompatActivity() {
+
+    private val userViewModel: UserViewModel by viewModel()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val intent = Intent(this, IntroActivity::class.java)
-        startActivity(intent)
-        finish()
+        userViewModel.userData.observe(this, Observer {
+            val intent: Intent = if (it != null) {
+                Intent(this, MainActivity::class.java)
+            } else {
+                Intent(this, IntroActivity::class.java)
+            }
+            startActivity(intent)
+            finish()
+        })
     }
 }

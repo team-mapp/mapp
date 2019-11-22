@@ -4,13 +4,8 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <!-- camera, gallery -->
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-
-    <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <application
@@ -37,35 +32,40 @@
         <activity
             android:name=".splash.SplashActivity"
             android:exported="true"
-            android:theme="@style/SplashTheme" />
-        <activity
-            android:name=".intro.IntroActivity"
-            android:theme="@style/Theme.App.NoActionBar">
-            <intent-filter>
-                <action android:name="android.intent.action.ACTION" />
-                <category android:name="android.intent.category.DEFAULT" />
-            </intent-filter>
-        </activity>
-        <activity
-            android:name=".main.MainActivity"
-            android:theme="@style/Theme.App.NoActionBar">
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
+        <activity
+            android:name=".intro.IntroActivity"
+            android:theme="@style/Theme.App.NoActionBar" />
+
+        <activity
+            android:name=".main.MainActivity"
+            android:theme="@style/Theme.App.NoActionBar" />
+
         <activity android:name=".restaurantDetail.RestaurantDetailActivity" />
+
         <activity
             android:name=".detail.DetailActivity"
             android:theme="@style/Theme.App.NoActionBar" />
+
         <activity
             android:name=".search.SearchActivity"
             android:launchMode="singleTask"
             android:theme="@style/Theme.App.NoActionBar" />
-        <activity android:name=".profile.ProfileActivity" />
+
+        <activity
+            android:name=".profile.ProfileActivity"
+            android:theme="@style/Theme.App.NoActionBar" />
+
         <activity
             android:name=".review.ReviewWriteActivity"
             android:theme="@style/Theme.App.Review" />
+
         <activity
             android:name=".review.ReviewViewActivity"
             android:theme="@style/Theme.App.Review" />
