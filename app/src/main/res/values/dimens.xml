@@ -35,4 +35,8 @@
 
     <dimen name="text_overline_height">24dp</dimen>
     <dimen name="text_overline_content_height">20dp</dimen>
+
+    <dimen name="profile_toolbar_height">160dp</dimen>
+    <dimen name="profile_image_normal">64dp</dimen>
+    <dimen name="profile_image_large">96dp</dimen>
 </resources>

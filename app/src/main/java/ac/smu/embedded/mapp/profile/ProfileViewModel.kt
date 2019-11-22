@@ -5,36 +5,45 @@ import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.repository.FavoriteRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.StorageRepository
+import ac.smu.embedded.mapp.repository.UserRepository
+import ac.smu.embedded.mapp.util.StateViewModel
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.UploadTask
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
-class ProfileViewModel (
+class ProfileViewModel(
+    private val userRepository: UserRepository,
     private val storageRepository: StorageRepository<UploadTask>,
     private val favoriteRepository: FavoriteRepository,
     private val restaurantsRepository: RestaurantsRepository
-) : ViewModel() {
+) : StateViewModel() {
 
-    private val _restaurants = MutableLiveData<List<Restaurant>>()
-    val restaurants: LiveData<List<Restaurant>> = _restaurants
+    val favorites: LiveData<List<Favorite>?> = useState()
 
-    fun uploadImage(uri: Uri, userId: String) =
-        storageRepository.put(userId + ".jpg", uri)
+    val favoriteRestaurants: LiveData<List<Restaurant>?> = useState()
 
-    fun loadRestaurants(userId: String, documentIds: List<String>) =
-        viewModelScope.launch {
-            val userFavorites = favoriteRepository.loadFavoritesAwait(userId)
-            val restaurants = documentIds.map {
-                restaurantsRepository.loadRestaurantAwait(it)
-            }
-            val userFavoriteIds = userFavorites?.map { it.restaurantId }
-            _restaurants.value = restaurants.filterNotNull().map {
-                it.isFavorite = userFavoriteIds?.contains(it.documentId) ?: false
-                return@map it
+    fun loadFavorites() = viewModelScope.launch {
+        val user = userRepository.getUser()
+        if (user != null) {
+            favoriteRepository.loadFavoritesSync(user.uid!!).asFlow().collect {
+                setState(favorites, it)
             }
         }
+    }
+
+    fun loadFavoriteRestaurants(favorites: List<Favorite>) =
+        viewModelScope.launch {
+            val documentIds = favorites.map { it.restaurantId }
+            val restaurantList = documentIds.map {
+                restaurantsRepository.loadRestaurant(it)!!
+            }
+            setState(favoriteRestaurants, restaurantList)
+        }
+
+    fun uploadImage(uri: Uri, userId: String) =
+        storageRepository.put("$userId.jpg", uri)
 }

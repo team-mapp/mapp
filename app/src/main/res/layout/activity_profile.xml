@@ -1,118 +1,76 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:id="@+id/linearLayout1"
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/app_bar_layout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:background="@color/backgroundColor">
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
-        <com.google.android.material.appbar.AppBarLayout
-            android:id="@+id/app_bar_layout"
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
+            android:layout_height="?attr/actionBarSize">
 
-        </com.google.android.material.appbar.AppBarLayout>
+        </com.google.android.material.appbar.MaterialToolbar>
 
-        <TextView
-            android:id="@+id/profileText"
+        <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center_horizontal"
-            android:text="프로필 변경"
-            android:textSize="15sp"
-            android:textStyle="bold"/>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
-            android:background="@color/backgroundColor">
+            android:layout_height="@dimen/profile_toolbar_height">
 
             <ImageView
-                android:id="@+id/profileImgView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:src="@drawable/profile"
+                android:id="@+id/iv_profile"
+                android:layout_width="@dimen/profile_image_normal"
+                android:layout_height="@dimen/profile_image_normal"
                 android:scaleType="centerCrop"
-                android:layout_gravity="center_horizontal" />
+                android:src="@drawable/ic_account_circle"
+                app:layout_constraintBottom_toTopOf="@id/tv_username"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:ignore="ContentDescription" />
 
             <TextView
-                android:id="@+id/nickname"
-                android:layout_width="match_parent"
+                android:id="@+id/tv_username"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:gravity="center_horizontal"
-                android:text="nickname"
-                android:textSize="15sp"
-                android:textStyle="bold" />
+                android:layout_marginTop="@dimen/keyline_normal"
+                android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
+                android:textSize="@dimen/card_title_size"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/iv_profile"
+                app:layout_constraintVertical_chainStyle="packed"
+                tools:text="Title" />
 
-            <LinearLayout
-                android:id="@+id/linearLayout2"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
-                <View
-                    android:id="@+id/line1"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="10dp"
-                    android:background="@color/colorAccent" />
+    </com.google.android.material.appbar.AppBarLayout>
 
-                <LinearLayout
-                    android:id="@+id/linearLayout3"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_marginBottom="10dp"
-                    android:orientation="horizontal">
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/favorites_view"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginLeft="@dimen/keyline_small"
+        android:layout_marginTop="@dimen/keyline_small"
+        android:layout_marginRight="@dimen/keyline_small"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/app_bar_layout" />
 
-                    <ImageView
-                        android:id="@+id/favoriteImage"
-                        android:src="@drawable/ic_favorite"
-                        android:tint="#FF0000"
-                        android:layout_width="40dp"
-                        android:layout_height="40dp"
-                        android:layout_marginLeft="20dp"
-                        android:layout_marginRight="10dp"
-                        android:gravity="left" />
+    <ProgressBar
+        android:id="@+id/loading_progress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/favorites_view" />
 
-                    <TextView
-                        android:id="@+id/favoritesText"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center"
-                        android:text="좋아요"
-                        android:textSize="15sp"
-                        android:textStyle="bold" />
-                </LinearLayout>
-
-            </LinearLayout>
-        </LinearLayout>
-
-        <view class="androidx.appcompat.app.AlertController$RecycleListView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvFavoritesList"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginTop="10dp"
-            android:layout_weight="2"
-            android:background="@color/colorAccent" />
-
-    </LinearLayout>
-
-</ScrollView>
+</androidx.constraintlayout.widget.ConstraintLayout>
