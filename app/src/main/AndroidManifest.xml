@@ -4,6 +4,10 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- camera, gallery -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
@@ -21,14 +25,27 @@
         <meta-data
             android:name="com.naver.maps.map.CLIENT_ID"
             android:value="559188p0np" />
-        <!-- splash manifest변경 추가 -->
-        <activity android:name=".splash.Splash_MainActivity"
-                  android:theme="@style/SplashTheme"
-                  android:exported="true">
-        <!-- TODO: IntroActivity에서 MainActivity로 이동되는 Intent 추가하고 intent-filter 옮기기 -->
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_channel_id"
+            android:value="@string/notification_channel_default_id" />
+
+        <meta-data
+            android:name="com.google.firebase.messaging.default_notification_icon"
+            android:resource="@drawable/ic_notifications" />
+
+        <activity
+            android:name=".splash.SplashActivity"
+            android:exported="true"
+            android:theme="@style/SplashTheme" />
+        <activity
+            android:name=".intro.IntroActivity"
+            android:theme="@style/Theme.App.NoActionBar">
+            <intent-filter>
+                <action android:name="android.intent.action.ACTION" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
         </activity>
-        <!-- intro activity 추가 -->
-        <activity android:name=".Intro.Intro_MainActivity"></activity>
         <activity
             android:name=".main.MainActivity"
             android:theme="@style/Theme.App.NoActionBar">
@@ -46,6 +63,19 @@
             android:launchMode="singleTask"
             android:theme="@style/Theme.App.NoActionBar" />
         <activity android:name=".profile.ProfileActivity" />
-    </application>
+        <activity
+            android:name=".review.ReviewWriteActivity"
+            android:theme="@style/Theme.App.Review" />
+        <activity
+            android:name=".review.ReviewViewActivity"
+            android:theme="@style/Theme.App.Review" />
 
+        <service
+            android:name=".service.FirebaseNotificationService"
+            android:exported="false">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
+    </application>
 </manifest>

@@ -94,7 +94,7 @@ class ReviewContentBuilder() {
         this.aboutFood = lambda()
     }
 
-    fun recommendPoint(@IntRange(from = 0, to = 5) value: Int) {
+    fun recommendPoint(@IntRange(from = -1, to = 1) value: Int) {
         this.recommendPoint = value
     }
 

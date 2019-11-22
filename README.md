@@ -1,6 +1,6 @@
 # Team_Mapp
 
----
+[![Build Status](https://app.bitrise.io/app/eee8c8dc2c14666f/status.svg?token=be-fGTmq5oL5HB4d5a7bHw&branch=master)](https://app.bitrise.io/app/eee8c8dc2c14666f)
 
 ### 팀구성
 
