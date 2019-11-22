@@ -2,12 +2,11 @@ package ac.smu.embedded.mapp.common
 
 import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.repository.UserRepository
+import ac.smu.embedded.mapp.util.StateViewModel
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -18,17 +17,20 @@ import kotlinx.coroutines.launch
 
 class UserViewModel(
     private val userRepository: UserRepository
-) : ViewModel() {
+) : StateViewModel() {
 
-    private val _userData = MutableLiveData<User?>()
-    val userData: LiveData<User?> = _userData
+    val userData: LiveData<User?> = useState()
 
     init {
-        updateUser()
+        getUser()
+    }
+
+    fun getUser() = viewModelScope.launch {
+        setState(userData, userRepository.getUser())
     }
 
     fun signIn(credential: AuthCredential) = viewModelScope.launch {
-        _userData.value = userRepository.signIn(credential)
+        setState(userData, userRepository.signIn(credential))
         val idResult = userRepository.getNotificationToken()
         if (idResult != null) {
             userRepository.addNotificationToken(idResult.token)
@@ -48,17 +50,14 @@ class UserViewModel(
 
     fun signOut() {
         userRepository.signOut()
-        updateUser()
     }
 
     fun updateUserProfile(displayName: String?, profileImage: String?) = viewModelScope.launch {
         userRepository.updateUserProfile(displayName, profileImage)
-        updateUser()
     }
 
     fun deleteUser() = viewModelScope.launch {
         userRepository.deleteUser()
-        updateUser()
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -72,10 +71,6 @@ class UserViewModel(
                 Log.e(TAG, "Error occurred", e)
             }
         }
-    }
-
-    private fun updateUser() = viewModelScope.launch {
-        _userData.value = userRepository.getUser()
     }
 
     companion object {

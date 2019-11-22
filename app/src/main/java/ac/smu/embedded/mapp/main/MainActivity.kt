@@ -35,7 +35,13 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         initView()
-        setupUserProfile()
+        setupObservers()
+        loadContents()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        userViewModel.getUser()
     }
 
     private fun initView() {
@@ -91,16 +97,14 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
 
         notification_view.layoutManager = LinearLayoutManager(this)
         notification_view.adapter = notificationAdapter
+    }
 
+    private fun setupObservers() {
         mainViewModel.notifications.observe(this, Observer {
             notification_toolbar.title = "${getString(R.string.menu_notification)} (${it.size})"
             notificationAdapter.submitList(it)
         })
 
-        mainViewModel.loadNotifications()
-    }
-
-    private fun setupUserProfile() {
         userViewModel.userData.observe(this, Observer {
             if (it != null) {
                 if (it.profileImage != null) {
@@ -109,6 +113,10 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
                 view_profile.setTitle(it.displayName!!)
             }
         })
+    }
+
+    private fun loadContents() {
+        mainViewModel.loadNotifications()
     }
 
     private fun navigateSearch() {

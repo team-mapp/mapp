@@ -62,9 +62,9 @@ class UserRepositoryImpl(
     override fun signOut() = auth.signOut()
 
     override suspend fun getUser(): User? {
-        val uid = auth.uid
-        if (uid != null) {
-            return getUser(uid)
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
+            return getUser(currentUser.uid)
         }
         return null
     }
@@ -76,8 +76,8 @@ class UserRepositoryImpl(
             .toObject(::fromMap)
 
     override fun updateUserProfile(displayName: String?, profileImage: String?) {
-        val uid = auth.uid
-        if (uid != null) {
+        val currentUser = auth.currentUser
+        if (currentUser != null) {
             val updateMap = mutableMapOf<String, Any>()
             if (displayName != null) {
                 updateMap[User.FIELD_DISPLAY_NAME] = displayName
@@ -87,7 +87,7 @@ class UserRepositoryImpl(
             }
             if (updateMap.keys.size > 0) {
                 db.collection(COLLECTION_USER_PATH)
-                    .document(uid)
+                    .document(currentUser.uid)
                     .update(updateMap)
             }
         }
