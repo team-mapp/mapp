@@ -63,6 +63,11 @@
             android:theme="@style/Theme.App.NoActionBar" />
 
         <activity
+            android:name=".profile.ProfileSettingActivity"
+            android:label="@string/action_edit_profile"
+            android:theme="@style/Theme.App.NoActionBar" />
+
+        <activity
             android:name=".review.ReviewWriteActivity"
             android:theme="@style/Theme.App.Review" />
 
