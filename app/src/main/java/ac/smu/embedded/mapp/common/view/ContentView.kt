@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -70,7 +70,7 @@ class ContentView @JvmOverloads constructor(
                 val palette = Palette.from(resource).generate()
                 val backgroundColor =
                     palette.getDarkMutedColor(
-                        ContextCompat.getColor(
+                        getColor(
                             context,
                             R.color.colorSecondary
                         )
@@ -144,6 +144,7 @@ class ContentView @JvmOverloads constructor(
     }
 
     private fun initView() {
+        setCardBackgroundColor(getColor(context, R.color.colorAccent))
         btn_favorite.setOnClickListener {
             if (::favoriteClickListener.isInitialized) {
                 favoriteClickListener.onClick(it, isFavorite)
@@ -153,14 +154,9 @@ class ContentView @JvmOverloads constructor(
 
     private fun updateFavorite() {
         if (isFavorite) {
-            btn_favorite.setColorFilter(
-                ContextCompat.getColor(
-                    context,
-                    R.color.content_favorite_color
-                )
-            )
+            btn_favorite.setColorFilter(getColor(context, R.color.content_favorite_color))
         } else {
-            btn_favorite.setColorFilter(ContextCompat.getColor(context, android.R.color.white))
+            btn_favorite.setColorFilter(getColor(context, android.R.color.white))
         }
     }
 

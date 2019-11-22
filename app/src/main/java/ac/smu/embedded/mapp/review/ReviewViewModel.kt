@@ -3,6 +3,7 @@ package ac.smu.embedded.mapp.review
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.model.ReviewContent
+import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.repository.ConfigLoaderRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.ReviewRepository
@@ -24,6 +25,8 @@ class ReviewViewModel(
 
     val review: LiveData<Review?> = useState()
 
+    val user: LiveData<User?> = useState()
+
     val validRecommend: LiveData<Boolean> = useState(true)
 
     val validWaitingTime: LiveData<Boolean> = useState(true)
@@ -43,11 +46,15 @@ class ReviewViewModel(
     }
 
     fun loadRestaurant(documentId: String) = viewModelScope.launch {
-        setState(restaurant, restaurantsRepository.loadRestaurantAwait(documentId))
+        setState(restaurant, restaurantsRepository.loadRestaurant(documentId))
     }
 
     fun loadReview(documentId: String) = viewModelScope.launch {
-        setState(review, reviewRepository.loadReviewAwait(documentId))
+        setState(review, reviewRepository.loadReview(documentId))
+    }
+
+    fun loadUser(uid: String) = viewModelScope.launch {
+        setState(user, userRepository.getUser(uid))
     }
 
     fun saveReview(

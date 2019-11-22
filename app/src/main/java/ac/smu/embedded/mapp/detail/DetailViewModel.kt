@@ -27,19 +27,19 @@ class DetailViewModel(
     val restaurants: LiveData<List<Restaurant>?> = _restaurants
 
     fun loadCeleb(documentId: String) = viewModelScope.launch {
-        _celeb.value = celebsRepository.loadCelebAwait(documentId)
+        _celeb.value = celebsRepository.loadCeleb(documentId)
     }
 
     fun loadProgram(documentId: String) = viewModelScope.launch {
-        _program.value = programsRepository.loadProgramAwait(documentId)
+        _program.value = programsRepository.loadProgram(documentId)
     }
 
     fun loadRestaurants(documentIds: List<String>) =
         viewModelScope.launch {
             val userFavorites =
-                favoriteRepository.loadFavoritesAwait(userRepository.getUser()?.uid!!)
+                favoriteRepository.loadFavorites(userRepository.getUser()?.uid!!)
             val restaurants = documentIds.map {
-                restaurantsRepository.loadRestaurantAwait(it)
+                restaurantsRepository.loadRestaurant(it)
             }
             val userFavoriteIds = userFavorites?.map { it.restaurantId }
             _restaurants.value = restaurants.filterNotNull().map {

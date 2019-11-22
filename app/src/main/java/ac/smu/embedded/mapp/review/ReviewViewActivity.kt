@@ -67,8 +67,20 @@ class ReviewViewActivity : AppCompatActivity(R.layout.activity_view_review) {
             }
         })
 
+        reviewViewModel.user.observe(this, Observer {
+            with(view_user_profile) {
+                if (it != null) {
+                    if (it.profileImage != null) {
+                        setImage(it.profileImage, !it.isExternalProfile())
+                    }
+                    setTitle(it.displayName!!)
+                }
+            }
+        })
+
         reviewViewModel.review.observe(this, Observer {
             if (it != null) {
+                reviewViewModel.loadUser(it.userId)
                 reviewViewModel.loadRestaurant(it.restaurantId)
                 view_user_profile.setSubtitle(getDate(it.createdAt, it.updatedAt))
 
