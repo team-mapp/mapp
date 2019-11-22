@@ -46,11 +46,11 @@ class ReviewViewModel(
     }
 
     fun loadRestaurant(documentId: String) = viewModelScope.launch {
-        setState(restaurant, restaurantsRepository.loadRestaurantAwait(documentId))
+        setState(restaurant, restaurantsRepository.loadRestaurant(documentId))
     }
 
     fun loadReview(documentId: String) = viewModelScope.launch {
-        setState(review, reviewRepository.loadReviewAwait(documentId))
+        setState(review, reviewRepository.loadReview(documentId))
     }
 
     fun loadUser(uid: String) = viewModelScope.launch {

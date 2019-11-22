@@ -28,7 +28,7 @@ class UserViewModel(
     }
 
     fun signIn(credential: AuthCredential) = viewModelScope.launch {
-        _userData.value = userRepository.signInAwait(credential)
+        _userData.value = userRepository.signIn(credential)
         val idResult = userRepository.getNotificationToken()
         if (idResult != null) {
             userRepository.addNotificationToken(idResult.token)
@@ -57,7 +57,7 @@ class UserViewModel(
     }
 
     fun deleteUser() = viewModelScope.launch {
-        userRepository.deleteUserAwait()
+        userRepository.deleteUser()
         updateUser()
     }
 

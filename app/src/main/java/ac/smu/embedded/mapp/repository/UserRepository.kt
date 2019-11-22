@@ -4,8 +4,6 @@ import ac.smu.embedded.mapp.model.NotificationToken
 import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.model.User.Companion.fromMap
-import ac.smu.embedded.mapp.util.asLiveData
-import ac.smu.embedded.mapp.util.map
 import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -19,9 +17,7 @@ import kotlinx.coroutines.tasks.await
 
 interface UserRepository {
 
-    fun signIn(credential: AuthCredential): LiveData<Resource<User?>>
-
-    suspend fun signInAwait(credential: AuthCredential): User?
+    suspend fun signIn(credential: AuthCredential): User?
 
     fun signOut()
 
@@ -31,9 +27,7 @@ interface UserRepository {
 
     fun updateUserProfile(displayName: String?, profileImage: String?)
 
-    fun deleteUser(): LiveData<Resource<Void?>>
-
-    suspend fun deleteUserAwait(): Boolean
+    suspend fun deleteUser(): Boolean
 
     suspend fun getNotificationToken(): InstanceIdResult?
 
@@ -52,22 +46,7 @@ class UserRepositoryImpl(
         const val COLLECTION_TOKEN_PATH = "tokens"
     }
 
-    override fun signIn(credential: AuthCredential): LiveData<Resource<User?>> =
-        auth.signInWithCredential(credential).asLiveData().map { resource ->
-            resource.transform {
-                if (it != null) {
-                    with(it.user!!) {
-                        val user = User(uid, displayName, photoUrl.toString())
-                        addUser(user)
-                        user
-                    }
-                } else {
-                    null
-                }
-            }
-        }
-
-    override suspend fun signInAwait(credential: AuthCredential): User? {
+    override suspend fun signIn(credential: AuthCredential): User? {
         val result = auth.signInWithCredential(credential).await()
         return if (result.user != null) {
             with(result.user!!) {
@@ -114,11 +93,7 @@ class UserRepositoryImpl(
         }
     }
 
-    override fun deleteUser(): LiveData<Resource<Void?>> {
-        return auth.currentUser?.delete()?.asLiveData() ?: createErrorData("Unknown user")
-    }
-
-    override suspend fun deleteUserAwait(): Boolean {
+    override suspend fun deleteUser(): Boolean {
         return auth.currentUser?.delete()?.await() != null
     }
 
