@@ -4,6 +4,8 @@ import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.intro.IntroViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
+import ac.smu.embedded.mapp.profile.FavoriteViewModel
+import ac.smu.embedded.mapp.profile.ProfileViewModel
 import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.repository.local.AppDatabase
 import ac.smu.embedded.mapp.review.ReviewViewModel
@@ -115,6 +117,10 @@ class BaseApplication : Application() {
         viewModel { SearchViewModel(get(), get(), get()) }
 
         viewModel { UserViewModel(get()) }
+
+        viewModel { ProfileViewModel(get(), get(), get()) }
+
+        viewModel { FavoriteViewModel(get()) }
 
         viewModel { ReviewViewModel(get(), get(), get(), get(named(CONFIG_REMOTE))) }
 
