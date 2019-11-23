@@ -10,6 +10,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="appBarLayoutStyle">@style/AppBarLayout.Default</item>
         <item name="toolbarStyle">@style/Toolbar.Default</item>
+        <item name="colorControlNormal">#000000</item>
     </style>
 
     <style name="Theme.App.NoActionBar" parent="Theme.MaterialComponents.Light.NoActionBar">
@@ -22,6 +23,7 @@
         <item name="android:windowLightStatusBar">true</item>
         <item name="appBarLayoutStyle">@style/AppBarLayout.Default</item>
         <item name="toolbarStyle">@style/Toolbar.Default</item>
+        <item name="colorControlNormal">#000000</item>
     </style>
 
     <style name="Theme.App.Review" parent="Theme.App.NoActionBar">

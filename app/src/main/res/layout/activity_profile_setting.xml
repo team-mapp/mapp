@@ -33,13 +33,13 @@
             android:id="@+id/tv_profile_setting"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/keyline_large"
             android:text="@string/activity_profile_setting"
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline5"
             android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@id/iv_profile"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
             tools:visibility="visible" />
 
         <ImageButton
@@ -109,9 +109,9 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_get_started"
-            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/btn_large_height"
             android:text="@string/action_get_started"
             android:textStyle="bold"
             android:visibility="gone"
