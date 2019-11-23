@@ -32,6 +32,10 @@ class IntroActivity : AppCompatActivity(R.layout.activity_intro) {
     }
 
     private fun setupObservers() {
+        userViewModel.signInProgress.observe(this, Observer {
+            loading_progress.visibility = it
+        })
+        
         userViewModel.userData.observe(this, Observer {
             if (it != null) {
                 val intent = Intent(this, ProfileSettingActivity::class.java).apply {
