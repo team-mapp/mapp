@@ -9,11 +9,9 @@ import ac.smu.embedded.mapp.repository.local.NotificationDao
 import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import ac.smu.embedded.mapp.util.EXTRA_DOCUMENT_ID
 import ac.smu.embedded.mapp.util.NotificationConstants.TYPE_REVIEW_CREATED
-import android.app.NotificationChannel
 import android.app.PendingIntent
 import android.content.Intent
 import android.graphics.Bitmap
-import android.os.Build
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import com.bumptech.glide.Glide
@@ -50,12 +48,6 @@ class FirebaseNotificationService : FirebaseMessagingService() {
                     val restaurant =
                         restaurantsRepository.loadRestaurant(restaurantId!!)
                     if (restaurant != null) {
-                        createNotificationChannel(
-                            CHANNEL_ID_REVIEW_CREATED,
-                            getString(R.string.notification_channel_review_created),
-                            getString(R.string.notification_channel_review_created_desc),
-                            NotificationManagerCompat.IMPORTANCE_DEFAULT
-                        )
                         CoroutineScope(Dispatchers.IO).launch {
                             val largeIcon = getLargeIcon(restaurant.image)
                             notifyReviewNotification(restaurant, largeIcon)
@@ -70,22 +62,6 @@ class FirebaseNotificationService : FirebaseMessagingService() {
                     }
                 }
             }
-        }
-    }
-
-    private fun createNotificationChannel(
-        id: String,
-        name: String,
-        desc: String? = null,
-        importance: Int
-    ) {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val channel = NotificationChannel(id, name, importance).apply {
-                if (desc != null) {
-                    description = desc
-                }
-            }
-            NotificationManagerCompat.from(this).createNotificationChannel(channel)
         }
     }
 
@@ -131,6 +107,6 @@ class FirebaseNotificationService : FirebaseMessagingService() {
 
         private const val NOTIFICATION_ID_REVIEW_CREATED = 101
 
-        private const val CHANNEL_ID_REVIEW_CREATED = "review_created"
+        const val CHANNEL_ID_REVIEW_CREATED = "review_created"
     }
 }

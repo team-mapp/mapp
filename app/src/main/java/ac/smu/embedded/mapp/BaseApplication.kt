@@ -10,8 +10,11 @@ import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.repository.local.AppDatabase
 import ac.smu.embedded.mapp.review.ReviewViewModel
 import ac.smu.embedded.mapp.search.SearchViewModel
+import ac.smu.embedded.mapp.service.FirebaseNotificationService.Companion.CHANNEL_ID_REVIEW_CREATED
+import ac.smu.embedded.mapp.util.NotificationUtil
 import android.app.Application
 import android.content.SharedPreferences
+import androidx.core.app.NotificationManagerCompat
 import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
@@ -144,5 +147,16 @@ class BaseApplication : Application() {
         if (BuildConfig.DEBUG) {
             Logger.addLogAdapter(AndroidLogAdapter())
         }
+
+        initNotificationChannel()
+    }
+
+    fun initNotificationChannel() {
+        NotificationUtil.createNotificationChannel(
+            this, CHANNEL_ID_REVIEW_CREATED,
+            getString(R.string.notification_channel_review_created),
+            getString(R.string.notification_channel_review_created_desc),
+            NotificationManagerCompat.IMPORTANCE_DEFAULT
+        )
     }
 }
