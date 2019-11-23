@@ -58,6 +58,10 @@
         <item name="android:gravity">bottom</item>
     </style>
 
+    <style name="TextAppearance.Empty" parent="@style/TextAppearance.MaterialComponents.Body1">
+        <item name="android:textColor">?android:attr/textColorSecondary</item>
+    </style>
+
     <style name="RatingBarStyle" parent="Widget.AppCompat.RatingBar">
         <item name="android:indeterminateDrawable" tools:ignore="PrivateResource">
             @drawable/abc_ratingbar_indicator_material
