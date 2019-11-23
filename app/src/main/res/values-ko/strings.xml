@@ -44,6 +44,7 @@
     <string name="msg_req_eaten_food">먹은 음식은 필수 항목입니다</string>
     <string name="msg_req_review_content">리뷰 내용은 필수 항목입니다</string>
     <string name="msg_req_recommend">이 항목은 필수 항목입니다</string>
+    <string name="msg_req_username">이름은 비워둘 수 없습니다</string>
 
     <string name="created_date_format">%1$s 생성됨</string>
     <string name="updated_date_format">%1$s 수정됨</string>
@@ -54,4 +55,11 @@
 
     <string name="notification_review_created_title">새 리뷰 등록됨</string>
     <string name="notification_review_created_content">%1$s에 새로운 리뷰가 등록되었어요</string>
+
+    <string name="hint_username">이름</string>
+    <string name="activity_profile_setting">프로필 설정</string>
+    <string name="action_get_started">시작하기</string>
+    <string name="action_save">저장</string>
+    <string name="action_google_signin">구글로 시작하기</string>
+    <string name="action_edit_profile">프로필 편집</string>
 </resources>

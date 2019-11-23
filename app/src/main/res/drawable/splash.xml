@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@color/background_color_splash" /> <!-- 원하는 바탕색 추가 -->
+    <item android:drawable="@color/colorPrimary" /> <!-- 원하는 바탕색 추가 -->
     <item>
         <bitmap
             android:gravity="center"

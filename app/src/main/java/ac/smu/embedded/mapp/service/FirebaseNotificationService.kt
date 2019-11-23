@@ -48,7 +48,7 @@ class FirebaseNotificationService : FirebaseMessagingService() {
                 val restaurantId = message.data[KEY_RESTAURANT_ID]
                 CoroutineScope(Dispatchers.Main).launch {
                     val restaurant =
-                        restaurantsRepository.loadRestaurantAwait(restaurantId!!)
+                        restaurantsRepository.loadRestaurant(restaurantId!!)
                     if (restaurant != null) {
                         createNotificationChannel(
                             CHANNEL_ID_REVIEW_CREATED,

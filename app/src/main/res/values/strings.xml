@@ -45,6 +45,7 @@
     <string name="msg_req_eaten_food">Required eaten food</string>
     <string name="msg_req_review_content">Required review content</string>
     <string name="msg_req_recommend">Required recommend</string>
+    <string name="msg_req_username">Required username</string>
 
     <string name="created_date_format">Created %1$s</string>
     <string name="updated_date_format">Updated %1$s</string>
@@ -56,6 +57,13 @@
 
     <string name="notification_review_created_title">New review added</string>
     <string name="notification_review_created_content">Added new view to %1$s</string>
+
+    <string name="hint_username">Username</string>
+    <string name="activity_profile_setting">Profile setting</string>
+    <string name="action_get_started">Get started</string>
+    <string name="action_save">Save</string>
+    <string name="action_google_signin">Start with Google</string>
+    <string name="action_edit_profile">Edit Profile</string>
 
     <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>

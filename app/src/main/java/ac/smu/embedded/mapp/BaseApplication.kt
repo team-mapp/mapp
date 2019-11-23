@@ -4,6 +4,8 @@ import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
 import ac.smu.embedded.mapp.intro.IntroViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
+import ac.smu.embedded.mapp.profile.ProfileSettingViewModel
+import ac.smu.embedded.mapp.profile.ProfileViewModel
 import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.repository.local.AppDatabase
 import ac.smu.embedded.mapp.review.ReviewViewModel
@@ -14,6 +16,7 @@ import androidx.preference.PreferenceManager
 import androidx.room.Room
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreSettings
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig
@@ -35,7 +38,11 @@ private const val CONFIG_LOCAL = "local"
 
 class BaseApplication : Application() {
     private val firestore: FirebaseFirestore
-        get() = Firebase.firestore
+        get() = Firebase.firestore.apply {
+            firestoreSettings = FirebaseFirestoreSettings.Builder()
+                .setPersistenceEnabled(true)
+                .build()
+        }
 
     private val firebaseAuth: FirebaseAuth
         get() = FirebaseAuth.getInstance()
@@ -115,6 +122,10 @@ class BaseApplication : Application() {
         viewModel { SearchViewModel(get(), get(), get()) }
 
         viewModel { UserViewModel(get()) }
+
+        viewModel { ProfileViewModel(get(), get(), get(), get()) }
+
+        viewModel { ProfileSettingViewModel(get()) }
 
         viewModel { ReviewViewModel(get(), get(), get(), get(named(CONFIG_REMOTE))) }
 

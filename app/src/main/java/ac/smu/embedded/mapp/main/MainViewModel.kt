@@ -27,7 +27,7 @@ class MainViewModel(
             notificationDao.loadAll().collect { list ->
                 val mappedNotifications = list.map {
                     if (it.type == NotificationConstants.TYPE_REVIEW_CREATED) {
-                        val restaurant = restaurantsRepository.loadRestaurantAwait(it.content)
+                        val restaurant = restaurantsRepository.loadRestaurant(it.content)
                         if (restaurant != null) {
                             it.data = restaurant
                         }
@@ -40,8 +40,8 @@ class MainViewModel(
             }
         }
 
-    fun loadCelebs() = celebsRepository.loadCelebsSync(viewModelScope)
+    fun loadCelebs() = celebsRepository.loadCelebsSync()
 
-    fun loadPrograms() = programsRepository.loadProgramsSync(viewModelScope)
+    fun loadPrograms() = programsRepository.loadProgramsSync()
 
 }
