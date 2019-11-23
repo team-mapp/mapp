@@ -3,12 +3,14 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.model.Review.Companion.fromMap
 import ac.smu.embedded.mapp.model.ReviewContent
-import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
 
 interface ReviewRepository {
@@ -41,14 +43,15 @@ class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository
         private const val COLLECTION_PATH = "reviews"
     }
 
+    @ExperimentalCoroutinesApi
     override fun loadReviewsSync(restaurantId: String): LiveData<List<Review>?> =
         liveData {
-            val channel = db.collection(COLLECTION_PATH)
+            db.collection(COLLECTION_PATH)
                 .whereEqualTo(Review.FIELD_RESTAURANT_ID, restaurantId)
-                .observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
-            }
+                .asFlow()
+                .collect {
+                    emit(it?.toObject(::fromMap))
+                }
         }
 
     override suspend fun loadReviews(restaurantId: String): List<Review>? =
@@ -70,14 +73,15 @@ class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository
             .get().await()
             .toObject(::fromMap)
 
+    @ExperimentalCoroutinesApi
     override fun loadUserReviewsSync(userId: String): LiveData<List<Review>?> =
         liveData {
-            val channel = db.collection(COLLECTION_PATH)
+            db.collection(COLLECTION_PATH)
                 .whereEqualTo(Review.FIELD_USER_ID, userId)
-                .observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
-            }
+                .asFlow()
+                .collect {
+                    emit(it?.toObject(::fromMap))
+                }
         }
 
     override suspend fun loadReview(documentId: String): Review? =

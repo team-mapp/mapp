@@ -3,11 +3,13 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.model.Restaurant.Companion.fromMap
-import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
 
 interface RestaurantsRepository {
@@ -35,11 +37,11 @@ class RestaurantsRepositoryImpl(private val db: FirebaseFirestore) : Restaurants
             .get().await()
             .toObject(::fromMap)
 
+    @ExperimentalCoroutinesApi
     override fun loadRestaurantsSync(): LiveData<List<Restaurant>?> =
         liveData {
-            val channel = db.collection(COLLECTION_PATH).observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
+            db.collection(COLLECTION_PATH).asFlow().collect {
+                emit(it?.toObject(::fromMap))
             }
         }
 

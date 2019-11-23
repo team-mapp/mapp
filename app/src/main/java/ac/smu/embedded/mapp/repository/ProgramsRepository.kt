@@ -3,11 +3,12 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Program
 import ac.smu.embedded.mapp.model.Program.Companion.fromMap
-import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.tasks.await
 
 interface ProgramsRepository {
@@ -32,9 +33,8 @@ class ProgramsRepositoryImpl(private val db: FirebaseFirestore) : ProgramsReposi
 
     override fun loadProgramsSync(): LiveData<List<Program>?> =
         liveData {
-            val channel = db.collection(COLLECTION_PATH).observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
+            db.collection(COLLECTION_PATH).asFlow().collect {
+                emit(it?.toObject(::fromMap))
             }
         }
 
