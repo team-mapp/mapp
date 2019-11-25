@@ -7,6 +7,7 @@ import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.local.NotificationDao
 import ac.smu.embedded.mapp.util.NotificationConstants
 import ac.smu.embedded.mapp.util.StateViewModel
+import androidx.lifecycle.liveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -40,8 +41,15 @@ class MainViewModel(
             }
         }
 
-    fun loadCelebs() = celebsRepository.loadCelebsSync()
+    fun loadCelebs() = liveData {
+        celebsRepository.loadCelebsSync().collect {
+            emit(it)
+        }
+    }
 
-    fun loadPrograms() = programsRepository.loadProgramsSync()
-
+    fun loadPrograms() = liveData {
+        programsRepository.loadProgramsSync().collect {
+            emit(it)
+        }
+    }
 }

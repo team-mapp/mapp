@@ -5,18 +5,17 @@ import ac.smu.embedded.mapp.model.Restaurant
 import ac.smu.embedded.mapp.model.Restaurant.Companion.fromMap
 import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 interface RestaurantsRepository {
 
     suspend fun loadRestaurants(): List<Restaurant>?
 
-    fun loadRestaurantsSync(): LiveData<List<Restaurant>?>
+    fun loadRestaurantsSync(): Flow<List<Restaurant>?>
 
     suspend fun loadRestaurantsByQuery(query: String): List<Restaurant>?
 
@@ -38,12 +37,10 @@ class RestaurantsRepositoryImpl(private val db: FirebaseFirestore) : Restaurants
             .toObject(::fromMap)
 
     @ExperimentalCoroutinesApi
-    override fun loadRestaurantsSync(): LiveData<List<Restaurant>?> =
-        liveData {
-            db.collection(COLLECTION_PATH).asFlow().collect {
-                emit(it?.toObject(::fromMap))
-            }
-        }
+    override fun loadRestaurantsSync(): Flow<List<Restaurant>?> =
+        db.collection(COLLECTION_PATH)
+            .asFlow()
+            .map { it?.toObject(::fromMap) }
 
     override suspend fun loadRestaurantsByQuery(query: String): List<Restaurant>? =
         db.collection(COLLECTION_PATH)
