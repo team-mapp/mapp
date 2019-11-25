@@ -3,17 +3,18 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.model.Review.Companion.fromMap
 import ac.smu.embedded.mapp.model.ReviewContent
-import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 interface ReviewRepository {
 
-    fun loadReviewsSync(restaurantId: String): LiveData<List<Review>?>
+    fun loadReviewsSync(restaurantId: String): Flow<List<Review>?>
 
     suspend fun loadReviews(restaurantId: String): List<Review>?
 
@@ -21,7 +22,7 @@ interface ReviewRepository {
 
     suspend fun loadUserReviews(userId: String): List<Review>?
 
-    fun loadUserReviewsSync(userId: String): LiveData<List<Review>?>
+    fun loadUserReviewsSync(userId: String): Flow<List<Review>?>
 
     suspend fun loadReview(documentId: String): Review?
 
@@ -41,15 +42,12 @@ class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository
         private const val COLLECTION_PATH = "reviews"
     }
 
-    override fun loadReviewsSync(restaurantId: String): LiveData<List<Review>?> =
-        liveData {
-            val channel = db.collection(COLLECTION_PATH)
-                .whereEqualTo(Review.FIELD_RESTAURANT_ID, restaurantId)
-                .observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
-            }
-        }
+    @ExperimentalCoroutinesApi
+    override fun loadReviewsSync(restaurantId: String): Flow<List<Review>?> =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Review.FIELD_RESTAURANT_ID, restaurantId)
+            .asFlow()
+            .map { it?.toObject(::fromMap) }
 
     override suspend fun loadReviews(restaurantId: String): List<Review>? =
         db.collection(COLLECTION_PATH)
@@ -70,15 +68,12 @@ class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository
             .get().await()
             .toObject(::fromMap)
 
-    override fun loadUserReviewsSync(userId: String): LiveData<List<Review>?> =
-        liveData {
-            val channel = db.collection(COLLECTION_PATH)
-                .whereEqualTo(Review.FIELD_USER_ID, userId)
-                .observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
-            }
-        }
+    @ExperimentalCoroutinesApi
+    override fun loadUserReviewsSync(userId: String): Flow<List<Review>?> =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Review.FIELD_USER_ID, userId)
+            .asFlow()
+            .map { it?.toObject(::fromMap) }
 
     override suspend fun loadReview(documentId: String): Review? =
         db.collection(COLLECTION_PATH)

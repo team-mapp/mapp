@@ -9,7 +9,6 @@ import ac.smu.embedded.mapp.repository.UserRepository
 import ac.smu.embedded.mapp.util.StateViewModel
 import android.net.Uri
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.asFlow
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.UploadTask
 import kotlinx.coroutines.flow.collect
@@ -29,7 +28,7 @@ class ProfileViewModel(
     fun loadFavorites() = viewModelScope.launch {
         val user = userRepository.getUser()
         if (user != null) {
-            favoriteRepository.loadFavoritesSync(user.uid!!).asFlow().collect {
+            favoriteRepository.loadFavoritesSync(user.uid!!).collect {
                 setState(favorites, it)
             }
         }

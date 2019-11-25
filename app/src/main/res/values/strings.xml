@@ -65,5 +65,7 @@
     <string name="action_google_signin">Start with Google</string>
     <string name="action_edit_profile">Edit Profile</string>
 
+    <string name="empty_favorite_list">Empty favorite list</string>
+
     <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>

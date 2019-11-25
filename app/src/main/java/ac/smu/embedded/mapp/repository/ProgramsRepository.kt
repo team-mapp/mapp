@@ -3,18 +3,19 @@ package ac.smu.embedded.mapp.repository
 import ac.smu.embedded.mapp.model.Celeb
 import ac.smu.embedded.mapp.model.Program
 import ac.smu.embedded.mapp.model.Program.Companion.fromMap
-import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 interface ProgramsRepository {
 
     suspend fun loadPrograms(): List<Program>?
 
-    fun loadProgramsSync(): LiveData<List<Program>?>
+    fun loadProgramsSync(): Flow<List<Program>?>
 
     suspend fun loadProgramsByQuery(query: String): List<Program>?
 
@@ -30,13 +31,11 @@ class ProgramsRepositoryImpl(private val db: FirebaseFirestore) : ProgramsReposi
         private const val COLLECTION_PATH = "programs"
     }
 
-    override fun loadProgramsSync(): LiveData<List<Program>?> =
-        liveData {
-            val channel = db.collection(COLLECTION_PATH).observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
-            }
-        }
+    @ExperimentalCoroutinesApi
+    override fun loadProgramsSync(): Flow<List<Program>?> =
+        db.collection(COLLECTION_PATH)
+            .asFlow()
+            .map { it?.toObject(::fromMap) }
 
     override suspend fun loadPrograms(): List<Program>? =
         db.collection(COLLECTION_PATH)

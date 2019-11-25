@@ -87,6 +87,10 @@ class ProfileActivity : AppCompatActivity(R.layout.activity_profile) {
         profileViewModel.favorites.observe(this, Observer {
             if (it != null) {
                 profileViewModel.loadFavoriteRestaurants(it)
+                tv_empty_items.visibility = View.GONE
+            } else {
+                tv_empty_items.visibility = View.VISIBLE
+                loading_progress.visibility = View.GONE
             }
         })
 

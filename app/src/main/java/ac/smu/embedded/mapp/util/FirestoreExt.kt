@@ -8,8 +8,11 @@ import com.google.firebase.firestore.DocumentReference
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.Query
 import com.google.firebase.firestore.QuerySnapshot
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.channels.sendBlocking
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.channels.awaitClose
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.callbackFlow
 
 /**
  * Firestore를 이용할때 [Task] 결과에 대한 콜백을 [LiveData]로 Wrapping 해주는 Extension 함수
@@ -89,20 +92,16 @@ fun Query.asLiveData(): LiveData<Resource<QuerySnapshot?>> {
     return liveData
 }
 
-fun Query.observe(): Channel<QuerySnapshot> {
-    val channel = Channel<QuerySnapshot>()
-    addSnapshotListener { snapshot, exception ->
+@ExperimentalCoroutinesApi
+fun Query.asFlow(): Flow<QuerySnapshot?> = callbackFlow {
+    val listener = addSnapshotListener { snapshot, exception ->
         if (exception != null) {
-            channel.close(exception)
-            return@addSnapshotListener
+            cancel(exception.toString(), exception)
+        } else {
+            offer(snapshot)
         }
-        if (snapshot == null) {
-            channel.close()
-            return@addSnapshotListener
-        }
-        channel.sendBlocking(snapshot)
     }
-    return channel
+    awaitClose { listener.remove() }
 }
 
 fun <T> QuerySnapshot.toObject(transform: (String, Map<String, Any>) -> T): List<T>? {

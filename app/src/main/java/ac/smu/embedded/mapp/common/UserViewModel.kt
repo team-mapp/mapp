@@ -6,6 +6,7 @@ import ac.smu.embedded.mapp.util.StateViewModel
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -18,6 +19,8 @@ import kotlinx.coroutines.launch
 class UserViewModel(
     private val userRepository: UserRepository
 ) : StateViewModel() {
+
+    val signInProgress: LiveData<Int> = useState(View.GONE)
 
     val userData: LiveData<User?> = useState()
 
@@ -67,6 +70,7 @@ class UserViewModel(
                 val account = task.getResult(ApiException::class.java)
                 val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
                 signIn(credential)
+                setState(signInProgress, View.VISIBLE)
             } catch (e: ApiException) {
                 Log.e(TAG, "Error occurred", e)
             }
