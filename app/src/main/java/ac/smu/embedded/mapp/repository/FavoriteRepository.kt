@@ -2,24 +2,21 @@ package ac.smu.embedded.mapp.repository
 
 import ac.smu.embedded.mapp.model.Favorite
 import ac.smu.embedded.mapp.model.Favorite.Companion.fromMap
-import ac.smu.embedded.mapp.model.Resource
-import ac.smu.embedded.mapp.util.asLiveData
-import ac.smu.embedded.mapp.util.map
-import ac.smu.embedded.mapp.util.observe
+import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.liveData
 import com.google.firebase.firestore.FirebaseFirestore
-import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.tasks.await
 
 interface FavoriteRepository {
 
-    fun loadFavorites(userId: String): LiveData<Resource<List<Favorite>?>>
+    suspend fun loadFavorites(userId: String): List<Favorite>?
 
-    fun loadFavoritesSync(scope: CoroutineScope, userId: String): LiveData<List<Favorite>?>
+    fun loadFavoritesSync(userId: String): Flow<List<Favorite>?>
 
-    suspend fun loadFavoritesAwait(userId: String): List<Favorite>?
+    suspend fun loadFavorite(userId: String, restaurantId: String): Favorite?
 
     fun addFavorite(userId: String, restaurantId: String)
 
@@ -33,31 +30,26 @@ class FavoriteRepositoryImpl(private val db: FirebaseFirestore) : FavoriteReposi
         private const val COLLECTION_PATH = "favorites"
     }
 
-    override fun loadFavorites(userId: String): LiveData<Resource<List<Favorite>?>> =
+    override suspend fun loadFavorites(userId: String): List<Favorite>? =
         db.collection(COLLECTION_PATH)
             .whereEqualTo(Favorite.FIELD_USER_ID, userId)
-            .asLiveData()
-            .map { resource ->
-                resource.transform {
-                    it?.toObject(::fromMap)
-                }
-            }
-
-    override fun loadFavoritesSync(
-        scope: CoroutineScope,
-        userId: String
-    ): LiveData<List<Favorite>?> =
-        liveData(scope.coroutineContext) {
-            val channel = db.collection(COLLECTION_PATH).observe()
-            for (snapshot in channel) {
-                emit(snapshot.toObject(::fromMap))
-            }
-        }
-
-    override suspend fun loadFavoritesAwait(userId: String): List<Favorite>? =
-        db.collection(COLLECTION_PATH)
             .get().await()
             .toObject(::fromMap)
+
+    @ExperimentalCoroutinesApi
+    override fun loadFavoritesSync(userId: String): Flow<List<Favorite>?> =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Favorite.FIELD_USER_ID, userId)
+            .asFlow()
+            .map { it?.toObject(::fromMap) }
+
+    override suspend fun loadFavorite(userId: String, restaurantId: String): Favorite? =
+        db.collection(COLLECTION_PATH)
+            .whereEqualTo(Favorite.FIELD_USER_ID, userId)
+            .whereEqualTo(Favorite.FIELD_RESTAURANT_ID, restaurantId)
+            .get().await()
+            .firstOrNull()
+            ?.toObject(::fromMap)
 
     override fun addFavorite(userId: String, restaurantId: String) {
         db.collection(COLLECTION_PATH)

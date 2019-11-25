@@ -1,7 +1,6 @@
 package ac.smu.embedded.mapp.model
 
 import ac.smu.embedded.mapp.util.emptyFieldError
-import android.graphics.Bitmap
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.Exclude
 import com.google.firebase.firestore.IgnoreExtraProperties

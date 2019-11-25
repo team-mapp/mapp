@@ -8,6 +8,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.View
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.content.withStyledAttributes
 import com.bumptech.glide.request.RequestListener
@@ -47,34 +48,41 @@ class ProfileView @JvmOverloads constructor(
 
     private val imageRequestOptions = listOf(RequestOptions.circleCropTransform())
 
+    private var title: String? = null
+    private var titleTextColor = 0
+    private var subtitleTextColor = 0
+    private var subtitle: String? = null
+    private var image: Drawable? = null
     private var imageTintColor = 0
-    private var nameTextColor = 0
-    private var defaultImageDrawable: Drawable? = null
-    private var defaultName: String? = null
 
     init {
         inflate(context, R.layout.view_profile, this)
         context.withStyledAttributes(attrs, R.styleable.ProfileView) {
+            title = getString(R.styleable.ProfileView_title)
+            titleTextColor = getColor(R.styleable.ProfileView_titleTextColor, 0)
+            subtitle = getString(R.styleable.ProfileView_subtitle)
+            subtitleTextColor = getColor(R.styleable.ProfileView_subtitleTextColor, 0)
+            image = getDrawable(R.styleable.ProfileView_image)
             imageTintColor = getColor(R.styleable.ProfileView_imageTint, 0)
-            nameTextColor = getColor(R.styleable.ProfileView_textColor, 0)
-            defaultImageDrawable = getDrawable(R.styleable.ProfileView_image)
-            defaultName = getString(R.styleable.ProfileView_name)
         }
 
+        if (title != null) {
+            setTitle(title!!)
+        }
+        if (titleTextColor != 0) {
+            tv_title.setTextColor(titleTextColor)
+        }
+        if (subtitle != null) {
+            setSubtitle(subtitle!!)
+        }
+        if (subtitleTextColor != 0) {
+            tv_title.setTextColor(subtitleTextColor)
+        }
+        if (image != null) {
+            setImage(image!!)
+        }
         if (imageTintColor != 0) {
             iv_content.setColorFilter(imageTintColor)
-        }
-
-        if (nameTextColor != 0) {
-            tv_content.setTextColor(nameTextColor)
-        }
-
-        if (defaultImageDrawable != null) {
-            setImage(defaultImageDrawable!!)
-        }
-
-        if (defaultName != null) {
-            setName(defaultName!!)
         }
     }
 
@@ -95,7 +103,17 @@ class ProfileView @JvmOverloads constructor(
         }
     }
 
+    @Deprecated(message = "setName 대신에 setTitle을 사용해주세요")
     fun setName(name: String) {
-        tv_content.text = name
+        tv_title.text = name
+    }
+
+    fun setTitle(title: String) {
+        tv_title.text = title
+    }
+
+    fun setSubtitle(subtitle: String) {
+        tv_subtitle.text = subtitle
+        tv_subtitle.visibility = View.VISIBLE
     }
 }

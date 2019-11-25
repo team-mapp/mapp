@@ -21,9 +21,9 @@ class SearchViewModel(
 
     fun search(query: String, autoComplete: Boolean = false) {
         viewModelScope.launch {
-            val queryCelebs = celebsRepository.loadCelebsByQueryAwait(query)
-            val queryPrograms = programsRepository.loadProgramsByQueryAwait(query)
-            val queryRestaurants = restaurantsRepository.loadRestaurantsByQueryAwait(query)
+            val queryCelebs = celebsRepository.loadCelebsByQuery(query)
+            val queryPrograms = programsRepository.loadProgramsByQuery(query)
+            val queryRestaurants = restaurantsRepository.loadRestaurantsByQuery(query)
 
             if (autoComplete) {
                 _searchAutoComplete.value =

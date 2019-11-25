@@ -1,35 +1,44 @@
 package ac.smu.embedded.mapp.common
 
-import ac.smu.embedded.mapp.model.Resource
 import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.repository.UserRepository
+import ac.smu.embedded.mapp.util.StateViewModel
 import android.app.Activity
 import android.content.Intent
 import android.util.Log
+import android.view.View
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.AuthCredential
 import com.google.firebase.auth.GoogleAuthProvider
+import kotlinx.coroutines.launch
 
 class UserViewModel(
     private val userRepository: UserRepository
-) : ViewModel() {
+) : StateViewModel() {
 
-    private val _userData = MutableLiveData<User?>()
-    val userData: LiveData<User?> = _userData
+    val signInProgress: LiveData<Int> = useState(View.GONE)
 
-    private lateinit var userObserver: Observer<Resource<*>>
+    val userData: LiveData<User?> = useState()
 
     init {
-        updateUser()
+        getUser()
     }
 
-    fun signIn(credential: AuthCredential) = userRepository.signIn(credential)
+    fun getUser() = viewModelScope.launch {
+        setState(userData, userRepository.getUser())
+    }
+
+    fun signIn(credential: AuthCredential) = viewModelScope.launch {
+        setState(userData, userRepository.signIn(credential))
+        val idResult = userRepository.getNotificationToken()
+        if (idResult != null) {
+            userRepository.addNotificationToken(idResult.token)
+        }
+    }
 
     fun signInWithGoogle(activity: Activity, clientId: String) {
         val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -44,32 +53,14 @@ class UserViewModel(
 
     fun signOut() {
         userRepository.signOut()
-        updateUser()
     }
 
-    fun updateUserProfile(displayName: String?, profileImage: String?) {
-        val updateUserProfile = userRepository.updateUserProfile(displayName, profileImage)
-        userObserver = Observer {
-            it.onSuccess {
-                updateUser()
-                updateUserProfile.removeObserver(userObserver)
-            }.onError {
-                updateUserProfile.removeObserver(userObserver)
-            }
-        }
+    fun updateUserProfile(displayName: String?, profileImage: String?) = viewModelScope.launch {
+        userRepository.updateUserProfile(displayName, profileImage)
     }
 
-    fun deleteUser() {
-        val deleteUser = userRepository.deleteUser()
-        userObserver = Observer {
-            it.onSuccess {
-                updateUser()
-                deleteUser.removeObserver(userObserver)
-            }.onError {
-                deleteUser.removeObserver(userObserver)
-            }
-        }
-        deleteUser.observeForever(userObserver)
+    fun deleteUser() = viewModelScope.launch {
+        userRepository.deleteUser()
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -78,24 +69,12 @@ class UserViewModel(
             try {
                 val account = task.getResult(ApiException::class.java)
                 val credential = GoogleAuthProvider.getCredential(account?.idToken, null)
-                val signIn = signIn(credential)
-                userObserver = Observer {
-                    it.onSuccess {
-                        updateUser()
-                        signIn.removeObserver(userObserver)
-                    }.onError {
-                        signIn.removeObserver(userObserver)
-                    }
-                }
-                signIn.observeForever(userObserver)
+                signIn(credential)
+                setState(signInProgress, View.VISIBLE)
             } catch (e: ApiException) {
                 Log.e(TAG, "Error occurred", e)
             }
         }
-    }
-
-    private fun updateUser() {
-        _userData.value = userRepository.getUser()
     }
 
     companion object {

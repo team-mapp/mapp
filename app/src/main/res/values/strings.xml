@@ -8,5 +8,64 @@
     <string name="subtitle_celebs">Celebs</string>
     <string name="subtitle_programs">Programs</string>
     <string name="subtitle_restaurants">Restaurants</string>
+    <string name="subtitle_write_review">Write review</string>
+    <string name="subtitle_view_review">View reviews</string>
     <string name="menu_notification">Notification</string>
+    <string name="menu_settings">Settings</string>
+
+    <string name="question_recommend">Recommend this restaurant?</string>
+    <string name="question_cost_effective">Cost effective</string>
+    <string name="question_service_point">Service</string>
+    <string name="question_waiting_time">Waiting time *</string>
+    <string name="question_eaten_food">Eaten food *</string>
+    <string name="question_review">Review *</string>
+    <string name="question_best_place">Seat</string>
+    <string name="question_about_place">How about seat?</string>
+    <string name="question_about_food">How about eaten food?</string>
+    <string name="hint_waiting_time">Waiting time</string>
+    <string name="hint_eaten_food">Eaten food</string>
+    <string name="hint_review">Review</string>
+
+    <string name="answer_no">Never</string>
+    <string name="answer_so_so">So so</string>
+    <string name="answer_yes">Yes</string>
+
+    <string name="action_write">Write</string>
+
+    <string name="waiting_time_none">None</string>
+    <string name="waiting_time_10">&lt; 10 minutes</string>
+    <string name="waiting_time_30">&lt; 30 minutes</string>
+    <string name="waiting_time_60">&lt; 1 hour</string>
+    <string name="waiting_time_over">Over 1 hour</string>
+    <string name="waiting_time_dont_know">None</string>
+
+    <string name="msg_exit_review">Do you want to stop writing reviews?</string>
+
+    <string name="msg_req_waiting_time">Required waiting time</string>
+    <string name="msg_req_eaten_food">Required eaten food</string>
+    <string name="msg_req_review_content">Required review content</string>
+    <string name="msg_req_recommend">Required recommend</string>
+    <string name="msg_req_username">Required username</string>
+
+    <string name="created_date_format">Created %1$s</string>
+    <string name="updated_date_format">Updated %1$s</string>
+
+    <string name="notification_channel_default_id" translatable="false">default</string>
+    <string name="notification_channel_default">Default notification</string>
+    <string name="notification_channel_review_created">New review to favorite restaurant notification</string>
+    <string name="notification_channel_review_created_desc">Notify me when someone writes a review in my favorite restaurant</string>
+
+    <string name="notification_review_created_title">New review added</string>
+    <string name="notification_review_created_content">Added new view to %1$s</string>
+
+    <string name="hint_username">Username</string>
+    <string name="activity_profile_setting">Profile setting</string>
+    <string name="action_get_started">Get started</string>
+    <string name="action_save">Save</string>
+    <string name="action_google_signin">Start with Google</string>
+    <string name="action_edit_profile">Edit Profile</string>
+
+    <string name="empty_favorite_list">Empty favorite list</string>
+
+    <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>

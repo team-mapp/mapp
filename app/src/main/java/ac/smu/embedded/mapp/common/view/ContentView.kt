@@ -5,7 +5,7 @@ import android.content.Context
 import android.graphics.Bitmap
 import android.util.AttributeSet
 import android.view.View
-import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.palette.graphics.Palette
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
@@ -70,9 +70,9 @@ class ContentView @JvmOverloads constructor(
                 val palette = Palette.from(resource).generate()
                 val backgroundColor =
                     palette.getDarkMutedColor(
-                        ContextCompat.getColor(
+                        getColor(
                             context,
-                            R.color.colorAccent
+                            R.color.colorSecondary
                         )
                     )
                 setCardBackgroundColor(backgroundColor)
@@ -109,8 +109,8 @@ class ContentView @JvmOverloads constructor(
         view_profile.setImage(imageUrl, isStorage, imageRequestListener)
     }
 
-    fun setName(name: String) {
-        view_profile.setName(name)
+    fun setTitle(name: String) {
+        view_profile.setTitle(name)
     }
 
     fun setVisibleFavorite(isVisible: Boolean) {
@@ -137,13 +137,14 @@ class ContentView @JvmOverloads constructor(
         imageFromStorage: Boolean = true
     ) {
         setImage(imageUrl, imageFromStorage)
-        setName(name)
+        setTitle(name)
         setVisibleFavorite(isFavorite || visibleFavorite)
         this.isFavorite = isFavorite
         updateFavorite()
     }
 
     private fun initView() {
+        setCardBackgroundColor(getColor(context, R.color.colorAccent))
         btn_favorite.setOnClickListener {
             if (::favoriteClickListener.isInitialized) {
                 favoriteClickListener.onClick(it, isFavorite)
@@ -153,14 +154,9 @@ class ContentView @JvmOverloads constructor(
 
     private fun updateFavorite() {
         if (isFavorite) {
-            btn_favorite.setColorFilter(
-                ContextCompat.getColor(
-                    context,
-                    R.color.content_favorite_color
-                )
-            )
+            btn_favorite.setColorFilter(getColor(context, R.color.content_favorite_color))
         } else {
-            btn_favorite.setColorFilter(ContextCompat.getColor(context, android.R.color.white))
+            btn_favorite.setColorFilter(getColor(context, android.R.color.white))
         }
     }
 
