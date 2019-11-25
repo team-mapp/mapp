@@ -58,7 +58,7 @@ class BaseApplication : Application() {
 
         viewModel { UserViewModel(get()) }
 
-        viewModel { RestaurantDetailViewModel(get(), get(), get()) }
+        viewModel { RestaurantDetailViewModel(get(), get(), get(), get()) }
     }
 
     override fun onCreate() {

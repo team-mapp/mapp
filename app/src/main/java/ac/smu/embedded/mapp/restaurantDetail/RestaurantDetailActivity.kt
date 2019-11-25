@@ -8,12 +8,14 @@ import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.loadStorage
 import ac.smu.embedded.mapp.util.recyclerAdapter
 import android.content.Context
+import android.graphics.Bitmap
 import android.os.Bundle
 import android.util.Log
 import android.view.MenuItem
 import android.widget.ImageButton
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.net.toUri
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.naver.maps.geometry.LatLng
@@ -45,8 +47,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
         // 이전 액티비티에서 documentId가 존재하는 경우
         if (intent.hasExtra(DOCUMENT_ID)) {
             // 여기서 documentId -> restaurantId
-            val documentId = intent.getStringExtra(DOCUMENT_ID)
-
+            val documentId:String = intent.getStringExtra(DOCUMENT_ID)
 
             initView()
             loadContents(documentId)
@@ -112,10 +113,12 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
             setDisplayShowTitleEnabled(false)
         }
 
+
         // adapter 설정
         adapter = recyclerAdapter(R.layout.item_restaurant_review){_,view,value ->
             view.tvUserName.text = "${value!!.userId}"
-            view.tvUserReview.text = "${value.content.recommendPoint.toString()}"
+            view.tvRecommendPoint.text = "${value.content.recommendPoint}"
+            view.tvServicePoint.text = "${value.content.servicePoint}"
         }
         rvReviewList.adapter = adapter
         rvReviewList.layoutManager = LinearLayoutManager(this)
@@ -150,11 +153,9 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
         // favorite 하트 버튼 색 변경
         restaurantDetailViewModel.favorite.observe(this, Observer {
             if(it){
-                Log.e("*****TRUE", it.toString())
                 btn_favorite.setColorFilter(ContextCompat.getColor(this,R.color.content_favorite_color))
                 isFavorite = it
             }else{
-                Log.e("*****FALSE", it.toString())
                 btn_favorite.setColorFilter(ContextCompat.getColor(this, R.color.card_filter_color))
                 isFavorite = it
             }
@@ -163,6 +164,8 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
         // review list 가져오기
         restaurantDetailViewModel.review.observe(this, Observer {
             adapter.submitList(it)
+
+
         })
 
         restaurantDetailViewModel.loadReview(documentId)

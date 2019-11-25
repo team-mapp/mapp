@@ -25,10 +25,10 @@ interface UserRepository {
     fun updateUserProfile(displayName: String?, profileImage: String?): LiveData<Resource<Void?>>
 
     fun deleteUser(): LiveData<Resource<Void?>>
-
 }
 
 class UserRepositoryImpl(private val auth: FirebaseAuth) : UserRepository {
+
     override fun signIn(credential: AuthCredential): LiveData<Resource<User?>> =
         auth.signInWithCredential(credential).asLiveData().map { resource ->
             resource.transform {

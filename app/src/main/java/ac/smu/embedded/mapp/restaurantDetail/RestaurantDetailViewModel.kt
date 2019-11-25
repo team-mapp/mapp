@@ -5,6 +5,7 @@ import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.repository.FavoriteRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.ReviewRepository
+import ac.smu.embedded.mapp.repository.UserRepository
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
@@ -15,9 +16,12 @@ import kotlinx.coroutines.launch
 class RestaurantDetailViewModel(
     private val restaurantRepository: RestaurantsRepository,
     private val favoriteRepository: FavoriteRepository,
-    private val reviewRepository: ReviewRepository
+    private val reviewRepository: ReviewRepository,
+    private val userRepository: UserRepository
 
     ): ViewModel() {
+
+    fun loadUser(documentId: String) = userRepository.getUser()
 
     fun loadRestaurant(documentId: String) = restaurantRepository.loadRestaurant(documentId)
 
@@ -26,6 +30,7 @@ class RestaurantDetailViewModel(
 
     fun loadReview(documentId: String) = viewModelScope.launch {
         _review.value = reviewRepository.loadReviewsAwait(documentId)
+
     }
 
     private val _favorite = MutableLiveData<Boolean>(false)
@@ -38,6 +43,7 @@ class RestaurantDetailViewModel(
             for (i in 0 until favorites.size) {
                 if (documentId == favorites[i].restaurantId){
                     _favorite.value = true
+
                 }else{
                     _favorite.value =false
                 }
