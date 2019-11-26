@@ -8,6 +8,7 @@ import ac.smu.embedded.mapp.profile.ProfileSettingViewModel
 import ac.smu.embedded.mapp.profile.ProfileViewModel
 import ac.smu.embedded.mapp.repository.*
 import ac.smu.embedded.mapp.repository.local.AppDatabase
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailViewModel
 import ac.smu.embedded.mapp.review.ReviewViewModel
 import ac.smu.embedded.mapp.search.SearchViewModel
 import ac.smu.embedded.mapp.service.FirebaseNotificationService.Companion.CHANNEL_ID_REVIEW_CREATED
@@ -125,6 +126,8 @@ class BaseApplication : Application() {
         viewModel { SearchViewModel(get(), get(), get()) }
 
         viewModel { UserViewModel(get()) }
+
+        viewModel { RestaurantDetailViewModel(get(), get(), get(), get()) }
 
         viewModel { ProfileViewModel(get(), get(), get(), get()) }
 

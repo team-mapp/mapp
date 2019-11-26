@@ -47,7 +47,9 @@
             android:name=".main.MainActivity"
             android:theme="@style/Theme.App.NoActionBar" />
 
-        <activity android:name=".restaurantDetail.RestaurantDetailActivity" />
+        <activity
+            android:name=".restaurantDetail.RestaurantDetailActivity"
+            android:theme="@style/Theme.App.Review" />
 
         <activity
             android:name=".detail.DetailActivity"
