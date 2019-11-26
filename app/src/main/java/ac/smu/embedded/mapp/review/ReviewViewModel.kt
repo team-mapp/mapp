@@ -8,6 +8,8 @@ import ac.smu.embedded.mapp.repository.ConfigLoaderRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.ReviewRepository
 import ac.smu.embedded.mapp.repository.UserRepository
+import ac.smu.embedded.mapp.util.CONFIG_USE_ABOUT_FOOD
+import ac.smu.embedded.mapp.util.CONFIG_USE_ABOUT_PLACE
 import ac.smu.embedded.mapp.util.CONFIG_USE_BEST_PLACE
 import ac.smu.embedded.mapp.util.StateViewModel
 import androidx.lifecycle.LiveData
@@ -37,12 +39,17 @@ class ReviewViewModel(
 
     val contentSaved: LiveData<Boolean> = useState(false)
 
-    val configObserver = configLoaderRepository.getDataUpdatedObserver()
+    val configUpdated = configLoaderRepository.getDataUpdatedObserver()
 
-    fun fetchConfig(): Map<String, Any> {
-        val configs = mutableMapOf<String, Any>()
-        configs[CONFIG_USE_BEST_PLACE] = configLoaderRepository.getBoolean(CONFIG_USE_BEST_PLACE)
-        return configs
+    val configs: LiveData<Map<String, Any>> = useState()
+
+    fun fetchConfig() {
+        val updateConfigs = mapOf(
+            CONFIG_USE_BEST_PLACE to configLoaderRepository.getBoolean(CONFIG_USE_BEST_PLACE),
+            CONFIG_USE_ABOUT_PLACE to configLoaderRepository.getBoolean(CONFIG_USE_ABOUT_PLACE),
+            CONFIG_USE_ABOUT_FOOD to configLoaderRepository.getBoolean(CONFIG_USE_ABOUT_FOOD)
+        )
+        setState(configs, updateConfigs)
     }
 
     fun loadRestaurant(documentId: String) = viewModelScope.launch {

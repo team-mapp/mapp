@@ -4,6 +4,8 @@ import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.model.ReviewContent
 import ac.smu.embedded.mapp.model.reviewContent
+import ac.smu.embedded.mapp.util.CONFIG_USE_ABOUT_FOOD
+import ac.smu.embedded.mapp.util.CONFIG_USE_ABOUT_PLACE
 import ac.smu.embedded.mapp.util.CONFIG_USE_BEST_PLACE
 import ac.smu.embedded.mapp.util.toNullIfEmpty
 import android.content.DialogInterface
@@ -27,7 +29,10 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
     private var review: Review? = null
 
     private lateinit var waitingTimeMap: Map<String, Int>
-    private var useBestPlace: Boolean = false
+
+    private var useBestPlace = false
+    private var useAboutPlace = false
+    private var useAboutFood = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,10 +43,9 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
                 reviewId = intent.getStringExtra(EXTRA_REVIEW_ID)
             }
 
-            initConfig()
             initView(restaurantId)
-            setupUpdatedConfig()
             setupObservers()
+            setupUpdatedConfig()
             loadContent(restaurantId, reviewId)
         } else {
             throw UnsupportedOperationException(
@@ -74,7 +78,7 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
         }
 
         edit_eaten_food.addTextChangedListener {
-            if (it != null && it.toString().isNotEmpty()) {
+            if (it != null && it.toString().isNotEmpty() && useAboutFood) {
                 layout_about_food.visibility = View.VISIBLE
             } else {
                 layout_about_food.visibility = View.GONE
@@ -82,7 +86,7 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
         }
 
         edit_best_place.addTextChangedListener {
-            if (it != null && it.toString().isNotEmpty()) {
+            if (it != null && it.toString().isNotEmpty() && useAboutPlace) {
                 layout_about_place.visibility = View.VISIBLE
             } else {
                 layout_about_place.visibility = View.GONE
@@ -116,19 +120,22 @@ class ReviewWriteActivity : AppCompatActivity(R.layout.activity_write_review) {
         }
     }
 
-    private fun initConfig() {
-        val configs = reviewViewModel.fetchConfig()
-        useBestPlace = configs[CONFIG_USE_BEST_PLACE] as Boolean
-    }
-
     private fun setupUpdatedConfig() {
-        reviewViewModel.configObserver.observe(this, Observer {
+        reviewViewModel.configUpdated.observe(this, Observer {
             Logger.d("Remote config updated")
-            initConfig()
+            reviewViewModel.fetchConfig()
         })
     }
 
     private fun setupObservers() {
+        reviewViewModel.configs.observe(this, Observer {
+            useBestPlace = it[CONFIG_USE_BEST_PLACE] as Boolean
+            useAboutPlace = it[CONFIG_USE_ABOUT_PLACE] as Boolean
+            useAboutFood = it[CONFIG_USE_ABOUT_FOOD] as Boolean
+
+            layout_best_place.visibility = if (useBestPlace) View.VISIBLE else View.GONE
+        })
+
         reviewViewModel.restaurant.observe(this, Observer {
             with(view_profile) {
                 if (it != null) {
