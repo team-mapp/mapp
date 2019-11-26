@@ -1,9 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_margin="@dimen/keyline_normal"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="?attr/selectableItemBackground">
 
     <ImageView
         android:id="@+id/ivUserProfile"
@@ -29,27 +32,44 @@
         android:layout_marginTop="5dp"
         />
     <TextView
-        android:id="@+id/tvRecommendPoint"
+        android:id="@+id/tvRecommend"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="recommend point"
-        android:textColor="@color/colorAccent"
-        app:layout_constraintTop_toBottomOf="@id/tvUserName"
-        app:layout_constraintBottom_toBottomOf="@id/ivUserProfile"
+        android:text="가성비"
         app:layout_constraintLeft_toLeftOf="@id/tvUserName"
-        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="@id/ivUserProfile"
         />
-    <TextView
-        android:id="@+id/tvServicePoint"
+
+    <RatingBar
+        android:id="@+id/rbCostRecommendPoint"
+        style="@style/Widget.AppCompat.RatingBar.Small"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="service point"
-        app:layout_constraintLeft_toRightOf="@id/tvRecommendPoint"
-        app:layout_constraintBottom_toBottomOf="@id/tvRecommendPoint"
+        app:layout_constraintLeft_toRightOf="@id/tvRecommend"
+        app:layout_constraintBottom_toBottomOf="@id/tvRecommend"
         android:layout_marginLeft="5dp"
+        tools:rating="3" />
 
+    <TextView
+        android:id="@+id/tvService"
+        android:text="서비스"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/rbCostRecommendPoint"
+        app:layout_constraintBottom_toBottomOf="@id/tvRecommend"
+        android:layout_marginLeft="5dp"
         />
 
+
+    <RatingBar
+        android:id="@+id/rbCostServicePoint"
+        style="@style/Widget.AppCompat.RatingBar.Small"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintLeft_toRightOf="@id/tvService"
+        app:layout_constraintBottom_toBottomOf="@id/tvRecommend"
+        android:layout_marginLeft="5dp"
+        tools:rating="3" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -49,7 +49,7 @@
 
         <activity
             android:name=".restaurantDetail.RestaurantDetailActivity"
-            android:theme="@style/Theme.App.NoActionBar" />
+            android:theme="@style/Theme.App.Review" />
 
         <activity
             android:name=".detail.DetailActivity"
