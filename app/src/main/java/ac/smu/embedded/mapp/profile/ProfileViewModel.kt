@@ -7,7 +7,6 @@ import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.StorageRepository
 import ac.smu.embedded.mapp.repository.UserRepository
 import ac.smu.embedded.mapp.util.StateViewModel
-import android.net.Uri
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import com.google.firebase.storage.UploadTask
@@ -42,7 +41,4 @@ class ProfileViewModel(
             }
             setState(favoriteRestaurants, restaurantList)
         }
-
-    fun uploadImage(uri: Uri, userId: String) =
-        storageRepository.put("$userId.jpg", uri)
 }
