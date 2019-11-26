@@ -30,6 +30,10 @@
     <string name="answer_so_so">글쎄요</string>
     <string name="answer_yes">예</string>
 
+    <string name="recommend_no">추천하지 않음</string>
+    <string name="recommend_so_so">그저 그럼</string>
+    <string name="recommend_yes">추천함</string>
+
     <string name="action_write">등록하기</string>
 
     <string name="waiting_time_none">없음</string>
@@ -40,6 +44,7 @@
     <string name="waiting_time_dont_know">모르겠어요</string>
 
     <string name="msg_exit_review">리뷰 작성이 아직 끝나지 않았습니다. 작성을 그만하고 종료할까요?</string>
+    <string name="msg_review">리뷰</string>
     <string name="msg_req_waiting_time">대기시간은 필수 항목입니다</string>
     <string name="msg_req_eaten_food">먹은 음식은 필수 항목입니다</string>
     <string name="msg_req_review_content">리뷰 내용은 필수 항목입니다</string>
@@ -64,4 +69,5 @@
     <string name="action_edit_profile">프로필 편집</string>
 
     <string name="empty_favorite_list">즐겨찾기 목록이 비어있어요</string>
+    <string name="empty_review_list">리뷰가 아직 작성되지 않았어요</string>
 </resources>

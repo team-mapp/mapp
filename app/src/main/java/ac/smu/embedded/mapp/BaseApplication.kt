@@ -131,7 +131,7 @@ class BaseApplication : Application() {
 
         viewModel { ProfileViewModel(get(), get(), get(), get()) }
 
-        viewModel { ProfileSettingViewModel(get()) }
+        viewModel { ProfileSettingViewModel(get(), get()) }
 
         viewModel { ReviewViewModel(get(), get(), get(), get(named(CONFIG_REMOTE))) }
 
