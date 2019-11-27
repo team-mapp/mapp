@@ -73,6 +73,7 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 }
             }
 
+
         val marginDimen = resources.getDimension(R.dimen.keyline_small).toInt()
 
         related_content_view.layoutManager = LinearLayoutManager(this)

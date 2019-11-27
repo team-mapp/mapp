@@ -2,6 +2,8 @@
     <string name="app_name">Mapp</string>
     <string name="tab_celeb_text">Celebs</string>
     <string name="tab_program_text">TV Programs</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="tab_reviews">Reviews</string>
     <string name="hint_search">Search</string>
     <string name="menu_my_title" translatable="false">MY</string>
 
@@ -30,6 +32,10 @@
     <string name="answer_so_so">So so</string>
     <string name="answer_yes">Yes</string>
 
+    <string name="recommend_no">No recommend</string>
+    <string name="recommend_so_so">So so</string>
+    <string name="recommend_yes">Recommend</string>
+
     <string name="action_write">Write</string>
 
     <string name="waiting_time_none">None</string>
@@ -39,6 +45,7 @@
     <string name="waiting_time_over">Over 1 hour</string>
     <string name="waiting_time_dont_know">None</string>
 
+    <string name="msg_review">Review</string>
     <string name="msg_exit_review">Do you want to stop writing reviews?</string>
 
     <string name="msg_req_waiting_time">Required waiting time</string>
@@ -64,8 +71,12 @@
     <string name="action_save">Save</string>
     <string name="action_google_signin">Start with Google</string>
     <string name="action_edit_profile">Edit Profile</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 
     <string name="empty_favorite_list">Empty favorite list</string>
+    <string name="empty_review_list">Empty review list</string>
+    <string name="empty_my_review_list">Empty review list</string>
 
     <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>

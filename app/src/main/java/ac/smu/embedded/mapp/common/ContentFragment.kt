@@ -1,4 +1,4 @@
-package ac.smu.embedded.mapp.main
+package ac.smu.embedded.mapp.common
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.detail.DetailActivity
@@ -9,11 +9,9 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import kotlinx.android.synthetic.main.fragment_main_content.*
-import org.koin.android.viewmodel.ext.android.viewModel
 
 abstract class ContentFragment<T> : Fragment(R.layout.fragment_main_content) {
 
-    protected val mainViewModel: MainViewModel by viewModel()
     protected lateinit var adapter: BaseRecyclerAdapter<T>
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -39,5 +37,5 @@ abstract class ContentFragment<T> : Fragment(R.layout.fragment_main_content) {
 
     abstract fun initAdapter(): BaseRecyclerAdapter<T>
 
-    abstract fun loadContents(): Unit
+    abstract fun loadContents()
 }

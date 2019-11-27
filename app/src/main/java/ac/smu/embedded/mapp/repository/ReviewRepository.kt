@@ -7,6 +7,7 @@ import ac.smu.embedded.mapp.util.asFlow
 import ac.smu.embedded.mapp.util.toObject
 import com.google.firebase.Timestamp
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -46,6 +47,7 @@ class ReviewRepositoryImpl(private val db: FirebaseFirestore) : ReviewRepository
     override fun loadReviewsSync(restaurantId: String): Flow<List<Review>?> =
         db.collection(COLLECTION_PATH)
             .whereEqualTo(Review.FIELD_RESTAURANT_ID, restaurantId)
+            .orderBy(Review.FIELD_CREATED_AT, Query.Direction.DESCENDING)
             .asFlow()
             .map { it?.toObject(::fromMap) }
 

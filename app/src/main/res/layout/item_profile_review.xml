@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?attr/selectableItemBackground"
+        android:padding="@dimen/keyline_normal">
+
+        <ImageView
+            android:id="@+id/iv_restaurant"
+            android:layout_width="@dimen/profile_image_size"
+            android:layout_height="@dimen/profile_image_size"
+            android:src="@drawable/profile"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="ContentDescription" />
+
+        <TextView
+            android:id="@+id/tv_restaurant_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/keyline_normal"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            android:textColor="?attr/colorOnBackground"
+            android:textStyle="bold"
+            app:layout_constraintLeft_toRightOf="@id/iv_restaurant"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="(Restaurant)" />
+
+        <TextView
+            android:id="@+id/tv_date"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_mini"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            app:layout_constraintLeft_toLeftOf="@id/tv_restaurant_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_restaurant_name"
+            tools:text="Date" />
+
+        <TextView
+            android:id="@+id/tvRecommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_small"
+            android:text="@string/question_cost_effective"
+            app:layout_constraintLeft_toLeftOf="@id/tv_restaurant_name"
+            app:layout_constraintTop_toBottomOf="@id/tv_date" />
+
+        <RatingBar
+            android:id="@+id/rbCostEffective"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/keyline_small"
+            app:layout_constraintBottom_toBottomOf="@id/tvRecommend"
+            app:layout_constraintLeft_toRightOf="@id/tvRecommend"
+            app:layout_constraintTop_toTopOf="@id/tvRecommend"
+            tools:rating="3" />
+
+        <TextView
+            android:id="@+id/tvService"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_mini"
+            android:text="@string/question_service_point"
+            app:layout_constraintLeft_toLeftOf="@id/tvRecommend"
+            app:layout_constraintTop_toBottomOf="@id/tvRecommend" />
+
+        <RatingBar
+            android:id="@+id/rbServicePoint"
+            style="@style/Widget.AppCompat.RatingBar.Small"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/keyline_small"
+            app:layout_constraintBottom_toBottomOf="@id/tvService"
+            app:layout_constraintLeft_toRightOf="@id/tvService"
+            app:layout_constraintTop_toTopOf="@id/tvService"
+            tools:rating="3" />
+
+        <TextView
+            android:id="@+id/tv_recommend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_small"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Caption"
+            android:textSize="14sp"
+            android:textStyle="italic"
+            app:layout_constraintLeft_toLeftOf="@id/tvService"
+            app:layout_constraintTop_toBottomOf="@id/tvService"
+            tools:text="@string/recommend_so_so" />
+
+        <TextView
+            android:id="@+id/tv_review_content"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_small"
+            android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
+            app:layout_constraintLeft_toLeftOf="@id/tvService"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/tv_recommend"
+            tools:text="(Content)" />
+
+        <com.google.android.material.button.MaterialButtonToggleGroup
+            android:id="@+id/group_control"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/keyline_small"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tv_review_content"
+            app:singleSelection="true">
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_edit"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/material_icon_button_min_width"
+                app:icon="@drawable/ic_edit"
+                app:iconPadding="0dp"
+                app:rippleColor="@color/colorSecondary" />
+
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btn_delete"
+                style="?attr/materialButtonOutlinedStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:minWidth="@dimen/material_icon_button_min_width"
+                app:icon="@drawable/ic_delete"
+                app:iconPadding="0dp"
+                app:rippleColor="@color/colorSecondary" />
+
+        </com.google.android.material.button.MaterialButtonToggleGroup>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</com.google.android.material.card.MaterialCardView>
