@@ -1,7 +1,6 @@
 package ac.smu.embedded.mapp.restaurantDetail
 
 import ac.smu.embedded.mapp.model.Restaurant
-import ac.smu.embedded.mapp.model.Review
 import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.repository.FavoriteRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
@@ -11,6 +10,10 @@ import ac.smu.embedded.mapp.util.StateViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.crashlytics.android.Crashlytics
+import com.orhanobut.logger.Logger
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
 
@@ -31,15 +34,25 @@ class RestaurantDetailViewModel(
         setState(restaurant, restaurantRepository.loadRestaurant(documentId))
     }
 
+    @ExperimentalCoroutinesApi
     fun loadReview(documentId: String) = viewModelScope.launch {
-        reviewRepository.loadReviewsSync(documentId).collect {
-            val currentUser = userRepository.getUser()
-            val reviewWithUsers = it?.map { review ->
-                val user = userRepository.getUser(review.userId)
-                ReviewWithUser(review, user, currentUser != null && currentUser.uid == user?.uid)
+        val currentUser = userRepository.getUser()
+        reviewRepository.loadReviewsSync(documentId)
+            .catch {
+                Logger.t("loadReview($documentId)").e(it, it.toString())
+                Crashlytics.logException(it)
             }
-            setState(reviews, reviewWithUsers)
-        }
+            .collect {
+                val reviewWithUsers = it?.map { review ->
+                    val user = userRepository.getUser(review.userId)
+                    ReviewWithUser(
+                        review,
+                        user,
+                        currentUser != null && currentUser.uid == user?.uid
+                    )
+                }
+                setState(reviews, reviewWithUsers)
+            }
     }
 
     private val _favorite = MutableLiveData<Boolean>(false)
@@ -60,7 +73,7 @@ class RestaurantDetailViewModel(
 
     fun addFavorite(documentId: String) = viewModelScope.launch {
         val user = userRepository.getUser()
-        if(user!=null){
+        if (user != null) {
             favoriteRepository.addFavorite(user.uid!!, documentId)
         }
     }
@@ -68,7 +81,7 @@ class RestaurantDetailViewModel(
 
     fun removeFavorite(documentId: String) = viewModelScope.launch {
         val user = userRepository.getUser()
-        if(user != null){
+        if (user != null) {
             favoriteRepository.removeFavorite(user.uid!!, documentId)
         }
     }

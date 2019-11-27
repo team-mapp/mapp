@@ -9,8 +9,11 @@ import ac.smu.embedded.mapp.repository.UserRepository
 import ac.smu.embedded.mapp.util.StateViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
+import com.crashlytics.android.Crashlytics
+import com.orhanobut.logger.Logger
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
 
 class ProfileViewModel(
@@ -43,20 +46,23 @@ class ProfileViewModel(
         setState(favoriteRestaurants, restaurantList)
     }
 
+    @ExperimentalCoroutinesApi
     fun loadUserReviews() = viewModelScope.launch {
         val user = userRepository.getUser()
         if (user != null) {
             reviewRepository.loadUserReviewsSync(user.uid!!)
-                .map { list ->
-                    list?.map {
+                .catch {
+                    Logger.t("loadUserReviews").e(it, it.toString())
+                    Crashlytics.logException(it)
+                }
+                .collect { list ->
+                    val listWithRestaurant = list?.map {
                         ReviewWithRestaurant(
                             it,
                             restaurantsRepository.loadRestaurant(it.restaurantId)
                         )
                     }
-                }
-                .collect {
-                    setState(reviews, it)
+                    setState(reviews, listWithRestaurant)
                 }
         }
     }
