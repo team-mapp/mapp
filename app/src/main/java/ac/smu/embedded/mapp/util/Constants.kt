@@ -1,5 +1,9 @@
 package ac.smu.embedded.mapp.util
 
+const val RECOMMEND_YES = 1
+const val RECOMMEND_SOSO = 0
+const val RECOMMEND_NO = -1
+
 const val EXTRA_FROM_INTRO = "from_intro"
 const val EXTRA_DOCUMENT_ID = "document_id"
 

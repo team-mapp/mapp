@@ -62,7 +62,7 @@
 
         <activity
             android:name=".profile.ProfileActivity"
-            android:theme="@style/Theme.App.NoActionBar" />
+            android:theme="@style/Theme.App.Review" />
 
         <activity
             android:name=".profile.ProfileSettingActivity"

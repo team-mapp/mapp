@@ -3,10 +3,7 @@ package ac.smu.embedded.mapp.restaurantDetail
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.review.ReviewViewActivity
 import ac.smu.embedded.mapp.review.ReviewWriteActivity
-import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
-import ac.smu.embedded.mapp.util.load
-import ac.smu.embedded.mapp.util.loadStorage
-import ac.smu.embedded.mapp.util.recyclerAdapter
+import ac.smu.embedded.mapp.util.*
 import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
@@ -230,6 +227,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
                 tvEmptyReview.visibility = View.GONE
                 adapter.submitList(it)
             } else {
+                adapter.submitList(listOf())
                 view_avg_panel.visibility = View.GONE
                 tvEmptyReview.visibility = View.VISIBLE
             }
@@ -312,9 +310,5 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
 
     companion object {
         const val DOCUMENT_ID = "document_id"
-
-        private const val RECOMMEND_YES = 1
-        private const val RECOMMEND_SOSO = 0
-        private const val RECOMMEND_NO = -1
     }
 }

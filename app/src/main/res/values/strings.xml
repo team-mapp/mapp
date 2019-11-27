@@ -2,6 +2,8 @@
     <string name="app_name">Mapp</string>
     <string name="tab_celeb_text">Celebs</string>
     <string name="tab_program_text">TV Programs</string>
+    <string name="tab_favorites">Favorites</string>
+    <string name="tab_reviews">Reviews</string>
     <string name="hint_search">Search</string>
     <string name="menu_my_title" translatable="false">MY</string>
 
@@ -69,9 +71,12 @@
     <string name="action_save">Save</string>
     <string name="action_google_signin">Start with Google</string>
     <string name="action_edit_profile">Edit Profile</string>
+    <string name="action_edit">Edit</string>
+    <string name="action_delete">Delete</string>
 
     <string name="empty_favorite_list">Empty favorite list</string>
     <string name="empty_review_list">Empty review list</string>
+    <string name="empty_my_review_list">Empty review list</string>
 
     <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>
