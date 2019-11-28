@@ -6,11 +6,13 @@ import ac.smu.embedded.mapp.repository.FavoriteRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.ReviewRepository
 import ac.smu.embedded.mapp.repository.UserRepository
+import ac.smu.embedded.mapp.util.Event
 import ac.smu.embedded.mapp.util.StateViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.crashlytics.android.Crashlytics
+import com.google.firebase.firestore.GeoPoint
 import com.orhanobut.logger.Logger
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.catch
@@ -25,10 +27,11 @@ class RestaurantDetailViewModel(
 ) : StateViewModel() {
 
     val reviews: LiveData<List<ReviewWithUser>?> = useState()
-
     val user: LiveData<User?> = useState()
-
     val restaurant: LiveData<Restaurant?> = useState()
+    val launchPhone: LiveData<Event<String>> = useState()
+    val launchAddress: LiveData<Event<Pair<String, GeoPoint>>> = useState()
+    val copyText: LiveData<String> = useState()
 
     fun loadRestaurant(documentId: String) = viewModelScope.launch {
         setState(restaurant, restaurantRepository.loadRestaurant(documentId))
@@ -86,4 +89,31 @@ class RestaurantDetailViewModel(
         }
     }
 
+    fun launchPhone() {
+        val restaurant = this.restaurant.value
+        if (restaurant != null) {
+            setState(launchPhone, Event(restaurant.phone))
+        }
+    }
+
+    fun launchAddress() {
+        val restaurant = this.restaurant.value
+        if (restaurant != null) {
+            setState(launchAddress, Event(restaurant.name to restaurant.location))
+        }
+    }
+
+    fun copyPhone() {
+        val restaurant = this.restaurant.value
+        if (restaurant != null) {
+            setState(copyText, restaurant.phone)
+        }
+    }
+
+    fun copyAddress() {
+        val restaurant = this.restaurant.value
+        if (restaurant != null) {
+            setState(copyText, restaurant.address)
+        }
+    }
 }

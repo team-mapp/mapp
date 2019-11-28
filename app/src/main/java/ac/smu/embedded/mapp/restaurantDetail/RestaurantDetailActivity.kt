@@ -5,11 +5,16 @@ import ac.smu.embedded.mapp.review.ReviewViewActivity
 import ac.smu.embedded.mapp.review.ReviewWriteActivity
 import ac.smu.embedded.mapp.util.*
 import android.annotation.SuppressLint
+import android.content.ClipData
+import android.content.ClipboardManager
+import android.content.Context
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
@@ -21,13 +26,13 @@ import com.naver.maps.map.CameraUpdate
 import com.naver.maps.map.NaverMap
 import com.naver.maps.map.OnMapReadyCallback
 import com.naver.maps.map.overlay.Marker
-import kotlinx.android.synthetic.main.activity_restaurantdetail.*
+import kotlinx.android.synthetic.main.activity_restaurant_detail.*
 import kotlinx.android.synthetic.main.item_restaurant_review.*
 import kotlinx.android.synthetic.main.view_review_average_panel.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-
-class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantdetail),
+// TODO: 2019-11-27 전화번호, 주소를 눌러 다이얼, 지도로 이동될 수 있도록 함
+class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_detail),
     OnMapReadyCallback {
 
     // 뷰 모델 설정
@@ -46,37 +51,9 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
             // 여기서 documentId -> restaurantId
             val documentId: String = intent.getStringExtra(DOCUMENT_ID)!!
 
-            initView()
+            initView(documentId)
+            setupObservers()
             loadContents(documentId)
-
-            floatingButton.setOnClickListener {
-                val intent = Intent(this, ReviewWriteActivity::class.java).apply {
-                    putExtra(ReviewWriteActivity.EXTRA_RESTAURANT_ID, documentId)
-                }
-                startActivity(intent)
-            }
-
-            btn_favorite.setOnClickListener {
-                if (isFavorite) {
-                    isFavorite = false
-                    btn_favorite.setColorFilter(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.card_filter_color
-                        )
-                    )
-                    restaurantDetailViewModel.removeFavorite(documentId)
-                } else {
-                    isFavorite = true
-                    btn_favorite.setColorFilter(
-                        ContextCompat.getColor(
-                            this,
-                            R.color.content_favorite_color
-                        )
-                    )
-                    restaurantDetailViewModel.addFavorite(documentId)
-                }
-            }
         } else { // 존재하지 않는 경우
             throw UnsupportedOperationException(
                 "Not received intent data, required EXTRA_DATA_TYPE, EXTRA_DOCUMENT_ID"
@@ -85,7 +62,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
 
     }
 
-    private fun initView() {
+    private fun initView(documentId: String) {
         // 액션바 설정
         setSupportActionBar(toolBar)
         supportActionBar?.apply {
@@ -148,6 +125,71 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurantd
             getString(R.string.waiting_time_over) to 61,
             getString(R.string.waiting_time_dont_know) to 999
         )
+
+        floatingButton.setOnClickListener {
+            val intent = Intent(this, ReviewWriteActivity::class.java).apply {
+                putExtra(ReviewWriteActivity.EXTRA_RESTAURANT_ID, documentId)
+            }
+            startActivity(intent)
+        }
+
+        btn_favorite.setOnClickListener {
+            if (isFavorite) {
+                isFavorite = false
+                btn_favorite.setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.card_filter_color
+                    )
+                )
+                restaurantDetailViewModel.removeFavorite(documentId)
+            } else {
+                isFavorite = true
+                btn_favorite.setColorFilter(
+                    ContextCompat.getColor(
+                        this,
+                        R.color.content_favorite_color
+                    )
+                )
+                restaurantDetailViewModel.addFavorite(documentId)
+            }
+        }
+
+        btn_launch_phone.setOnClickListener { restaurantDetailViewModel.launchPhone() }
+
+        btn_launch_address.setOnClickListener { restaurantDetailViewModel.launchAddress() }
+
+        layout_phone.setOnClickListener { restaurantDetailViewModel.copyPhone() }
+
+        layout_address.setOnClickListener { restaurantDetailViewModel.copyAddress() }
+    }
+
+    private fun setupObservers() {
+        restaurantDetailViewModel.launchPhone.observe(this, Observer {
+            val intent: Intent = Intent(
+                Intent.ACTION_DIAL,
+                Uri.parse("tel:${it.data.replace("-", "")}")
+            )
+            startActivity(intent)
+        })
+
+        restaurantDetailViewModel.launchAddress.observe(this, Observer {
+            with(it.data) {
+                NaverMapUtil.startNaverMap(
+                    this@RestaurantDetailActivity,
+                    second.latitude,
+                    second.longitude,
+                    first
+                )
+            }
+        })
+
+        restaurantDetailViewModel.copyText.observe(this, Observer {
+            val clipboardManager: ClipboardManager =
+                getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            clipboardManager.setPrimaryClip(ClipData.newPlainText(it, it))
+            showToast(R.string.copy_to_clipboard, Toast.LENGTH_SHORT)
+        })
     }
 
     @SuppressLint("SetTextI18n")

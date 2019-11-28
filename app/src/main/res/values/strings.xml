@@ -78,5 +78,7 @@
     <string name="empty_review_list">Empty review list</string>
     <string name="empty_my_review_list">Empty review list</string>
 
+    <string name="copy_to_clipboard">Copied to clipboard</string>
+
     <string name="key_google_login" translatable="false">pref_google_login</string>
 </resources>
