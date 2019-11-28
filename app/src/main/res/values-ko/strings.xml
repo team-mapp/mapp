@@ -4,7 +4,7 @@
     <string name="tab_celeb_text">셀럽맛집</string>
     <string name="tab_program_text">TV 맛집</string>
     <string name="tab_favorites">즐겨찾기</string>
-    <string name="tab_reviews">리뷰</string>
+    <string name="tab_reviews">내 리뷰</string>
     <string name="hint_search">검색하세요</string>
 
     <string name="subtitle_celebs">셀럽</string>

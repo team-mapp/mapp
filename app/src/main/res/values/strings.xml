@@ -3,7 +3,7 @@
     <string name="tab_celeb_text">Celebs</string>
     <string name="tab_program_text">TV Programs</string>
     <string name="tab_favorites">Favorites</string>
-    <string name="tab_reviews">Reviews</string>
+    <string name="tab_reviews">My Reviews</string>
     <string name="hint_search">Search</string>
     <string name="menu_my_title" translatable="false">MY</string>
 
