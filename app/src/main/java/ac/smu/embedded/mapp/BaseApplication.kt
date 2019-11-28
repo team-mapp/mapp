@@ -2,7 +2,6 @@ package ac.smu.embedded.mapp
 
 import ac.smu.embedded.mapp.common.UserViewModel
 import ac.smu.embedded.mapp.detail.DetailViewModel
-import ac.smu.embedded.mapp.intro.IntroViewModel
 import ac.smu.embedded.mapp.main.MainViewModel
 import ac.smu.embedded.mapp.profile.ProfileSettingViewModel
 import ac.smu.embedded.mapp.profile.ProfileViewModel
@@ -134,8 +133,6 @@ class BaseApplication : Application() {
         viewModel { ProfileSettingViewModel(get(), get()) }
 
         viewModel { ReviewViewModel(get(), get(), get(), get(named(CONFIG_REMOTE))) }
-
-        viewModel { IntroViewModel(get(), get()) }
 
     }
 

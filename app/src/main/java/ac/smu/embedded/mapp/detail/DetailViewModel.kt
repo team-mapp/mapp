@@ -40,15 +40,5 @@ class DetailViewModel(
                 restaurantsRepository.loadRestaurant(it)
             }
         }
-
-    fun addFavorite(documentId: String) =
-        viewModelScope.launch {
-            favoriteRepository.addFavorite(userRepository.getUser()?.uid!!, documentId)
-        }
-
-    fun removeFavorite(documentId: String) =
-        viewModelScope.launch {
-            favoriteRepository.removeFavorite(userRepository.getUser()?.uid!!, documentId)
-        }
 }
 
