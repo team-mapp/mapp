@@ -45,20 +45,30 @@ class ReviewsFragment : ContentFragment<ReviewWithRestaurant>() {
                 viewHolder.tv_recommend.text = "\"$recommendText\""
                 viewHolder.tv_date.text = getDate(createdAt, updatedAt)
 
-                viewHolder.group_control.addOnButtonCheckedListener { _, checkedId, _ ->
+                viewHolder.group_control.addOnButtonCheckedListener { _, checkedId, isChecked ->
                     when (checkedId) {
                         R.id.btn_edit -> {
-                            val intent =
-                                Intent(requireContext(), ReviewWriteActivity::class.java).apply {
-                                    putExtra(ReviewWriteActivity.EXTRA_RESTAURANT_ID, restaurantId)
-                                    putExtra(ReviewWriteActivity.EXTRA_REVIEW_ID, documentId)
-                                }
-                            startActivity(intent)
-                            viewHolder.btn_edit.isChecked = false
+                            if (isChecked) {
+                                val intent =
+                                    Intent(
+                                        requireContext(),
+                                        ReviewWriteActivity::class.java
+                                    ).apply {
+                                        putExtra(
+                                            ReviewWriteActivity.EXTRA_RESTAURANT_ID,
+                                            restaurantId
+                                        )
+                                        putExtra(ReviewWriteActivity.EXTRA_REVIEW_ID, documentId)
+                                    }
+                                startActivity(intent)
+                                viewHolder.btn_edit.isChecked = false
+                            }
                         }
                         R.id.btn_delete -> {
-                            profileViewModel.removeReview(documentId)
-                            viewHolder.btn_delete.isChecked = false
+                            if (isChecked) {
+                                profileViewModel.removeReview(documentId)
+                                viewHolder.btn_delete.isChecked = false
+                            }
                         }
                     }
                 }
