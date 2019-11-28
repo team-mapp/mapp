@@ -96,12 +96,14 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayoutCall"
-                        android:layout_width="wrap_content"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/list_content_margin"
+                        android:layout_marginEnd="@dimen/keyline_normal"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/btn_launch_phone"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
@@ -154,12 +156,14 @@
 
                     <LinearLayout
                         android:id="@+id/linearLayoutAddress"
-                        android:layout_width="match_parent"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="@dimen/list_content_margin"
+                        android:layout_marginEnd="@dimen/keyline_normal"
                         android:orientation="vertical"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintLeft_toLeftOf="parent"
+                        app:layout_constraintRight_toLeftOf="@id/btn_launch_address"
                         app:layout_constraintTop_toTopOf="parent">
 
                         <TextView
@@ -288,6 +292,8 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/keyline_normal"
         android:src="@drawable/ic_edit"
-        app:tint="@android:color/white" />
+        android:visibility="gone"
+        app:tint="@android:color/white"
+        tools:visibility="visible" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

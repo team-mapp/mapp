@@ -134,25 +134,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
         }
 
         btn_favorite.setOnClickListener {
-            if (isFavorite) {
-                isFavorite = false
-                btn_favorite.setColorFilter(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.card_filter_color
-                    )
-                )
-                restaurantDetailViewModel.removeFavorite(documentId)
-            } else {
-                isFavorite = true
-                btn_favorite.setColorFilter(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.content_favorite_color
-                    )
-                )
-                restaurantDetailViewModel.addFavorite(documentId)
-            }
+            restaurantDetailViewModel.toggleFavorite(documentId)
         }
 
         btn_launch_phone.setOnClickListener { restaurantDetailViewModel.launchPhone() }
@@ -221,18 +203,13 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
 
         // favorite 하트 버튼 색 변경
         restaurantDetailViewModel.favorite.observe(this, Observer {
-            if (it) {
-                btn_favorite.setColorFilter(
-                    ContextCompat.getColor(
-                        this,
-                        R.color.content_favorite_color
-                    )
+            btn_favorite.setColorFilter(
+                ContextCompat.getColor(
+                    this,
+                    if (it) R.color.content_favorite_color
+                    else android.R.color.black
                 )
-                isFavorite = it
-            } else {
-                btn_favorite.setColorFilter(ContextCompat.getColor(this, R.color.card_filter_color))
-                isFavorite = it
-            }
+            )
         })
 
         // review list 가져오기
@@ -274,6 +251,10 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
                 tvEmptyReview.visibility = View.VISIBLE
             }
             loading_progress.visibility = View.GONE
+        })
+
+        restaurantDetailViewModel.visibleAddReview.observe(this, Observer {
+            floatingButton.visibility = if (it) View.VISIBLE else View.GONE
         })
 
         restaurantDetailViewModel.loadRestaurant(documentId)

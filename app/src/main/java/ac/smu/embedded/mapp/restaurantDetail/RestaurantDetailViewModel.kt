@@ -1,7 +1,6 @@
 package ac.smu.embedded.mapp.restaurantDetail
 
 import ac.smu.embedded.mapp.model.Restaurant
-import ac.smu.embedded.mapp.model.User
 import ac.smu.embedded.mapp.repository.FavoriteRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
 import ac.smu.embedded.mapp.repository.ReviewRepository
@@ -9,7 +8,6 @@ import ac.smu.embedded.mapp.repository.UserRepository
 import ac.smu.embedded.mapp.util.Event
 import ac.smu.embedded.mapp.util.StateViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
 import com.crashlytics.android.Crashlytics
 import com.google.firebase.firestore.GeoPoint
@@ -26,9 +24,10 @@ class RestaurantDetailViewModel(
     private val userRepository: UserRepository
 ) : StateViewModel() {
 
-    val reviews: LiveData<List<ReviewWithUser>?> = useState()
-    val user: LiveData<User?> = useState()
     val restaurant: LiveData<Restaurant?> = useState()
+    val reviews: LiveData<List<ReviewWithUser>?> = useState()
+    val visibleAddReview: LiveData<Boolean> = useState(false)
+    val favorite: LiveData<Boolean> = useState(false)
     val launchPhone: LiveData<Event<String>> = useState()
     val launchAddress: LiveData<Event<Pair<String, GeoPoint>>> = useState()
     val copyText: LiveData<String> = useState()
@@ -39,53 +38,55 @@ class RestaurantDetailViewModel(
 
     @ExperimentalCoroutinesApi
     fun loadReview(documentId: String) = viewModelScope.launch {
-        val currentUser = userRepository.getUser()
+        val currentUser = userRepository.getUserWithoutProfile()
         reviewRepository.loadReviewsSync(documentId)
             .catch {
                 Logger.t("loadReview($documentId)").e(it, it.toString())
                 Crashlytics.logException(it)
             }
             .collect {
+                var existUserReview = false
                 val reviewWithUsers = it?.map { review ->
                     val user = userRepository.getUser(review.userId)
+                    val isSelf = currentUser != null && currentUser == user?.uid
+                    if (isSelf) existUserReview = true
                     ReviewWithUser(
                         review,
                         user,
-                        currentUser != null && currentUser.uid == user?.uid
+                        currentUser != null && currentUser == user?.uid
                     )
                 }
+                setState(visibleAddReview, !existUserReview)
                 setState(reviews, reviewWithUsers)
             }
     }
 
-    private val _favorite = MutableLiveData<Boolean>(false)
-    val favorite: LiveData<Boolean> = _favorite
 
-    // 좋아요 상태 확인
     fun loadFavorite(documentId: String) = viewModelScope.launch {
-        val user = userRepository.getUser()
+        val user = userRepository.getUserWithoutProfile()
         if (user != null) {
-            val favorites = favoriteRepository.loadFavorites(user.uid!!)
+            val favorites = favoriteRepository.loadFavorites(user)
             if (favorites != null) {
                 for (element in favorites) {
-                    _favorite.value = documentId == element.restaurantId
+                    setState(favorite, documentId == element.restaurantId)
                 }
             }
         }
     }
 
-    fun addFavorite(documentId: String) = viewModelScope.launch {
-        val user = userRepository.getUser()
-        if (user != null) {
-            favoriteRepository.addFavorite(user.uid!!, documentId)
-        }
-    }
-
-
-    fun removeFavorite(documentId: String) = viewModelScope.launch {
-        val user = userRepository.getUser()
-        if (user != null) {
-            favoriteRepository.removeFavorite(user.uid!!, documentId)
+    fun toggleFavorite(documentId: String) = viewModelScope.launch {
+        val favoriteState = favorite.value
+        if (favoriteState != null) {
+            val uid = userRepository.getUserWithoutProfile()
+            if (uid != null) {
+                if (favoriteState) {
+                    setState(favorite, false)
+                    favoriteRepository.removeFavorite(uid, documentId)
+                } else {
+                    setState(favorite, true)
+                    favoriteRepository.addFavorite(uid, documentId)
+                }
+            }
         }
     }
 

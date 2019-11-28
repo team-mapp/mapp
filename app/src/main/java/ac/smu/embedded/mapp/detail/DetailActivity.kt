@@ -60,14 +60,6 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                     isFavorite = false,
                     visibleFavorite = false
                 )
-                contentView.setOnFavoriteClickListener { v, isFavorite ->
-                    if (isFavorite) {
-                        detailViewModel.removeFavorite(value.documentId)
-                    } else {
-                        detailViewModel.addFavorite(value.documentId)
-                    }
-                    contentView.isFavorite = !isFavorite
-                }
                 contentView.setOnClickListener {
                     navigateRestaurantDetail(value.documentId)
                 }
