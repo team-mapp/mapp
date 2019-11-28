@@ -36,15 +36,8 @@ class DetailViewModel(
 
     fun loadRestaurants(documentIds: List<String>) =
         viewModelScope.launch {
-            val userFavorites =
-                favoriteRepository.loadFavorites(userRepository.getUser()?.uid!!)
-            val restaurants = documentIds.map {
+            _restaurants.value = documentIds.mapNotNull {
                 restaurantsRepository.loadRestaurant(it)
-            }
-            val userFavoriteIds = userFavorites?.map { it.restaurantId }
-            _restaurants.value = restaurants.filterNotNull().map {
-                it.isFavorite = userFavoriteIds?.contains(it.documentId) ?: false
-                return@map it
             }
         }
 

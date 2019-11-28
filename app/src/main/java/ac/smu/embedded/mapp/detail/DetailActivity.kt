@@ -57,8 +57,8 @@ class DetailActivity : AppCompatActivity(R.layout.activity_detail) {
                 val contentView = view as ContentView
                 contentView.setContent(
                     value.image, value.name,
-                    isFavorite = value.isFavorite,
-                    visibleFavorite = true
+                    isFavorite = false,
+                    visibleFavorite = false
                 )
                 contentView.setOnFavoriteClickListener { v, isFavorite ->
                     if (isFavorite) {
