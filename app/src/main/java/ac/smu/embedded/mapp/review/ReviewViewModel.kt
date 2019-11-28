@@ -70,10 +70,10 @@ class ReviewViewModel(
         reviewContent: ReviewContent
     ) = viewModelScope.launch {
         if (validReview(reviewContent)) {
-            val user = userRepository.getUser()
+            val user = userRepository.getUserWithoutProfile()
             if (user != null) {
                 if (documentId == null) {
-                    reviewRepository.addReview(restaurantId, user.uid!!, reviewContent)
+                    reviewRepository.addReview(restaurantId, user, reviewContent)
                 } else {
                     reviewRepository.updateReview(documentId, reviewContent)
                 }

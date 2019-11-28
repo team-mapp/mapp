@@ -6,7 +6,6 @@ import ac.smu.embedded.mapp.main.MainActivity
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class SplashActivity : AppCompatActivity() {
@@ -15,14 +14,13 @@ class SplashActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        userViewModel.userData.observe(this, Observer {
-            val intent: Intent = if (it != null) {
-                Intent(this, MainActivity::class.java)
-            } else {
-                Intent(this, IntroActivity::class.java)
-            }
-            startActivity(intent)
-            finish()
-        })
+        val uid = userViewModel.getUserWithoutProfile()
+        val intent: Intent = if (uid != null) {
+            Intent(this, MainActivity::class.java)
+        } else {
+            Intent(this, IntroActivity::class.java)
+        }
+        startActivity(intent)
+        finish()
     }
 }

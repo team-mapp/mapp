@@ -51,9 +51,9 @@ class ProfileSettingViewModel(
     }
 
     fun uploadImage(uri: Uri) = viewModelScope.launch {
-        val user = userRepository.getUser()
+        val user = userRepository.getUserWithoutProfile()
         if (user != null) {
-            val path = "users/${user.uid}_${System.currentTimeMillis()}.jpg"
+            val path = "users/${user}_${System.currentTimeMillis()}.jpg"
             setState(showProgress, true)
             storageRepository.put(path, uri).asFlow().collect {
                 it.onComplete {

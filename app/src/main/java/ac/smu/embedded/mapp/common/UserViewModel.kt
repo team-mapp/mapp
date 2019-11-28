@@ -32,6 +32,8 @@ class UserViewModel(
         setState(userData, userRepository.getUser())
     }
 
+    fun getUserWithoutProfile() = userRepository.getUserWithoutProfile()
+
     fun signIn(credential: AuthCredential) = viewModelScope.launch {
         setState(userData, userRepository.signIn(credential))
         val idResult = userRepository.getNotificationToken()

@@ -30,9 +30,9 @@ class ProfileViewModel(
     val favoriteRestaurants: LiveData<List<Restaurant>?> = useState()
 
     fun loadFavorites() = viewModelScope.launch {
-        val user = userRepository.getUser()
+        val user = userRepository.getUserWithoutProfile()
         if (user != null) {
-            favoriteRepository.loadFavoritesSync(user.uid!!).collect {
+            favoriteRepository.loadFavoritesSync(user).collect {
                 setState(favorites, it)
             }
         }
@@ -48,9 +48,9 @@ class ProfileViewModel(
 
     @ExperimentalCoroutinesApi
     fun loadUserReviews() = viewModelScope.launch {
-        val user = userRepository.getUser()
+        val user = userRepository.getUserWithoutProfile()
         if (user != null) {
-            reviewRepository.loadUserReviewsSync(user.uid!!)
+            reviewRepository.loadUserReviewsSync(user)
                 .catch {
                     Logger.t("loadUserReviews").e(it, it.toString())
                     Crashlytics.logException(it)

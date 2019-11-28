@@ -25,6 +25,8 @@ interface UserRepository {
 
     suspend fun getUser(uid: String): User?
 
+    fun getUserWithoutProfile(): String?
+
     fun updateUserProfile(displayName: String?, profileImage: String?)
 
     suspend fun deleteUser(): Boolean
@@ -74,6 +76,10 @@ class UserRepositoryImpl(
             .document(uid)
             .get().await()
             .toObject(::fromMap)
+
+    override fun getUserWithoutProfile(): String? {
+        return auth.currentUser?.uid
+    }
 
     override fun updateUserProfile(displayName: String?, profileImage: String?) {
         val currentUser = auth.currentUser
