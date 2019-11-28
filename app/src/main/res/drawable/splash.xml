@@ -4,6 +4,6 @@
     <item>
         <bitmap
             android:gravity="center"
-            android:src="@drawable/logo_for_splash_1" /> <!-- 원하는 로고와 위치 지정 -->
+            android:src="@drawable/logo" /> <!-- 원하는 로고와 위치 지정 -->
     </item>
 </layer-list>
