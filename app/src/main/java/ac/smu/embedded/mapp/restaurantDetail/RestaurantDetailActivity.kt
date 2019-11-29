@@ -192,8 +192,6 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
 
             val cameraUpdate = CameraUpdate.scrollTo(LatLng(latitude, longitude))
             naverMap?.moveCamera(cameraUpdate)
-
-            restaurantDetailViewModel.loadFavorite(documentId)
         })
 
 
@@ -254,6 +252,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
         })
 
         restaurantDetailViewModel.loadRestaurant(documentId)
+        restaurantDetailViewModel.loadFavorite(documentId)
         restaurantDetailViewModel.loadReview(documentId)
     }
 

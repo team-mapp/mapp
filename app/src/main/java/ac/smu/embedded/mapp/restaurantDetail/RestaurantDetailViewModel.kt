@@ -27,7 +27,7 @@ class RestaurantDetailViewModel(
     val restaurant: LiveData<Restaurant?> = useState()
     val reviews: LiveData<List<ReviewWithUser>?> = useState()
     val visibleAddReview: LiveData<Boolean> = useState(false)
-    val favorite: LiveData<Boolean> = useState(false)
+    val favorite: LiveData<Boolean> = useState()
     val launchPhone: LiveData<Event<String>> = useState()
     val launchAddress: LiveData<Event<Pair<String, GeoPoint>>> = useState()
     val copyText: LiveData<String> = useState()
@@ -62,14 +62,12 @@ class RestaurantDetailViewModel(
     }
 
 
-    fun loadFavorite(documentId: String) = viewModelScope.launch {
-        val user = userRepository.getUserWithoutProfile()
-        if (user != null) {
-            val favorites = favoriteRepository.loadFavorites(user)
-            if (favorites != null) {
-                for (element in favorites) {
-                    setState(favorite, documentId == element.restaurantId)
-                }
+    fun loadFavorite(documentId: String) {
+        viewModelScope.launch {
+            val user = userRepository.getUserWithoutProfile()
+            if (user != null) {
+                val userFavorite = favoriteRepository.loadFavorite(user, documentId)
+                setState(favorite, userFavorite != null)
             }
         }
     }
