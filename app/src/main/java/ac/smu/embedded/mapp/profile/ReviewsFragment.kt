@@ -2,7 +2,7 @@ package ac.smu.embedded.mapp.profile
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.common.ContentFragment
-import ac.smu.embedded.mapp.review.ReviewViewActivity
+import ac.smu.embedded.mapp.restaurantDetail.RestaurantDetailActivity
 import ac.smu.embedded.mapp.review.ReviewWriteActivity
 import ac.smu.embedded.mapp.util.*
 import android.content.Intent
@@ -75,8 +75,8 @@ class ReviewsFragment : ContentFragment<ReviewWithRestaurant>() {
             }
 
             view.setOnClickListener {
-                val intent = Intent(requireContext(), ReviewViewActivity::class.java).apply {
-                    putExtra(ReviewViewActivity.EXTRA_REVIEW_ID, value.review.documentId)
+                val intent = Intent(requireContext(), RestaurantDetailActivity::class.java).apply {
+                    putExtra(RestaurantDetailActivity.DOCUMENT_ID, value.restaurant?.documentId!!)
                 }
                 startActivity(intent)
             }

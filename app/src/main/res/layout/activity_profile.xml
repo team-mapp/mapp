@@ -13,11 +13,13 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize" />
+            android:layout_height="?attr/actionBarSize"
+            app:layout_scrollFlags="scroll" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/profile_toolbar_height">
+            android:layout_height="@dimen/profile_toolbar_height"
+            app:layout_scrollFlags="scroll">
 
             <ImageView
                 android:id="@+id/iv_profile"

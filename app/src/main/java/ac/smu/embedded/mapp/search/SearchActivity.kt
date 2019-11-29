@@ -35,10 +35,15 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
         super.onCreate(savedInstanceState)
         initView()
 
+        searchViewModel.showProgress.observe(this, Observer {
+            if (it) {
+                tv_empty_items.visibility = View.GONE
+            }
+            loading_progress.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
         searchViewModel.searchResults.observe(this, Observer {
             if (it != null) {
-                loading_progress.visibility = View.GONE
-
                 val items = mutableListOf<TypedItem<Any>>()
                 if (it.celebsResult != null) {
                     items.add(
@@ -73,9 +78,11 @@ class SearchActivity : AppCompatActivity(R.layout.activity_search) {
                         items.add(TypedItem(typeRestaurant, celeb))
                     }
                 }
-                adapter.submitList(items as List<TypedItem<out Any>>?)
-            } else {
-                loading_progress.visibility = View.VISIBLE
+                if (items.isNotEmpty()) {
+                    adapter.submitList(items as List<TypedItem<out Any>>?)
+                } else {
+                    tv_empty_items.visibility = View.VISIBLE
+                }
             }
         })
 

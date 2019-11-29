@@ -3,8 +3,8 @@ package ac.smu.embedded.mapp.search
 import ac.smu.embedded.mapp.repository.CelebsRepository
 import ac.smu.embedded.mapp.repository.ProgramsRepository
 import ac.smu.embedded.mapp.repository.RestaurantsRepository
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
+import ac.smu.embedded.mapp.util.StateViewModel
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 
@@ -12,24 +12,25 @@ class SearchViewModel(
     private val celebsRepository: CelebsRepository,
     private val programsRepository: ProgramsRepository,
     private val restaurantsRepository: RestaurantsRepository
-) : ViewModel() {
-    private val _searchResults = MutableLiveData<SearchResult?>()
-    val searchResults = _searchResults
-
-    private val _searchAutoComplete = MutableLiveData<SearchResult?>()
-    val searchAutoComplete = _searchAutoComplete
+) : StateViewModel() {
+    val searchResults: LiveData<SearchResult> = useState()
+    val searchAutoComplete: LiveData<SearchResult> = useState()
+    val showProgress: LiveData<Boolean> = useState()
 
     fun search(query: String, autoComplete: Boolean = false) {
         viewModelScope.launch {
+            setState(showProgress, !autoComplete)
             val queryCelebs = celebsRepository.loadCelebsByQuery(query)
             val queryPrograms = programsRepository.loadProgramsByQuery(query)
             val queryRestaurants = restaurantsRepository.loadRestaurantsByQuery(query)
-
+            setState(showProgress, false)
             if (autoComplete) {
-                _searchAutoComplete.value =
+                setState(
+                    searchAutoComplete,
                     SearchResult(queryCelebs, queryPrograms, queryRestaurants)
+                )
             } else {
-                _searchResults.value = SearchResult(queryCelebs, queryPrograms, queryRestaurants)
+                setState(searchResults, SearchResult(queryCelebs, queryPrograms, queryRestaurants))
             }
         }
     }

@@ -77,6 +77,8 @@
     <string name="empty_favorite_list">Empty favorite list</string>
     <string name="empty_review_list">Empty review list</string>
     <string name="empty_my_review_list">Empty review list</string>
+    <string name="empty_search_results">Empty search results</string>
+    <string name="empty_notification_list">Empty notification list</string>
 
     <string name="copy_to_clipboard">Copied to clipboard</string>
 

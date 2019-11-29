@@ -97,4 +97,18 @@
         app:layout_constraintTop_toTopOf="@+id/search_content_view"
         tools:visibility="visible" />
 
+    <TextView
+        android:id="@+id/tv_empty_items"
+        style="@style/TextAppearance.Empty"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="@string/empty_search_results"
+        android:visibility="gone"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/search_content_view"
+        tools:visibility="visible" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

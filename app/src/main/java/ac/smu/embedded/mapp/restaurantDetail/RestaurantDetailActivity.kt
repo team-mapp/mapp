@@ -31,16 +31,13 @@ import kotlinx.android.synthetic.main.item_restaurant_review.*
 import kotlinx.android.synthetic.main.view_review_average_panel.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
-// TODO: 2019-11-27 전화번호, 주소를 눌러 다이얼, 지도로 이동될 수 있도록 함
 class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_detail),
     OnMapReadyCallback {
 
-    // 뷰 모델 설정
     private val restaurantDetailViewModel: RestaurantDetailViewModel by viewModel()
 
     private var naverMap: NaverMap? = null
     private lateinit var adapter: BaseRecyclerAdapter<ReviewWithUser>
-    private var isFavorite: Boolean = false
 
     private lateinit var waitingTimeMap: Map<String, Int>
 
@@ -59,7 +56,6 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
                 "Not received intent data, required EXTRA_DATA_TYPE, EXTRA_DOCUMENT_ID"
             )
         }
-
     }
 
     private fun initView(documentId: String) {
@@ -148,7 +144,7 @@ class RestaurantDetailActivity : AppCompatActivity(R.layout.activity_restaurant_
 
     private fun setupObservers() {
         restaurantDetailViewModel.launchPhone.observe(this, Observer {
-            val intent: Intent = Intent(
+            val intent = Intent(
                 Intent.ACTION_DIAL,
                 Uri.parse("tel:${it.data.replace("-", "")}")
             )

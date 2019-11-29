@@ -13,6 +13,7 @@ import android.os.Bundle
 import android.text.format.DateUtils
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityOptionsCompat
 import androidx.core.view.GravityCompat
@@ -102,6 +103,7 @@ class MainActivity : AppCompatActivity(R.layout.activity_main) {
     private fun setupObservers() {
         mainViewModel.notifications.observe(this, Observer {
             notification_toolbar.title = "${getString(R.string.menu_notification)} (${it.size})"
+            tv_empty_items.visibility = if (it.isEmpty()) View.VISIBLE else View.GONE
             notificationAdapter.submitList(it)
         })
 

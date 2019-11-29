@@ -2,8 +2,6 @@ package ac.smu.embedded.mapp.profile
 
 import ac.smu.embedded.mapp.R
 import ac.smu.embedded.mapp.common.UserViewModel
-import ac.smu.embedded.mapp.model.Restaurant
-import ac.smu.embedded.mapp.util.BaseRecyclerAdapter
 import ac.smu.embedded.mapp.util.load
 import ac.smu.embedded.mapp.util.loadStorage
 import android.content.Intent
@@ -19,8 +17,6 @@ import kotlinx.android.synthetic.main.activity_profile.*
 import org.koin.android.viewmodel.ext.android.viewModel
 
 class ProfileActivity : AppCompatActivity(R.layout.activity_profile) {
-
-    private lateinit var listAdapter: BaseRecyclerAdapter<Restaurant>
 
     private val userViewModel: UserViewModel by viewModel()
     private val profileViewModel: ProfileViewModel by viewModel()
